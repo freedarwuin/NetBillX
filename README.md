@@ -18,7 +18,7 @@
 - Notificación por WhatsApp al consumidor
 - Notificación por Telegram para el administrador
 
-Ver [Cómo funciona / Cara Kerja](https://github.com/freedarwuin/NetBillX/wiki/How-It-Works---Cara-kerja)
+Ver [Cómo funciona](https://github.com/freedarwuin/NetBillX/wiki/How-It-Works---Cara-kerja)
 
 ## Pasarela de pago y Plugins
 
