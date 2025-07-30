@@ -68,7 +68,7 @@ Soporte para [Freeradius con Base de Datos](https://github.com/freedarwuin/NetBi
 Este software es libre y de código abierto, sin ninguna garantía.
 
 Aunque el software es gratuito, el soporte técnico no lo es.  
-El soporte técnico empieza desde Rp 500.000 o $50.
+El soporte técnico empieza desde $ 10.
 
 Si me escribes para soporte técnico,  
 debes pagar.
