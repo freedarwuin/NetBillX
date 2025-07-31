@@ -25,7 +25,7 @@
                 <h5>Por favor, lea antes de continuar</h5>
                 <p><strong>Información de la Aplicación</strong><br>
                     Nombre de la Aplicación: NetBillX <br>
-                    Fecha de Lanzamiento: 30/10/2015<br>
+                    Fecha de Lanzamiento: 31/07/2025<br>
                     Por: NetBillX [ <a href="https://github.com/freedarwuin/NetBillX" target="_blank">https://github.com/freedarwuin/NetBillX</a> ]<br>
                     Donación USDT (TRC20): <b>TQxzqHUYu3GfgfphWjAZMLPhb8UrAju3kj</b><br>
                     <br>
