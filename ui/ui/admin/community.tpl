@@ -98,10 +98,6 @@
                             <td>Account Name</td>
                             <td><strong>freedarwuin</strong></td>
                         </tr>
-                        <tr>
-                            <td>Country</td>
-                            <td><strong>Venezuela</strong></td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
