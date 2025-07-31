@@ -9,7 +9,7 @@ _admin();
 $ui->assign('_title', 'Plugin Manager');
 $ui->assign('_system_menu', 'settings');
 
-$plugin_repository = '';
+$plugin_repository = 'https://freedarwuin.github.io/Plugin-Repository/repository.json';
 
 $action = $routes['1'];
 $ui->assign('_admin', $admin);
