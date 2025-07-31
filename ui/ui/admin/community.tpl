@@ -44,21 +44,19 @@
             <div class="box-header">
                 <h3 class="box-title">{Lang::T('Donations')} 🇮🇩</h3>
             </div>
-            <div class="box-body">{Lang::T('To support further development, please donate to freedarwuin. Your donation will help ensure the continued development of this application.')}</div>
+            <div class="box-body">
+                {Lang::T('To support further development, you can donate to the following Binance wallet.')}
+            </div>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <tbody>
                         <tr>
-                            <td>BCA</td>
-                            <td>5410-454-825</td>
+                            <td>Binance USDT (TRC20)</td>
+                            <td><strong>TVeXxxxxxxYourAddressHere</strong></td>
                         </tr>
                         <tr>
-                            <td>Mandiri</td>
-                            <td>163-000-1855-793</td>
-                        </tr>
-                        <tr>
-                            <td>Atas nama</td>
-                            <td>Ibnu Maksum</td>
+                            <td>Name</td>
+                            <td><strong>freedarwuin</strong></td>
                         </tr>
                     </tbody>
                 </table>
