@@ -87,12 +87,6 @@ ver archivo [LICENSE](LICENSE)
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/DPedroa)
 
-BCA: 5410454825
-
-Mandiri: 163-000-1855-793
-
-a.n Ibnu Maksum
-
 ## PATROCINADORES
 
 - [mixradius.com](https://mixradius.com/) Servicios de pago Billing Radius
