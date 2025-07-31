@@ -12,7 +12,7 @@ class RadiusRest {
             'url' => [
                 'Wiki Tutorial' => 'https://github.com/freedarwuin/NetBillX/wiki/FreeRadius-Rest',
                 'Telegram' => 'https://t.me/freedarwuin',
-                'Donate' => 'https://paypal.me/freedarwuin'
+                'Donate' => 'https://paypal.me/DPedroa'
             ]
         ];
     }

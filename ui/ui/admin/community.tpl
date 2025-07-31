@@ -103,7 +103,7 @@
             </div>
             <div class="box-footer">
                 <div class="btn-group btn-group-justified" role="group" aria-label="...">
-                    <a href="https://paypal.me/freedarwuin" target="_blank"
+                    <a href="https://paypal.me/DPedroa" target="_blank"
                         class="btn btn-primary btn-sm btn-block">Paypal</a>
                 </div>
             </div>

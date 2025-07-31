@@ -85,7 +85,7 @@ ver archivo [LICENSE](LICENSE)
 
 ## Dona a freedarwuin
 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/freedarwuin)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/DPedroa)
 
 BCA: 5410454825
 

@@ -15,7 +15,7 @@ class MikrotikVpn
                 'Github' => 'https://github.com/agstrxyz',
                 'Telegram' => 'https://t.me/agstrxyz',
                 'Youtube' => 'https://www.youtube.com/@agstrxyz',
-                'Donate' => 'https://paypal.me/freedarwuin'
+                'Donate' => 'https://paypal.me/DPedroa'
             ]
         ];
     }

@@ -12,7 +12,7 @@ class Dummy {
             'url' => [
                 'Github' => 'https://github.com/freedarwuin/NetBillX/',
                 'Telegram' => 'https://t.me/freedarwuin',
-                'Donate' => 'https://paypal.me/freedarwuin'
+                'Donate' => 'https://paypal.me/DPedroa'
             ]
         ];
     }
