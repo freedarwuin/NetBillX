@@ -96,7 +96,7 @@
                         </tr>
                         <tr>
                             <td>Account Name</td>
-                            <td><strong>freedarwuin</strong></td>
+                            <td><strong>DPedroa</strong></td>
                         </tr>
                     </tbody>
                 </table>
