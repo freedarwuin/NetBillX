@@ -51,8 +51,12 @@
                 <table class="table table-bordered table-striped">
                     <tbody>
                         <tr>
-                            <td>Binance USDT (TRC20)</td>
-                            <td><strong>TVeXxxxxxxYourAddressHere</strong></td>
+                            <td><strong>USDT (TRC20)</strong></td>
+                            <td>
+                                <span style="font-family: monospace; color:#2d7;">
+                                    TQxzqHUYu3GfgfphWjAZMLPhb8UrAju3kj
+                                </span>
+                            </td>
                         </tr>
                         <tr>
                             <td>Name</td>
