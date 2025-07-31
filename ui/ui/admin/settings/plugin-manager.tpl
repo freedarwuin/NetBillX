@@ -85,7 +85,7 @@
                                         {else} href="#" onclick="alert('PHP ZIP extension is not installed')"
                                         {/if}
                                         style="color: black;" class="btn btn-success"><i
-                                            class="glyphicon glyphicon-circle-arrow-down"></i> Install</a>
+                                            class="glyphicon glyphicon-circle-arrow-down"></i> {Lang::T('Install')}</a>
                                 </div>
                             </div>
                         </div>
