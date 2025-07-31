@@ -87,20 +87,20 @@
                 <table class="table table-bordered table-striped">
                     <tbody>
                         <tr>
-                            <td>Bank Central Asia</td>
-                            <td>5410-454-825</td>
-                        </tr>
-                        <tr>
-                            <td>SWIFT/BIC</td>
-                            <td>CENAIDJA</td>
-                        </tr>
-                        <tr>
-                            <td>Jakarta</td>
-                            <td>Indonesia</td>
+                            <td><strong>PayPal</strong></td>
+                            <td>
+                                <span style="font-family: monospace; color:#2d7;">
+                                    ingdarwuin@gmail.com
+                                </span>
+                            </td>
                         </tr>
                         <tr>
                             <td>Account Name</td>
-                            <td>Ibnu Maksum</td>
+                            <td><strong>freedarwuin</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Country</td>
+                            <td><strong>Venezuela</strong></td>
                         </tr>
                     </tbody>
                 </table>
