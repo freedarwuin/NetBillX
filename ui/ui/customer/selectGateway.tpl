@@ -4,7 +4,7 @@
     {if file_exists("$PAGES_PATH/Payment_Info.html")}
         <div class="col-md-6">
             <div class="panel panel-warning panel-hovered">
-                <div class="panel-heading">{Lang::T('Payment Info')}</div>
+                <div class="panel-heading">{Lang::T('Payment Info2')}</div>
                 <div class="panel-body">{include file="$PAGES_PATH/Payment_Info.html"}</div>
             </div>
         </div>
