@@ -79,7 +79,7 @@
                                 <div class="btn-group btn-group-justified" role="group" aria-label="...">
                                     <a href="{Text::url('')}pluginmanager/delete/plugin/{$plugin['id']}"
                                         onclick="return ask(this, '{Lang::T('Delete')}?')" class="btn btn-danger"><i
-                                            class="glyphicon glyphicon-trash"></i> Delete</a>
+                                            class="glyphicon glyphicon-trash"></i> Eliminar</a>
                                     <a {if $zipExt } href="{Text::url('')}pluginmanager/install/plugin/{$plugin['id']}"
                                             onclick="return ask(this, 'Installing plugin will take some time to complete, do not close the page while it loading to install the plugin')"
                                         {else} href="#" onclick="alert('PHP ZIP extension is not installed')"
@@ -111,7 +111,7 @@
                                     <a href="{$pg['url']}" target="_blank" style="color: black;"
                                         class="btn btn-{if $pg['ispaid']}warning{else}primary{/if}"><i
                                             class="glyphicon glyphicon-globe"></i>
-                                        {if $pg['ispaid']}Buy{else}{Lang::T('Web')}{/if}
+                                        {if $pg['ispaid']}Buy{else}Web{/if}
                                     </a>
                                     <a href="{$pg['github']}" target="_blank" style="color: black;" class="btn btn-info"><i
                                             class="glyphicon glyphicon-align-left"></i> Source</a>
@@ -120,7 +120,7 @@
                                         {else} href="#" onclick="alert('PHP ZIP extension is not available')"
                                         {/if}
                                         style="color: black;" class="btn btn-success"><i
-                                            class="glyphicon glyphicon-circle-arrow-down"></i> {Lang::T('Install')}</a>
+                                            class="glyphicon glyphicon-circle-arrow-down"></i> Install</a>
                                 </div>
                             </div>
                         </div>
@@ -149,7 +149,7 @@
                                         {if $dvc['ispaid']}Buy{else}Web{/if}
                                     </a>
                                     <a href="{$dvc['github']}" target="_blank" style="color: black;" class="btn btn-info"><i
-                                            class="glyphicon glyphicon-align-left"></i> {Lang::T('Source')}</a>
+                                            class="glyphicon glyphicon-align-left"></i> Source</a>
                                     <a {if $zipExt } href="{Text::url('')}pluginmanager/install/device/{$dvc['id']}"
                                             onclick="return ask(this, 'Installing plugin will take some time to complete, do not close the page while it loading to install the plugin')"
                                         {else} href="#" onclick="alert('PHP ZIP extension is not available')"
