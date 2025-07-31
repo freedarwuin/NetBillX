@@ -79,7 +79,7 @@
                                 <div class="btn-group btn-group-justified" role="group" aria-label="...">
                                     <a href="{Text::url('')}pluginmanager/delete/plugin/{$plugin['id']}"
                                         onclick="return ask(this, '{Lang::T('Delete')}?')" class="btn btn-danger"><i
-                                            class="glyphicon glyphicon-trash"></i> Eliminar</a>
+                                            class="glyphicon glyphicon-trash"></i> {Lang::T('Delete')}</a>
                                     <a {if $zipExt } href="{Text::url('')}pluginmanager/install/plugin/{$plugin['id']}"
                                             onclick="return ask(this, 'Installing plugin will take some time to complete, do not close the page while it loading to install the plugin')"
                                         {else} href="#" onclick="alert('PHP ZIP extension is not installed')"
@@ -120,7 +120,7 @@
                                         {else} href="#" onclick="alert('PHP ZIP extension is not available')"
                                         {/if}
                                         style="color: black;" class="btn btn-success"><i
-                                            class="glyphicon glyphicon-circle-arrow-down"></i> Install</a>
+                                            class="glyphicon glyphicon-circle-arrow-down"></i> {Lang::T('Install')}</a>
                                 </div>
                             </div>
                         </div>
