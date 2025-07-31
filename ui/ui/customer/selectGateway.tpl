@@ -159,7 +159,7 @@
                                 </option>
                                 {/if}
                                 {foreach $pgs as $pg}
-                                    <option value="{$pg}">{ucwords($pg)}</option>
+                                    <option value="{$pg}">{ucwords($pg)}BAnco</option>
                                 {/foreach}
                             </select>
                         </div>
