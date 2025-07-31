@@ -95,8 +95,12 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Account Name</td>
+                            <td>{Lang::T('Account Name')}</td>
                             <td><strong>DPedroa</strong></td>
+                        </tr>
+                        <tr>
+                             <td>{Lang::T('Country')}</td>
+                              <td><strong>Venezuela</strong></td>
                         </tr>
                     </tbody>
                 </table>
