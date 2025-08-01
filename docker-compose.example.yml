@@ -1,6 +1,6 @@
 services:
-  nuxbill:
-    container_name: nuxbill
+  NetBillX:
+    container_name: NetBillX
     pull_policy: always
     build: ./
     restart: unless-stopped
@@ -16,8 +16,8 @@ services:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: "12345678"
-      MYSQL_DATABASE: "nuxbill"
-      MYSQL_USER: "nuxbill"
+      MYSQL_DATABASE: "NetBillX"
+      MYSQL_USER: "NetBillX"
       MYSQL_PASSWORD: "12345678"
     ports:
       - "3306:3306"
