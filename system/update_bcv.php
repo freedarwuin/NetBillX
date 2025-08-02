@@ -16,31 +16,27 @@ try {
         exit;
     }
 
-    // Último registro de la tabla
-    $stmt = $dbh->query("SELECT rate, created_at FROM bcv_rate ORDER BY id DESC LIMIT 1");
-    $last = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$last) {
-        // Si no hay registros, insertar el primero
-        $stmt = $dbh->prepare("INSERT INTO bcv_rate (rate, created_at) VALUES (?, NOW())");
-        $stmt->execute([$rate]);
-        echo "✅ Primera tasa BCV registrada: $rate Bs";
-        exit;
-    }
-
-    $lastRate = $last['rate'];
-    $lastDate = date('Y-m-d', strtotime($last['created_at']));
     $today = date('Y-m-d');
 
-    // ✅ Lógica:
-    // - Si el rate es diferente al último → INSERTA (aunque sea el mismo día)
-    // - Si el rate es igual al último → NO hace nada
-    if ($rate != $lastRate) {
+    // Buscar registro de HOY
+    $stmt = $dbh->prepare("SELECT id, rate FROM bcv_rate WHERE DATE(created_at) = ?");
+    $stmt->execute([$today]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$row) {
+        // ✅ Si no hay registro hoy → INSERTA
         $stmt = $dbh->prepare("INSERT INTO bcv_rate (rate, created_at) VALUES (?, NOW())");
         $stmt->execute([$rate]);
-        echo "✅ Nueva tasa detectada ($rate Bs) → Insertada";
+        echo "✅ Tasa BCV insertada para hoy: $rate Bs";
     } else {
-        echo "ℹ️ La tasa no cambió ($rate Bs). No se insertó nada.";
+        // ✅ Si hay registro hoy → Compara y actualiza solo si cambia
+        if ($row['rate'] != $rate) {
+            $stmt = $dbh->prepare("UPDATE bcv_rate SET rate = ?, updated_at = NOW() WHERE id = ?");
+            $stmt->execute([$rate, $row['id']]);
+            echo "✅ Tasa BCV de hoy actualizada: $rate Bs";
+        } else {
+            echo "ℹ️ La tasa BCV de hoy ($rate Bs) ya está actualizada. No se hizo nada.";
+        }
     }
 
 } catch (PDOException $e) {
