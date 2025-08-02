@@ -20,6 +20,26 @@ if (isset($_GET['refresh'])) {
     r2(getUrl('dashboard'), 's', 'Data Refreshed');
 }
 
+// Leer timezone desde tbl_appconfig
+$timezone = 'UTC'; // valor por defecto si no existe
+$appconfig = ORM::for_table('tbl_appconfig')->where('key', 'timezone')->find_one();
+if ($appconfig) {
+    $timezone = $appconfig->value;
+}
+$ui->assign('timezone', $timezone);
+
+// Leer la tasa BCV del día desde la tabla bcv_rate
+$bcv_rate = null;
+$rateRecord = ORM::for_table('bcv_rate')
+    ->where_raw('DATE(created_at) = CURDATE()')
+    ->order_by_desc('created_at')
+    ->find_one();
+
+if ($rateRecord) {
+    $bcv_rate = $rateRecord->rate;
+}
+$ui->assign('bcv_rate', $bcv_rate);
+
 $tipeUser = _req("user");
 if (empty($tipeUser)) {
     $tipeUser = 'Admin';
@@ -46,38 +66,14 @@ if (in_array($tipeUser, ['SuperAdmin', 'Admin'])) {
     $tipeUser = 'Admin';
 }
 
-try {
-    // Obtener tasa BCV para hoy
-    $bcv_rate_record = ORM::for_table('bcv_rate')
-        ->where_raw('DATE(created_at) = CURDATE()')
-        ->order_by_desc('created_at')
-        ->find_one();
-
-    $bcv_rate = $bcv_rate_record ? $bcv_rate_record->rate : null;
-
-    // Obtener timezone de la configuración
-    $timezone_record = ORM::for_table('tbl_appconfig')
-        ->where('setting', 'timezone')
-        ->find_one();
-
-    $timezone = $timezone_record ? $timezone_record->value : null;
-
-} catch (Exception $e) {
-    $bcv_rate = null;
-    $timezone = null;
-}
-
-$ui->assign('bcv_rate', $bcv_rate);
-$ui->assign('timezone', $timezone);
-
 $widgets = ORM::for_table('tbl_widgets')->where("enabled", 1)->where('user', $tipeUser)->order_by_asc("orders")->findArray();
 $count = count($widgets);
 for ($i = 0; $i < $count; $i++) {
-    try{
-        if(file_exists($WIDGET_PATH . DIRECTORY_SEPARATOR . $widgets[$i]['widget'].".php")){
-            require_once $WIDGET_PATH . DIRECTORY_SEPARATOR . $widgets[$i]['widget'].".php";
+    try {
+        if (file_exists($WIDGET_PATH . DIRECTORY_SEPARATOR . $widgets[$i]['widget'] . ".php")) {
+            require_once $WIDGET_PATH . DIRECTORY_SEPARATOR . $widgets[$i]['widget'] . ".php";
             $widgets[$i]['content'] = (new $widgets[$i]['widget'])->getWidget($widgets[$i]);
-        }else{
+        } else {
             $widgets[$i]['content'] = "Widget not found";
         }
     } catch (Throwable $e) {
