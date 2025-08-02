@@ -46,6 +46,7 @@ if (in_array($tipeUser, ['SuperAdmin', 'Admin'])) {
     $tipeUser = 'Admin';
 }
 
+// Obtener widgets
 $widgets = ORM::for_table('tbl_widgets')->where("enabled", 1)->where('user', $tipeUser)->order_by_asc("orders")->findArray();
 $count = count($widgets);
 for ($i = 0; $i < $count; $i++) {
@@ -60,7 +61,25 @@ for ($i = 0; $i < $count; $i++) {
         $widgets[$i]['content'] = $e->getMessage();
     }
 }
-
 $ui->assign('widgets', $widgets);
+
+// Obtener timezone desde tbl_appconfig
+$timezone = ORM::for_table('tbl_appconfig')->where('name', 'timezone')->find_one();
+if ($timezone) {
+    $timezoneValue = $timezone->value;
+} else {
+    $timezoneValue = null;
+}
+$ui->assign('timezone', $timezoneValue);
+
+// Obtener tasa BCV del día más reciente de la tabla bcv_rate
+$bcvRateRow = ORM::for_table('bcv_rate')->order_by_desc('date')->find_one();
+if ($bcvRateRow) {
+    $bcv_rate = $bcvRateRow->rate;
+} else {
+    $bcv_rate = null;
+}
+$ui->assign('bcv_rate', $bcv_rate);
+
 run_hook('view_dashboard'); #HOOK
 $ui->display('admin/dashboard.tpl');
