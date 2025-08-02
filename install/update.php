@@ -29,25 +29,6 @@
                     "$db_pass",
                     array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
 
-                echo "CREATE TABLE IF NOT EXISTS `bcv_rate` (
-                    `id` INT AUTO_INCREMENT PRIMARY KEY,
-                    `rate` DECIMAL(12,2) NOT NULL,
-                    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;\n\n";
-
-                $dbh->exec("CREATE TABLE IF NOT EXISTS `bcv_rate` (
-                    `id` INT AUTO_INCREMENT PRIMARY KEY,
-                    `rate` DECIMAL(12,2) NOT NULL,
-                    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
-
-                // Inserta tasa inicial si no existe
-                $check = $dbh->query("SELECT COUNT(*) FROM bcv_rate")->fetchColumn();
-                if ($check == 0) {
-                    echo "INSERT INTO `bcv_rate` (`rate`) VALUES (36.50);\n\n";
-                    $dbh->exec("INSERT INTO `bcv_rate` (`rate`) VALUES (36.50)");
-                }
-
                 echo "CREATE TABLE `tbl_payment_gateway` (
     `id` int(11) NOT NULL,
     `username` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
@@ -112,6 +93,26 @@
                     $dbh->exec("ALTER TABLE `tbl_user_recharges` CHANGE `method` `method` VARCHAR(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '';");
                     echo "ALTER TABLE `tbl_transactions` CHANGE `method` `method` VARCHAR(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;\n\n";
                     $dbh->exec("ALTER TABLE `tbl_transactions` CHANGE `method` `method` VARCHAR(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL;");
+
+                    // ✅ NUEVA TABLA BCV_RATE
+                    echo "CREATE TABLE IF NOT EXISTS `bcv_rate` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `rate` DECIMAL(12,2) NOT NULL,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;\n\n";
+                    $dbh->exec("CREATE TABLE IF NOT EXISTS `bcv_rate` (
+                        `id` INT AUTO_INCREMENT PRIMARY KEY,
+                        `rate` DECIMAL(12,2) NOT NULL,
+                        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
+
+                    // Insertar tasa inicial si está vacía
+                    $check = $dbh->query("SELECT COUNT(*) FROM bcv_rate")->fetchColumn();
+                    if ($check == 0) {
+                        echo "INSERT INTO `bcv_rate` (`rate`) VALUES (36.50);\n\n";
+                        $dbh->exec("INSERT INTO `bcv_rate` (`rate`) VALUES (36.50)");
+                    }
+
                     echo "Actualización de base de datos completada para el nuevo sistema <a href='/admin/'>Volver al Inicio</a>";
             }catch(PDOException $ex){
                 echo "Error al conectar con la base de datos: ".$ex->getMessage()."\n";
