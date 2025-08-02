@@ -16,20 +16,27 @@ try {
         exit;
     }
 
-    // Verificar si ya existe la tasa de hoy
-    $stmt = $dbh->prepare("SELECT id FROM bcv_rate WHERE DATE(created_at)=CURDATE()");
+    // Verificar si hay un registro hoy
+    $stmt = $dbh->prepare("SELECT id, rate FROM bcv_rate WHERE DATE(created_at)=CURDATE() ORDER BY id DESC LIMIT 1");
     $stmt->execute();
-    $exists = $stmt->fetchColumn();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($exists) {
-        $stmt = $dbh->prepare("UPDATE bcv_rate SET rate=? WHERE id=?");
-        $stmt->execute([$rate, $exists]);
-        echo "✅ Tasa BCV actualizada a $rate Bs (Hoy)";
+    if ($row) {
+        if ($row['rate'] != $rate) {
+            // La tasa cambió -> insertamos NUEVO registro
+            $stmt = $dbh->prepare("INSERT INTO bcv_rate (rate, created_at) VALUES (?, NOW())");
+            $stmt->execute([$rate]);
+            echo "✅ Nueva tasa BCV detectada: $rate Bs (Se insertó otro registro)";
+        } else {
+            echo "ℹ️ La tasa BCV de hoy ya está actualizada ($rate Bs). No se insertó nada.";
+        }
     } else {
+        // No hay registro de hoy -> insertamos el primero
         $stmt = $dbh->prepare("INSERT INTO bcv_rate (rate, created_at) VALUES (?, NOW())");
         $stmt->execute([$rate]);
-        echo "✅ Tasa BCV insertada: $rate Bs (Hoy)";
+        echo "✅ Tasa BCV insertada: $rate Bs (Primer registro del día)";
     }
+
 } catch (PDOException $e) {
     echo "❌ Error en la base de datos: " . $e->getMessage();
 }
