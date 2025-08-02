@@ -165,7 +165,7 @@ if (!empty($_SESSION['user_language'])) {
 }
 
 if (empty($config['language'])) {
-    $config['language'] = 'english';
+    $config['language'] = 'spanish';
 }
 $lan_file = $root_path . File::pathFixer('system/lan/' . $config['language'] . '.json');
 if (file_exists($lan_file)) {
