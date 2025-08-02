@@ -1,16 +1,5 @@
 {include file="sections/header.tpl"}
 
-{* Mostrar tasa BCV solo si timezone es America/Caracas *}
-{if $timezone|default:'' == "America/Caracas" && $bcv_rate|default:false}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
-                💱 Tasa BCV del día: {$bcv_rate} Bs/USD
-            </div>
-        </div>
-    </div>
-{/if}
-
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-primary panel-hovered panel-stacked mb30">
@@ -174,7 +163,8 @@
                             {else}
                                 <li class="list-group-item">
                                     <b>{Lang::T('Total')}</b> <span class="pull-right"
-                                        style="font-size: large; font-weight:bolder; font-family: 'Courier New', Courier, monospace; ">{if $using eq 'zero'}{Lang::moneyFormat(0)}{else}{Lang::moneyFormat($plan['price'])}{/if}</span>                                </li>
+                                        style="font-size: large; font-weight:bolder; font-family: 'Courier New', Courier, monospace; ">{if $using eq 'zero'}{Lang::moneyFormat(0)}{else}{Lang::moneyFormat($plan['price'])}{/if}</span>
+                                </li>
                             {/if}
                         {/if}
                     </ul>
