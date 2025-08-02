@@ -1,5 +1,10 @@
 <?php
 
+/**
+ *  PHP Mikrotik Billing (https://github.com/freedarwuin/NetBillX/)
+ *  by https://t.me/freedarwuin
+ **/
+
 _admin();
 $ui->assign('_title', Lang::T('Dashboard'));
 $ui->assign('_admin', $admin);
@@ -21,8 +26,11 @@ if (empty($tipeUser)) {
 }
 $ui->assign('tipeUser', $tipeUser);
 
-$reset_day = $config['reset_day'] ?? 1;
-
+$reset_day = $config['reset_day'];
+if (empty($reset_day)) {
+    $reset_day = 1;
+}
+//first day of month
 if (date("d") >= $reset_day) {
     $start_date = date('Y-m-' . $reset_day);
 } else {
@@ -33,7 +41,7 @@ $current_date = date('Y-m-d');
 $ui->assign('start_date', $start_date);
 $ui->assign('current_date', $current_date);
 
-$tipeUser = $admin['user_type'] ?? 'Admin';
+$tipeUser = $admin['user_type'];
 if (in_array($tipeUser, ['SuperAdmin', 'Admin'])) {
     $tipeUser = 'Admin';
 }
@@ -41,11 +49,11 @@ if (in_array($tipeUser, ['SuperAdmin', 'Admin'])) {
 $widgets = ORM::for_table('tbl_widgets')->where("enabled", 1)->where('user', $tipeUser)->order_by_asc("orders")->findArray();
 $count = count($widgets);
 for ($i = 0; $i < $count; $i++) {
-    try {
-        if (file_exists($WIDGET_PATH . DIRECTORY_SEPARATOR . $widgets[$i]['widget'] . ".php")) {
-            require_once $WIDGET_PATH . DIRECTORY_SEPARATOR . $widgets[$i]['widget'] . ".php";
+    try{
+        if(file_exists($WIDGET_PATH . DIRECTORY_SEPARATOR . $widgets[$i]['widget'].".php")){
+            require_once $WIDGET_PATH . DIRECTORY_SEPARATOR . $widgets[$i]['widget'].".php";
             $widgets[$i]['content'] = (new $widgets[$i]['widget'])->getWidget($widgets[$i]);
-        } else {
+        }else{
             $widgets[$i]['content'] = "Widget not found";
         }
     } catch (Throwable $e) {
@@ -54,31 +62,5 @@ for ($i = 0; $i < $count; $i++) {
 }
 
 $ui->assign('widgets', $widgets);
-
-// Obtener timezone de tbl_appconfig
-$timezoneConfig = ORM::for_table('tbl_appconfig')->where('name', 'timezone')->find_one();
-if ($timezoneConfig) {
-    $timezone = $timezoneConfig->value;
-    echo "Timezone found in DB: $timezone\n";
-} else {
-    $timezone = '';
-    echo "Timezone NOT found in DB\n";
-}
-$ui->assign('timezone', $timezone);
-
-// Obtener tasa BCV del día
-function get_current_bcv_rate() {
-    $rate = ORM::for_table('bcv_rate')->order_by_desc('date')->find_one();
-    if ($rate) {
-        return $rate->rate;
-    } else {
-        return 'N/A';
-    }
-}
-
-$bcv_rate = get_current_bcv_rate();
-echo "BCV Rate fetched: $bcv_rate\n";
-$ui->assign('bcv_rate', $bcv_rate);
-
 run_hook('view_dashboard'); #HOOK
 $ui->display('admin/dashboard.tpl');
