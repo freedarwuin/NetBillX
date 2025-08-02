@@ -46,6 +46,30 @@ if (in_array($tipeUser, ['SuperAdmin', 'Admin'])) {
     $tipeUser = 'Admin';
 }
 
+try {
+    // Obtener tasa BCV para hoy
+    $bcv_rate_record = ORM::for_table('bcv_rate')
+        ->where_raw('DATE(created_at) = CURDATE()')
+        ->order_by_desc('created_at')
+        ->find_one();
+
+    $bcv_rate = $bcv_rate_record ? $bcv_rate_record->rate : null;
+
+    // Obtener timezone de la configuración
+    $timezone_record = ORM::for_table('tbl_appconfig')
+        ->where('setting', 'timezone')
+        ->find_one();
+
+    $timezone = $timezone_record ? $timezone_record->value : null;
+
+} catch (Exception $e) {
+    $bcv_rate = null;
+    $timezone = null;
+}
+
+$ui->assign('bcv_rate', $bcv_rate);
+$ui->assign('timezone', $timezone);
+
 $widgets = ORM::for_table('tbl_widgets')->where("enabled", 1)->where('user', $tipeUser)->order_by_asc("orders")->findArray();
 $count = count($widgets);
 for ($i = 0; $i < $count; $i++) {
