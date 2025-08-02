@@ -1,5 +1,7 @@
 {include file="sections/header.tpl"}
 
+{* Mostrar tasa BCV solo si timezone es America/Caracas *}
+{if isset($timezone) && $timezone == "America/Caracas"}
 <div class="row">
     <div class="col-md-12">
         <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
@@ -7,6 +9,7 @@
         </div>
     </div>
 </div>
+{/if}
 
 {function showWidget pos=0}
     {foreach $widgets as $w}
@@ -49,8 +52,7 @@
                 $('#version').html('Version: ' + localVersion);
                 $.getJSON(
                     "https://raw.githubusercontent.com/freedarwuin/NetBillX/master/version.json?" +
-                    Math
-                    .random(),
+                    Math.random(),
                     function(data) {
                         var latestVersion = data.version;
                         if (localVersion !== latestVersion) {
@@ -68,8 +70,7 @@
                                     timerProgressBar: true,
                                     didOpen: (toast) => {
                                         toast.addEventListener('mouseenter', Swal.stopTimer)
-                                        toast.addEventListener('mouseleave', Swal
-                                            .resumeTimer)
+                                        toast.addEventListener('mouseleave', Swal.resumeTimer)
                                     }
                                 });
                                 setCookie(latestVersion, 'done', 7);

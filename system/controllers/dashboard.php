@@ -49,11 +49,11 @@ if (in_array($tipeUser, ['SuperAdmin', 'Admin'])) {
 $widgets = ORM::for_table('tbl_widgets')->where("enabled", 1)->where('user', $tipeUser)->order_by_asc("orders")->findArray();
 $count = count($widgets);
 for ($i = 0; $i < $count; $i++) {
-    try{
-        if(file_exists($WIDGET_PATH . DIRECTORY_SEPARATOR . $widgets[$i]['widget'].".php")){
-            require_once $WIDGET_PATH . DIRECTORY_SEPARATOR . $widgets[$i]['widget'].".php";
+    try {
+        if (file_exists($WIDGET_PATH . DIRECTORY_SEPARATOR . $widgets[$i]['widget'] . ".php")) {
+            require_once $WIDGET_PATH . DIRECTORY_SEPARATOR . $widgets[$i]['widget'] . ".php";
             $widgets[$i]['content'] = (new $widgets[$i]['widget'])->getWidget($widgets[$i]);
-        }else{
+        } else {
             $widgets[$i]['content'] = "Widget not found";
         }
     } catch (Throwable $e) {
@@ -63,20 +63,21 @@ for ($i = 0; $i < $count; $i++) {
 
 $ui->assign('widgets', $widgets);
 
-// --- NUEVO: Obtener timezone y decidir si mostrar tasa BCV ---
-$timezoneConfig = ORM::for_table('tbl_appconfig')->where('key', 'timezone')->find_one();
-$isCaracas = false;
-if ($timezoneConfig && $timezoneConfig->value === 'America/Caracas') {
-    $isCaracas = true;
+// --- NUEVO: Obtener timezone desde tbl_appconfig ---
+$timezoneConfig = ORM::for_table('tbl_appconfig')->where('name', 'timezone')->find_one();
+$timezone = $timezoneConfig ? $timezoneConfig->value : '';
+$ui->assign('timezone', $timezone);
 
-    // Obtener tasa BCV actual desde la tabla (ejemplo)
-    $bcvRow = ORM::for_table('bcv_rate')->order_by_desc('created_at')->find_one();
-    $bcv_rate = $bcvRow ? $bcvRow->rate : 'N/A';
-} else {
-    $bcv_rate = null;
+// --- NUEVO: Obtener tasa BCV del día ---
+// Aquí debes reemplazar esta función con la lógica real que uses para obtener la tasa BCV,
+// puede ser un fetch a una API, o consulta a tu tabla 'bcv_rate'
+function get_current_bcv_rate() {
+    // Ejemplo simple: consulta la última tasa registrada en la tabla bcv_rate
+    $rate = ORM::for_table('bcv_rate')->order_by_desc('date')->find_one();
+    return $rate ? $rate->rate : 'N/A';
 }
 
-$ui->assign('show_bcv_rate', $isCaracas);
+$bcv_rate = get_current_bcv_rate();
 $ui->assign('bcv_rate', $bcv_rate);
 
 run_hook('view_dashboard'); #HOOK
