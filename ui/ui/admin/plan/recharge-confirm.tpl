@@ -27,6 +27,10 @@
                             <b>{Lang::T('Balance')}</b> <span
                                 class="pull-right">{Lang::moneyFormat($cust['balance'])}</span>
                         </li>
+                        <li class="list-group-item">
+                            <b>{Lang::T('Balance')}</b> <span
+                                class="pull-right">{Lang::moneyFormat($cust['balance'])}</span>
+                        </li>
                     </ul>
                     <center><b>{Lang::T('Plan')}</b></center>
                     <ul class="list-group list-group-unbordered">
