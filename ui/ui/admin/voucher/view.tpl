@@ -4,6 +4,13 @@
     <div class="col-md-6 col-sm-12 col-md-offset-3">
         <div class="panel panel-hovered panel-primary panel-stacked mb30">
             <div class="panel-body">
+            <div class="alert alert-warning" style="font-size:14px; text-align:right;">
+                Tasa BCV usada: {$bcv_rate} Bs
+            </div>
+
+            <p><b>Total USD:</b> {$invoice.total_usd}</p>
+            <p><b>Total Bs:</b> {($invoice.total_usd * $bcv_rate)|number_format:2:",":"."}</p>
+
                 <form class="form-horizontal" method="post" action="{Text::url('')}plan/print" target="_blank">
                     <pre id="content"></pre>
                     <textarea class="hidden" id="formcontent" name="content">{$print}</textarea>

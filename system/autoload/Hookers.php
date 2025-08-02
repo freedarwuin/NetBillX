@@ -56,3 +56,36 @@ function run_hook($action, $args = []){
     }
     return false;
 }
+
+function updateBCVRate() {
+    $url = "https://ve.dolarapi.com/v1/dolares/oficial";
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $data = curl_exec($ch);
+    curl_close($ch);
+
+    if (!$data) return false;
+
+    $json = json_decode($data, true);
+    $rate = $json['promedio'] ?? null;
+    if (!$rate) return false;
+
+    // Guardar en BD
+    $d = ORM::for_table('bcv_rate')->find_one(1);
+    if (!$d) {
+        $d = ORM::for_table('bcv_rate')->create();
+    }
+    $d->rate = $rate;
+    $d->save();
+
+    return $rate;
+}
+
+function getBCVRate() {
+    $d = ORM::for_table('bcv_rate')->find_one(1);
+    return $d ? $d->rate : 0;
+}
+
