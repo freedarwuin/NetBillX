@@ -18,7 +18,11 @@
         {/if}
     {/foreach}
 {/function}
-
+<div class="col-md-12">
+            <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
+                💱 Tasa BCV del día: {$bcv_rate} Bs/USD
+            </div>
+        </div>
 {assign dtipe value="dashboard_`$tipeUser`"}
 
 {assign rows explode(".", $_c[$dtipe])}
