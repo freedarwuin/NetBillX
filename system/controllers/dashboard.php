@@ -1,10 +1,5 @@
 <?php
 
-/**
- *  PHP Mikrotik Billing (https://github.com/freedarwuin/NetBillX/)
- *  by https://t.me/freedarwuin
- **/
-
 _admin();
 $ui->assign('_title', Lang::T('Dashboard'));
 $ui->assign('_admin', $admin);
@@ -26,11 +21,8 @@ if (empty($tipeUser)) {
 }
 $ui->assign('tipeUser', $tipeUser);
 
-$reset_day = $config['reset_day'];
-if (empty($reset_day)) {
-    $reset_day = 1;
-}
-//first day of month
+$reset_day = $config['reset_day'] ?? 1;
+
 if (date("d") >= $reset_day) {
     $start_date = date('Y-m-' . $reset_day);
 } else {
@@ -41,7 +33,7 @@ $current_date = date('Y-m-d');
 $ui->assign('start_date', $start_date);
 $ui->assign('current_date', $current_date);
 
-$tipeUser = $admin['user_type'];
+$tipeUser = $admin['user_type'] ?? 'Admin';
 if (in_array($tipeUser, ['SuperAdmin', 'Admin'])) {
     $tipeUser = 'Admin';
 }
@@ -63,21 +55,29 @@ for ($i = 0; $i < $count; $i++) {
 
 $ui->assign('widgets', $widgets);
 
-// --- NUEVO: Obtener timezone desde tbl_appconfig ---
+// Obtener timezone de tbl_appconfig
 $timezoneConfig = ORM::for_table('tbl_appconfig')->where('name', 'timezone')->find_one();
-$timezone = $timezoneConfig ? $timezoneConfig->value : '';
+if ($timezoneConfig) {
+    $timezone = $timezoneConfig->value;
+    echo "Timezone found in DB: $timezone\n";
+} else {
+    $timezone = '';
+    echo "Timezone NOT found in DB\n";
+}
 $ui->assign('timezone', $timezone);
 
-// --- NUEVO: Obtener tasa BCV del día ---
-// Aquí debes reemplazar esta función con la lógica real que uses para obtener la tasa BCV,
-// puede ser un fetch a una API, o consulta a tu tabla 'bcv_rate'
+// Obtener tasa BCV del día
 function get_current_bcv_rate() {
-    // Ejemplo simple: consulta la última tasa registrada en la tabla bcv_rate
     $rate = ORM::for_table('bcv_rate')->order_by_desc('date')->find_one();
-    return $rate ? $rate->rate : 'N/A';
+    if ($rate) {
+        return $rate->rate;
+    } else {
+        return 'N/A';
+    }
 }
 
 $bcv_rate = get_current_bcv_rate();
+echo "BCV Rate fetched: $bcv_rate\n";
 $ui->assign('bcv_rate', $bcv_rate);
 
 run_hook('view_dashboard'); #HOOK
