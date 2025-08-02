@@ -1,6 +1,6 @@
 {include file="sections/header.tpl"}
 
-{if $timezone == "Americas/Caracas" && $bcv_rate}
+
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
@@ -8,7 +8,7 @@
             </div>
         </div>
     </div>
-{/if}
+
 
 {function showWidget pos=0}
     {foreach $widgets as $w}
