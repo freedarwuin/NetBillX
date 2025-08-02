@@ -1,14 +1,42 @@
 {include file="sections/header.tpl"}
 
-{* Mostrar tasa BCV solo si timezone es America/Caracas y hay tasa disponible *}
+{* Mostrar tasa BCV y calculadora solo si timezone es America/Caracas y hay tasa disponible *}
 {if $timezone|default:'' == "America/Caracas" && $bcv_rate|default:false}
-    <div class="row">
-        <div class="col-md-12">
-            <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
-                💱 Tasa BCV del día: {$bcv_rate} Bs/USD
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
+
+            💱 Tasa BCV del día: <span id="bcvRate">{$bcv_rate}</span> Bs/USD
+
+            <br><br>
+
+            <div class="input-group justify-content-center" style="max-width: 400px; margin: auto;">
+                <input id="usdAmount" type="number" min="0" step="any" class="form-control" placeholder="Ingrese monto en USD" aria-label="USD amount" />
+                <span class="input-group-text">USD × {$bcv_rate} =</span>
+                <input id="bsAmount" type="text" class="form-control" readonly placeholder="Resultado en Bs" aria-label="Resultado en Bs" />
             </div>
+
         </div>
     </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const usdInput = document.getElementById('usdAmount');
+        const bsOutput = document.getElementById('bsAmount');
+        const bcvRate = parseFloat(document.getElementById('bcvRate').textContent);
+
+        usdInput.addEventListener('input', function() {
+            let usd = parseFloat(usdInput.value);
+            if (isNaN(usd) || usd < 0) {
+                bsOutput.value = '';
+                return;
+            }
+            let bs = usd * bcvRate;
+            bsOutput.value = bs.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        });
+    });
+</script>
 {/if}
 
 {function showWidget pos=0}
@@ -76,8 +104,7 @@
                                 setCookie(latestVersion, 'done', 7);
                             }
                         }
-                    }
-                );
+                    });
             });
         });
     </script>
