@@ -1,6 +1,6 @@
 {include file="sections/header.tpl"}
 
-{* Mostrar tasa BCV solo si timezone es America/Caracas y hay tasa disponible *}
+{* Mostrar tasa BCV solo si timezone es America/Caracas *}
 {if $timezone|default:'' == "America/Caracas" && $bcv_rate|default:false}
     <div class="row">
         <div class="col-md-12">
@@ -18,11 +18,7 @@
         {/if}
     {/foreach}
 {/function}
-<div class="col-md-12">
-            <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
-                💱 Tasa BCV del día: {$bcv_rate} Bs/USD
-            </div>
-        </div>
+
 {assign dtipe value="dashboard_`$tipeUser`"}
 
 {assign rows explode(".", $_c[$dtipe])}
@@ -32,6 +28,13 @@
         <div class="row">
             <div class="col-md-12">
                 {showWidget widgets=$widgets pos=$pos}
+                <div class="row">
+                        <div class="col-md-12">
+                            <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
+                                💱 Tasa BCV del día: {$bcv_rate} Bs/USD
+                            </div>
+                        </div>
+                    </div>
             </div>
         </div>
         {assign pos value=$pos+1}
