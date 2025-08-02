@@ -4,7 +4,7 @@
 {if $timezone|default:'' == "America/Caracas" && $bcv_rate|default:false}
 <div class="row">
     <div class="col-md-12">
-        <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
+        <div class="alert alert-info text-center" style="font-size:9px; font-weight:bold;">
 
             💱 Tasa BCV del día: <span id="bcvRate">{$bcv_rate}</span> Bs/USD
 
