@@ -9,6 +9,9 @@
 {/function}
 
 {assign dtipe value="dashboard_`$tipeUser`"}
+
+{assign rows explode(".", $_c[$dtipe])}
+{assign pos 1}
 {* Mostrar tasa BCV solo si timezone es America/Caracas *}
 {if $timezone|default:'' == "America/Caracas" && $bcv_rate|default:false}
     <div class="row">
@@ -19,8 +22,6 @@
         </div>
     </div>
 {/if}
-{assign rows explode(".", $_c[$dtipe])}
-{assign pos 1}
 {foreach $rows as $cols}
     {if $cols == 12}
         <div class="row">
