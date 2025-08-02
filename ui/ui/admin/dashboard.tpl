@@ -1,6 +1,6 @@
 {include file="sections/header.tpl"}
 
-{* Mostrar tasa BCV solo si timezone es America/Caracas *}
+{* Mostrar tasa BCV solo si timezone es America/Caracas y hay tasa disponible *}
 {if $timezone|default:'' == "America/Caracas" && $bcv_rate|default:false}
     <div class="row">
         <div class="col-md-12">
