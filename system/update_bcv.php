@@ -1,30 +1,36 @@
 <?php
-include "../init.php";
+include "../config.php";
 
 try {
-    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name;charset=utf8", $db_user, $db_pass, [
+    $dbh = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass, [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
     ]);
 
-    $stmt = $pdo->prepare("SELECT rate FROM bcv_rate WHERE DATE(created_at)=CURDATE() ORDER BY id DESC LIMIT 1");
-    $stmt->execute();
-    $rate = $stmt->fetchColumn();
+    // Obtener tasa de la API
+    $json = file_get_contents("https://ve.dolarapi.com/v1/dolares/oficial");
+    $data = json_decode($json, true);
+    $rate = $data['promedio'] ?? $data['valor'] ?? null;
 
     if (!$rate) {
-        $api_url = "https://ve.dolarapi.com/v1/dolares/oficial";
-        $json = @file_get_contents($api_url);
-        $data = json_decode($json, true);
-        if (isset($data['precio'])) {
-            $rate = $data['precio'];
-            $insert = $pdo->prepare("INSERT INTO bcv_rate (rate, created_at) VALUES (?, NOW())");
-            $insert->execute([$rate]);
-            echo "✅ Tasa BCV actualizada: {$rate} Bs/USD\n";
-        } else {
-            echo "❌ Error al obtener la tasa desde la API\n";
-        }
+        echo "❌ Error: No se pudo obtener la tasa de la API";
+        exit;
+    }
+
+    // Verificar si ya existe la tasa de hoy
+    $stmt = $dbh->prepare("SELECT id FROM bcv_rate WHERE DATE(created_at)=CURDATE()");
+    $stmt->execute();
+    $exists = $stmt->fetchColumn();
+
+    if ($exists) {
+        $stmt = $dbh->prepare("UPDATE bcv_rate SET rate=? WHERE id=?");
+        $stmt->execute([$rate, $exists]);
+        echo "✅ Tasa BCV actualizada a $rate Bs (Hoy)";
     } else {
-        echo "ℹ️ Tasa BCV ya existe: {$rate} Bs/USD\n";
+        $stmt = $dbh->prepare("INSERT INTO bcv_rate (rate, created_at) VALUES (?, NOW())");
+        $stmt->execute([$rate]);
+        echo "✅ Tasa BCV insertada: $rate Bs (Hoy)";
     }
 } catch (PDOException $e) {
-    echo "❌ Error en la base de datos: " . $e->getMessage() . "\n";
+    echo "❌ Error en la base de datos: " . $e->getMessage();
 }
+?>
