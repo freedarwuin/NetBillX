@@ -1,14 +1,10 @@
 <?php
 
-/**
- *  PHP Mikrotik Billing (https://github.com/freedarwuin/NetBillX/)
- *  by https://t.me/freedarwuin
- **/
-
 _admin();
 $ui->assign('_title', Lang::T('Dashboard'));
 $ui->assign('_admin', $admin);
 
+// Limpieza cache si refresh
 if (isset($_GET['refresh'])) {
     $files = scandir($CACHE_PATH);
     foreach ($files as $file) {
@@ -20,52 +16,30 @@ if (isset($_GET['refresh'])) {
     r2(getUrl('dashboard'), 's', 'Data Refreshed');
 }
 
-// Leer timezone desde tbl_appconfig
-$timezone = 'UTC'; // valor por defecto si no existe
-$appconfig = ORM::for_table('tbl_appconfig')->where('key', 'timezone')->find_one();
-if ($appconfig) {
-    $timezone = $appconfig->value;
-}
-$ui->assign('timezone', $timezone);
-
-// Leer la tasa BCV del día desde la tabla bcv_rate
-$bcv_rate = null;
-$rateRecord = ORM::for_table('bcv_rate')
-    ->where_raw('DATE(created_at) = CURDATE()')
-    ->order_by_desc('created_at')
-    ->find_one();
-
-if ($rateRecord) {
-    $bcv_rate = $rateRecord->rate;
-}
-$ui->assign('bcv_rate', $bcv_rate);
-
+// Tipo usuario
 $tipeUser = _req("user");
 if (empty($tipeUser)) {
     $tipeUser = 'Admin';
 }
 $ui->assign('tipeUser', $tipeUser);
 
-$reset_day = $config['reset_day'];
-if (empty($reset_day)) {
-    $reset_day = 1;
-}
-//first day of month
+$reset_day = $config['reset_day'] ?: 1;
 if (date("d") >= $reset_day) {
     $start_date = date('Y-m-' . $reset_day);
 } else {
     $start_date = date('Y-m-' . $reset_day, strtotime("-1 MONTH"));
 }
-
 $current_date = date('Y-m-d');
 $ui->assign('start_date', $start_date);
 $ui->assign('current_date', $current_date);
 
+// Normalizar tipo usuario para widgets
 $tipeUser = $admin['user_type'];
 if (in_array($tipeUser, ['SuperAdmin', 'Admin'])) {
     $tipeUser = 'Admin';
 }
 
+// Cargar widgets
 $widgets = ORM::for_table('tbl_widgets')->where("enabled", 1)->where('user', $tipeUser)->order_by_asc("orders")->findArray();
 $count = count($widgets);
 for ($i = 0; $i < $count; $i++) {
@@ -80,7 +54,17 @@ for ($i = 0; $i < $count; $i++) {
         $widgets[$i]['content'] = $e->getMessage();
     }
 }
-
 $ui->assign('widgets', $widgets);
-run_hook('view_dashboard'); #HOOK
+
+// Consultar timezone en tbl_appconfig
+$timezoneSetting = ORM::for_table('tbl_appconfig')->where('setting', 'timezone')->find_one();
+$timezone = $timezoneSetting ? $timezoneSetting->value : null;
+$ui->assign('timezone', $timezone);
+
+// Consultar tasa BCV más reciente
+$bcvRate = ORM::for_table('bcv_rate')->order_by_desc('created_at')->find_one();
+$bcv_rate = $bcvRate ? $bcvRate->rate : null;
+$ui->assign('bcv_rate', $bcv_rate);
+
+run_hook('view_dashboard'); // HOOK
 $ui->display('admin/dashboard.tpl');

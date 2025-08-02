@@ -1,7 +1,7 @@
 {include file="sections/header.tpl"}
 
 {* Mostrar tasa BCV solo si timezone es America/Caracas *}
-{if isset($timezone) && $timezone == "America/Caracas" && isset($bcv_rate) && $bcv_rate}
+{if $timezone|default:'' == "America/Caracas" && $bcv_rate|default:false}
     <div class="row">
         <div class="col-md-12">
             <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
