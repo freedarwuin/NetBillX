@@ -62,5 +62,19 @@ for ($i = 0; $i < $count; $i++) {
 }
 
 $ui->assign('widgets', $widgets);
+
+// ✅ OBTENER TASA BCV
+try {
+    $rateQuery = ORM::for_table('bcv_rate')
+        ->raw_query("SELECT rate FROM bcv_rate ORDER BY id DESC LIMIT 1")
+        ->find_one();
+
+    $bcv_rate = $rateQuery ? $rateQuery->rate : 0;
+} catch (Exception $e) {
+    $bcv_rate = 0;
+}
+
+$ui->assign('bcv_rate', $bcv_rate);
+
 run_hook('view_dashboard'); #HOOK
 $ui->display('admin/dashboard.tpl');
