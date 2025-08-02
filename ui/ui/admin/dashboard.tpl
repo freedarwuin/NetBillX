@@ -26,18 +26,18 @@
             {foreach $colss as $c}
                 <div class="col-md-{$c}">
                     {showWidget widgets=$widgets pos=$pos}
-                </div>
-                {assign pos value=$pos+1}
-                {* Mostrar tasa BCV solo si timezone es America/Caracas *}
-                {if $timezone|default:'' == "America/Caracas" && $bcv_rate|default:false}
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
-                                💱 Tasa BCV del día: {$bcv_rate} Bs/USD
+                    {* Mostrar tasa BCV solo si timezone es America/Caracas *}
+                    {if $timezone|default:'' == "America/Caracas" && $bcv_rate|default:false}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
+                                    💱 Tasa BCV del día: {$bcv_rate} Bs/USD
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {/if}
+                    {/if}
+                </div>
+                {assign pos value=$pos+1}
             {/foreach}
         </div>
     {/if}
