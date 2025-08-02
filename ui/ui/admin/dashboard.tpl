@@ -1,5 +1,13 @@
 {include file="sections/header.tpl"}
 
+<div class="row">
+    <div class="col-md-12">
+        <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
+            💱 Tasa BCV del día: {$bcv_rate} Bs/USD
+        </div>
+    </div>
+</div>
+
 {function showWidget pos=0}
     {foreach $widgets as $w}
         {if $w['position'] == $pos}
