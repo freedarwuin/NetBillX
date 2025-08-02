@@ -1,7 +1,5 @@
 {include file="sections/header.tpl"}
 
-
-
 {function showWidget pos=0}
     {foreach $widgets as $w}
         {if $w['position'] == $pos}
@@ -9,6 +7,8 @@
         {/if}
     {/foreach}
 {/function}
+
+{assign dtipe value="dashboard_`$tipeUser`"}
 {* Mostrar tasa BCV solo si timezone es America/Caracas *}
 {if $timezone|default:'' == "America/Caracas" && $bcv_rate|default:false}
     <div class="row">
@@ -19,8 +19,6 @@
         </div>
     </div>
 {/if}
-{assign dtipe value="dashboard_`$tipeUser`"}
-
 {assign rows explode(".", $_c[$dtipe])}
 {assign pos 1}
 {foreach $rows as $cols}
