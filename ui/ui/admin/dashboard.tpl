@@ -1,67 +1,41 @@
 {include file="sections/header.tpl"}
 
-{* Mostrar tasa BCV solo si timezone es America/Caracas y hay tasa disponible *}
+{* Mostrar tasa BCV y calculadora solo si timezone es America/Caracas y hay tasa disponible *}
 {if $timezone|default:'' == "America/Caracas" && $bcv_rate|default:false}
 <div class="row">
     <div class="col-md-12">
         <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
-            💱 Tasa BCV del día:
-            <a href="#" data-bs-toggle="modal" data-bs-target="#bcvCalculatorModal" style="text-decoration: underline; cursor: pointer;">
-                <span id="bcvRate">{$bcv_rate}</span> Bs/USD
-            </a>
-        </div>
-    </div>
-</div>
 
-{* Modal Bootstrap para la calculadora *}
-<div class="modal fade" id="bcvCalculatorModal" tabindex="-1" aria-labelledby="bcvCalculatorModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="bcvCalculatorModalLabel">Calculadora BCV</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="usdAmount" class="form-label">Monto en USD</label>
-          <input id="usdAmount" type="number" min="0" step="any" class="form-control" placeholder="Ingrese monto en USD" />
+            💱 Tasa BCV del día: <span id="bcvRate">{$bcv_rate}</span> Bs/USD
+
+            <br><br>
+
+            <div class="input-group justify-content-center" style="max-width: 400px; margin: auto;">
+                <input id="usdAmount" type="number" min="0" step="any" class="form-control" placeholder="Ingrese monto en USD" aria-label="USD amount" />
+                <span class="input-group-text">USD × {$bcv_rate} =</span>
+                <input id="bsAmount" type="text" class="form-control" readonly placeholder="Resultado en Bs" aria-label="Resultado en Bs" />
+            </div>
+
         </div>
-        <div class="mb-3">
-          <label for="bsAmount" class="form-label">Equivalente en Bs</label>
-          <input id="bsAmount" type="text" class="form-control" readonly placeholder="Resultado en Bs" />
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-      </div>
     </div>
-  </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const usdInput = document.getElementById('usdAmount');
-    const bsOutput = document.getElementById('bsAmount');
-    const bcvRate = parseFloat(document.getElementById('bcvRate').textContent);
+    document.addEventListener('DOMContentLoaded', function() {
+        const usdInput = document.getElementById('usdAmount');
+        const bsOutput = document.getElementById('bsAmount');
+        const bcvRate = parseFloat(document.getElementById('bcvRate').textContent);
 
-    usdInput.addEventListener('input', function() {
-        let usd = parseFloat(usdInput.value);
-        if (isNaN(usd) || usd < 0) {
-            bsOutput.value = '';
-            return;
-        }
-        let bs = usd * bcvRate;
-        bsOutput.value = bs.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        usdInput.addEventListener('input', function() {
+            let usd = parseFloat(usdInput.value);
+            if (isNaN(usd) || usd < 0) {
+                bsOutput.value = '';
+                return;
+            }
+            let bs = usd * bcvRate;
+            bsOutput.value = bs.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        });
     });
-
-    // Opcional: Limpiar campos al abrir modal
-    const modal = document.getElementById('bcvCalculatorModal');
-    modal.addEventListener('show.bs.modal', function () {
-        usdInput.value = '';
-        bsOutput.value = '';
-        usdInput.focus();
-    });
-});
 </script>
 {/if}
 
