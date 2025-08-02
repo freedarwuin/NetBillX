@@ -63,17 +63,20 @@ for ($i = 0; $i < $count; $i++) {
 
 $ui->assign('widgets', $widgets);
 
-// ✅ OBTENER TASA BCV
-try {
-    $rateQuery = ORM::for_table('bcv_rate')
-        ->raw_query("SELECT rate FROM bcv_rate ORDER BY id DESC LIMIT 1")
-        ->find_one();
+// --- NUEVO: Obtener timezone y decidir si mostrar tasa BCV ---
+$timezoneConfig = ORM::for_table('tbl_appconfig')->where('key', 'timezone')->find_one();
+$isCaracas = false;
+if ($timezoneConfig && $timezoneConfig->value === 'America/Caracas') {
+    $isCaracas = true;
 
-    $bcv_rate = $rateQuery ? $rateQuery->rate : 0;
-} catch (Exception $e) {
-    $bcv_rate = 0;
+    // Obtener tasa BCV actual desde la tabla (ejemplo)
+    $bcvRow = ORM::for_table('bcv_rate')->order_by_desc('created_at')->find_one();
+    $bcv_rate = $bcvRow ? $bcvRow->rate : 'N/A';
+} else {
+    $bcv_rate = null;
 }
 
+$ui->assign('show_bcv_rate', $isCaracas);
 $ui->assign('bcv_rate', $bcv_rate);
 
 run_hook('view_dashboard'); #HOOK
