@@ -163,8 +163,7 @@
                             {else}
                                 <li class="list-group-item">
                                     <b>{Lang::T('Total')}</b> <span class="pull-right"
-                                        style="font-size: large; font-weight:bolder; font-family: 'Courier New', Courier, monospace; ">{if $using eq 'zero'}{Lang::moneyFormat(0)}{else}{Lang::moneyFormat($plan['price'])}{/if}</span>
-                                </li>
+                                        style="font-size: large; font-weight:bolder; font-family: 'Courier New', Courier, monospace; ">{if $using eq 'zero'}{Lang::moneyFormat(0)}{else}{Lang::moneyFormat($plan['price'])}{/if}</span>                                </li>
                             {/if}
                         {/if}
                     </ul>
