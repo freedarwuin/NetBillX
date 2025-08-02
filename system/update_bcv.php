@@ -16,24 +16,24 @@ try {
         exit;
     }
 
-    // Obtener último registro INSERTADO (independientemente del día)
-    $stmt = $dbh->prepare("SELECT rate FROM bcv_rate ORDER BY id DESC LIMIT 1");
+    // Buscar el último registro del día actual
+    $stmt = $dbh->prepare("SELECT id, rate FROM bcv_rate WHERE DATE(created_at)=CURDATE() ORDER BY id DESC LIMIT 1");
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$row) {
-        // No hay registros aún -> insertamos la primera tasa
+        // No hay registros hoy → insertar
         $stmt = $dbh->prepare("INSERT INTO bcv_rate (rate, created_at) VALUES (?, NOW())");
         $stmt->execute([$rate]);
-        echo "✅ Primera tasa insertada: $rate Bs";
+        echo "✅ Primer registro de hoy insertado: $rate Bs";
     } elseif ($row['rate'] != $rate) {
-        // El rate cambió respecto al último -> insertamos nuevo registro
+        // El rate de hoy cambió → insertar otro
         $stmt = $dbh->prepare("INSERT INTO bcv_rate (rate, created_at) VALUES (?, NOW())");
         $stmt->execute([$rate]);
-        echo "✅ Tasa cambiada, nuevo registro insertado: $rate Bs";
+        echo "✅ Nuevo registro insertado (cambió la tasa): $rate Bs";
     } else {
-        // El rate es igual al último -> no insertamos
-        echo "ℹ️ La tasa no cambió respecto al último registro ($rate Bs). No se insertó nada.";
+        // El rate es igual → no hacer nada
+        echo "ℹ️ La tasa BCV no cambió ($rate Bs). No se insertó nada.";
     }
 
 } catch (PDOException $e) {
