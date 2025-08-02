@@ -22,7 +22,6 @@
         {assign pos value=$pos+1}
     {else}
         {assign colss explode(",", $cols)}
-        <div class="row">
         {* Mostrar tasa BCV solo si timezone es America/Caracas *}
         {if $timezone|default:'' == "America/Caracas" && $bcv_rate|default:false}
             <div class="row">
@@ -33,6 +32,7 @@
                 </div>
             </div>
         {/if}
+        <div class="row">
             {foreach $colss as $c}
                 <div class="col-md-{$c}">
                     {showWidget widgets=$widgets pos=$pos}
