@@ -826,7 +826,7 @@
                     <label class="col-md-3 control-label">SMTP Host : Port</label>
                     <div class="col-md-4">
                         <input type="text" class="form-control" id="smtp_host" name="smtp_host"
-                            value="{$_c['smtp_host']}" placeholder="smtp.gmail.com">
+                            value="{$_c['smtp_host']}" placeholder="smtp.host.tld">
                     </div>
                     <div class="col-md-2">
                         <input type="number" class="form-control" id="smtp_port" name="smtp_port"
@@ -838,7 +838,7 @@
                     <label class="col-md-3 control-label">{Lang::T('SMTP Username')}</label>
                     <div class="col-md-5">
                         <input type="text" class="form-control" id="smtp_user" name="smtp_user"
-                            value="{$_c['smtp_user']}" placeholder="user@gmail.com">
+                            value="{$_c['smtp_user']}" placeholder="user@host.tld">
                     </div>
                 </div>
                 <div class="form-group">
@@ -867,14 +867,14 @@
                     <label class="col-md-3 control-label">Mail {Lang::T('From')}</label>
                     <div class="col-md-5">
                         <input type="text" class="form-control" id="mail_from" name="mail_from"
-                            value="{$_c['mail_from']}" placeholder="noreply@gmail.com">
+                            value="{$_c['mail_from']}" placeholder="noreply@host.tld">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label">{Lang::T('Mail Reply To')}</label>
                     <div class="col-md-5">
                         <input type="text" class="form-control" id="mail_reply_to" name="mail_reply_to"
-                            value="{$_c['mail_reply_to']}" placeholder="support@gmail.com">
+                            value="{$_c['mail_reply_to']}" placeholder="support@host.tld">
                     </div>
                     <p class="help-block col-md-4">
                         {Lang::T('Customer will reply email to this address, empty if you want to use From
