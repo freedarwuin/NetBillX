@@ -101,7 +101,7 @@
                         <div class="col-md-6">
                             <div class="input-group">
                                 <span class="input-group-addon" id="basic-addon1">+</span>
-                                <input type="text" class="form-control" id="country_code_phone" placeholder="62"
+                                <input type="text" class="form-control" id="country_code_phone" placeholder="58"
                                     name="country_code_phone" value="{$_c['country_code_phone']}">
                             </div>
                         </div>
