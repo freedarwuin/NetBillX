@@ -3,11 +3,11 @@
     <li role="presentation" {if $tipeUser=='Admin'} class="active" {/if}><a
             href="{Text::url('widgets&user=Admin')}">{Lang::T("Admin")}</a></li>
     <li role="presentation" {if $tipeUser=='Agent'} class="active" {/if}><a
-            href="{Text::url('widgets&user=Agent')}">Agent</a></li>
+            href="{Text::url('widgets&user=Agent')}">{Lang::T("Agent")}</a></li>
     <li role="presentation" {if $tipeUser=='Sales'} class="active" {/if}><a
-            href="{Text::url('widgets&user=Sales')}">Sales</a></li>
+            href="{Text::url('widgets&user=Sales')}">{Lang::T("Sales")}</a></li>
     <li role="presentation" {if $tipeUser=='Customer'} class="active" {/if}><a
-            href="{Text::url('widgets&user=Customer')}">Customer</a></li>
+            href="{Text::url('widgets&user=Customer')}">{Lang::T("Customer")}</a></li>
 </ul>
 <br>
 {function showWidget pos=0}
