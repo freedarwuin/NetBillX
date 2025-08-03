@@ -1,7 +1,7 @@
 {include file="sections/header.tpl"}
 <ul class="nav nav-tabs nav-justified">
     <li role="presentation" {if $tipeUser=='Admin'} class="active" {/if}><a
-            href="{Text::url('widgets&user=Admin')}">Admin</a></li>
+            href="{Text::url('widgets&user=Admin')}">{Lang::T("Admin")}</a></li>
     <li role="presentation" {if $tipeUser=='Agent'} class="active" {/if}><a
             href="{Text::url('widgets&user=Agent')}">Agent</a></li>
     <li role="presentation" {if $tipeUser=='Sales'} class="active" {/if}><a
