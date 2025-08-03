@@ -35,25 +35,25 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">Ports</label>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" id="ports" name="ports" placeholder="null"
+                            <input type="text" class="form-control" id="ports" name="ports" placeholder="{Lang::T('null')}"
                                 value="{$d['ports']}">
                         </div>
                         <label class="col-md-2 control-label">{Lang::T('Type')}</label>
                         <div class="col-md-2">
                             <input type="text" class="form-control" id="type" name="type" value="other"
-                                value="{$d['type']}" required placeholder="other">
+                                value="{$d['type']}" required placeholder="{Lang::T('other')}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label">Server</label>
                         <div class="col-md-2">
                             <input type="text" class="form-control" id="server" name="server" value="{$d['server']}"
-                                placeholder="null">
+                                placeholder="{Lang::T('null')}">
                         </div>
                         <label class="col-md-2 control-label">Community</label>
                         <div class="col-md-2">
                             <input type="text" class="form-control" id="community" name="community"
-                                value="{$d['community']}" placeholder="null">
+                                value="{$d['community']}" placeholder="{Lang::T('null')}">
                         </div>
                     </div>
                     <div class="form-group">

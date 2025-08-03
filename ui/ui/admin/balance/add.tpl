@@ -21,7 +21,7 @@
                         <label class="col-md-2 control-label">{Lang::T('Package Name')}</label>
                         <div class="col-md-6">
                             <input type="text" required class="form-control" id="name" name="name" maxlength="40"
-                                placeholder="Topup 100">
+                                placeholder="{Lang::T('Topup')} 100">
                         </div>
                     </div>
                     <div class="form-group">

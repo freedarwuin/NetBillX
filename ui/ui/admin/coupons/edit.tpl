@@ -37,7 +37,7 @@
                         <label class="col-md-2 control-label">{Lang::T('Discount Value')}</label>
                         <div class="col-md-6">
                             <input type="number" class="form-control" name="value" id="value" step="0.01"
-                                placeholder="Enter amount" required value="{$coupon['value']}">
+                                placeholder="{Lang::T('Enter amount')}" required value="{$coupon['value']}">
                             <p class="help-block"><small id="value-help">{Lang::T('Value of the discount (amount or
                                     percentage)')}</small></p>
                         </div>

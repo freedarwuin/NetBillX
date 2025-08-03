@@ -33,22 +33,22 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">Ports</label>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" id="ports" name="ports" placeholder="null">
+                            <input type="text" class="form-control" id="ports" name="ports" placeholder="{Lang::T('null')}">
                         </div>
                         <label class="col-md-2 control-label">{Lang::T('Type')}</label>
                         <div class="col-md-2">
                             <input type="text" class="form-control" id="type" name="type" value="other" required
-                                placeholder="other">
+                                placeholder="{Lang::T('other')}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-2 control-label">Server</label>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" id="server" name="server" placeholder="null">
+                            <input type="text" class="form-control" id="server" name="server" placeholder="{Lang::T('null')}">
                         </div>
                         <label class="col-md-2 control-label">Community</label>
                         <div class="col-md-2">
-                            <input type="text" class="form-control" id="community" name="community" placeholder="null">
+                            <input type="text" class="form-control" id="community" name="community" placeholder="{Lang::T('null')}">
                         </div>
                     </div>
                     <div class="form-group">

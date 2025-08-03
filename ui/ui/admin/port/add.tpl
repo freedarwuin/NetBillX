@@ -9,7 +9,7 @@
 					<div class="form-group">
 						<label class="col-md-2 control-label">{Lang::T('Port Name')}</label>
 						<div class="col-md-6">
-							<input type="text" class="form-control" id="name" name="name" placeholder="Vpn Tunnel">
+							<input type="text" class="form-control" id="name" name="name" placeholder="{Lang::T('Vpn Tunnel')}">
 						</div>
 					</div>
 					<div class="form-group">
