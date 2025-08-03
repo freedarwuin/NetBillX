@@ -207,10 +207,7 @@
     "2025.3.5" : [
         "CREATE TABLE IF NOT EXISTS `tbl_message_logs` ( `id` SERIAL PRIMARY KEY, `message_type` VARCHAR(50), `recipient` VARCHAR(255), `message_content` TEXT, `status` VARCHAR(50), `error_message` TEXT, `sent_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;"
     ],
-    "2025.8.5": [
+    "Nueva Tabla creada: bcv_rate": [
         "CREATE TABLE IF NOT EXISTS bcv_rate ( id INT AUTO_INCREMENT PRIMARY KEY, rate DECIMAL(12,2) NOT NULL, updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);"
-    ],
-    "2025.3.10" : [
-        "INSERT INTO tbl_widgets (id, orders, position, user, enabled, title, widget, content) VALUES (67, 1, 1, 'Admin', 1, 'Tasa BCV', 'bcv', '');"
     ]
 }
