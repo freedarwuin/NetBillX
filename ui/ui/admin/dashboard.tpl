@@ -7,7 +7,7 @@
         {/if}
     {/foreach}
 {/function}
-{* Mostrar tasa BCV solo si timezone es America/Caracas *}
+        {* Mostrar tasa BCV solo si timezone es America/Caracas *}
         {if $timezone|default:'' == "America/Caracas" && $bcv_rate|default:false}
             <div class="row">
                 <div class="col-md-12">
