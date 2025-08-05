@@ -1,30 +1,35 @@
 <?php
-
-function obtenerPreciosP2PBinanceUSDT($fiat = 'VES', $tradeType = 'BUY', $rows = 50) {
+function obtenerPreciosP2PBinanceUSDT($fiat = 'VES', $tradeType = 'BUY', $rows = 50)
+{
     $url = "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search";
 
     $payload = [
-        "page" => 1,
-        "rows" => $rows,
-        "payTypes" => [],
         "asset" => "USDT",
-        "tradeType" => $tradeType, // BUY o SELL
         "fiat" => $fiat,
-        "publisherType" => null
+        "merchantCheck" => false,
+        "page" => 1,
+        "payTypes" => [],
+        "publisherType" => null,
+        "rows" => $rows,
+        "tradeType" => strtoupper($tradeType) // BUY o SELL
+    ];
+
+    $headers = [
+        'Content-Type: application/json',
+        'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        'Origin: https://p2p.binance.com',
+        'Referer: https://p2p.binance.com/'
     ];
 
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Content-Type: application/json',
-        'User-Agent: Mozilla/5.0'
-    ]);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
     $response = curl_exec($ch);
-    if(curl_errno($ch)){
-        echo 'Error en CURL: ' . curl_error($ch);
+    if (curl_errno($ch)) {
+        echo '❌ Error CURL: ' . curl_error($ch);
         return null;
     }
     curl_close($ch);
@@ -32,27 +37,37 @@ function obtenerPreciosP2PBinanceUSDT($fiat = 'VES', $tradeType = 'BUY', $rows =
     $data = json_decode($response, true);
 
     if (empty($data['data'])) {
-        echo "No se encontraron datos de ofertas P2P.\n";
+        echo "⚠️ No se encontraron datos de ofertas P2P.\n";
         return null;
     }
 
-    $precios = array_map(function($offer) {
-        return floatval($offer['adv']['price']);
+    // Extraer precios
+    $precios = array_map(function ($oferta) {
+        return floatval($oferta['adv']['price']);
     }, $data['data']);
 
-    $minPrice = min($precios);
-    $maxPrice = max($precios);
+    $min = min($precios);
+    $max = max($precios);
+    $avg = array_sum($precios) / count($precios);
 
     return [
-        'min' => $minPrice,
-        'max' => $maxPrice,
-        'all_prices' => $precios
+        'min' => round($min, 2),
+        'max' => round($max, 2),
+        'avg' => round($avg, 2),
+        'cantidad' => count($precios),
+        'precios' => $precios
     ];
 }
 
-// Uso:
-$precios = obtenerPreciosP2PBinanceUSDT('VES', 'BUY', 50);
-if ($precios) {
-    echo "Precio mínimo USDT P2P Binance: {$precios['min']} VES\n";
-    echo "Precio máximo USDT P2P Binance: {$precios['max']} VES\n";
+// ▶️ Ejecutar la función
+$resultado = obtenerPreciosP2PBinanceUSDT('VES', 'BUY', 30); // Puedes cambiar a 'SELL'
+
+if ($resultado) {
+    echo "📊 Precios Binance P2P USDT/VES (BUY):\n";
+    echo "🔻 Mínimo: " . $resultado['min'] . " Bs\n";
+    echo "🔺 Máximo: " . $resultado['max'] . " Bs\n";
+    echo "📈 Promedio: " . $resultado['avg'] . " Bs\n";
+    echo "📦 Ofertas procesadas: " . $resultado['cantidad'] . "\n";
+} else {
+    echo "❌ No se pudieron obtener los datos.";
 }
