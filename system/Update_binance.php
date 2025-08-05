@@ -1,6 +1,15 @@
 <?php
 header('Content-Type: application/json');
 
+// 🕒 Duración del caché (en segundos)
+$cacheFile = __DIR__ . '/cache/ves_buy.json';
+$cacheTTL = 60; // 1 minuto
+
+if (file_exists($cacheFile) && (time() - filemtime($cacheFile) < $cacheTTL)) {
+    echo file_get_contents($cacheFile);
+    exit;
+}
+
 function obtenerPreciosBinanceP2P($asset, $fiat, $tradeType = 'BUY', $rows = 20, $payTypes = []) {
     $url = "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search";
 
@@ -16,10 +25,12 @@ function obtenerPreciosBinanceP2P($asset, $fiat, $tradeType = 'BUY', $rows = 20,
     ];
 
     $headers = [
-        "Content-Type: application/json",
-        "Origin: https://p2p.binance.com",
-        "Referer: https://p2p.binance.com",
-        "User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 16_4 like Mac OS X)"
+        "accept: application/json, text/plain, */*",
+        "accept-language: es-ES,es;q=0.9",
+        "content-type: application/json",
+        "origin: https://p2p.binance.com",
+        "referer: https://p2p.binance.com/",
+        "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
     ];
 
     $ch = curl_init($url);
@@ -27,6 +38,7 @@ function obtenerPreciosBinanceP2P($asset, $fiat, $tradeType = 'BUY', $rows = 20,
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10);
     $response = curl_exec($ch);
 
     if (curl_errno($ch)) {
@@ -37,7 +49,7 @@ function obtenerPreciosBinanceP2P($asset, $fiat, $tradeType = 'BUY', $rows = 20,
     $data = json_decode($response, true);
 
     if (empty($data['data'])) {
-        return ['error' => "Sin resultados"];
+        return ['error' => 'Sin resultados'];
     }
 
     $precios = array_map(fn($o) => floatval($o['adv']['price']), $data['data']);
@@ -51,36 +63,28 @@ function obtenerPreciosBinanceP2P($asset, $fiat, $tradeType = 'BUY', $rows = 20,
     ];
 }
 
-// ▶️ Lista de métodos de pago comunes en Venezuela
-$metodosPago = [
-    'ZINLI',
-    'BANPLUS',
-    'MERCANTIL',
-    'PROVINCIAL',
-    'BOD',
-    'BNC',
-    'BFC',
-    '100% BANCO',
-    'SOFITASA',
-    'TRANSFERENCIA',
-    'MOBILE_PAYMENT',
-    'PAYPAL'
-];
+// Métodos de pago conocidos para Venezuela
+$metodos = ['ZINLI', 'BANPLUS', 'MERCANTIL', 'BNC', 'BFC', 'PROVINCIAL', 'PAYPAL', 'TRANSFERENCIA'];
 
 $resultados = [];
 
-foreach ($metodosPago as $metodo) {
-    $r = obtenerPreciosBinanceP2P('USDT', 'VES', 'BUY', 20, [$metodo]);
-    $resultados[$metodo] = $r;
+foreach ($metodos as $metodo) {
+    $resultados[$metodo] = obtenerPreciosBinanceP2P('USDT', 'VES', 'BUY', 20, [$metodo]);
 }
 
-// También probar sin método de pago para comparar
+// También consultar sin filtrar método de pago
 $resultados['TODOS'] = obtenerPreciosBinanceP2P('USDT', 'VES', 'BUY', 20, []);
 
-echo json_encode([
+$output = [
     'timestamp' => date('Y-m-d H:i:s'),
     'asset' => 'USDT',
     'fiat' => 'VES',
     'tradeType' => 'BUY',
     'resultados' => $resultados
-], JSON_PRETTY_PRINT);
+];
+
+// Guardar en caché
+file_put_contents($cacheFile, json_encode($output, JSON_PRETTY_PRINT));
+
+// Mostrar al cliente
+echo json_encode($output, JSON_PRETTY_PRINT);
