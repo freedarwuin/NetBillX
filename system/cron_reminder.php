@@ -40,7 +40,7 @@ foreach ($d as $ds) {
         $c = ORM::for_table('tbl_customers')->where('id', $ds['customer_id'])->find_one();
         if ($p['validity_unit'] == 'Period') {
             // Postpaid price from field
-            $add_inv = User::getAttribute("Factura", $ds['customer_id']);
+            $add_inv = User::getAttribute("Invoice", $ds['customer_id']);
             if (empty($add_inv) or $add_inv == 0) {
                 $price = $p['price'];
             } else {
