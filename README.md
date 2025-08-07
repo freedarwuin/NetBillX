@@ -98,4 +98,4 @@ Agradecemos a todas las personas que están participando en este proyecto.
 
 <a href="https://github.com/freedarwuin/NetBillX/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=freedarwuin/NetBillX" />
-</a>
+</a> 
