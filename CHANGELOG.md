@@ -624,7 +624,12 @@ Customer can be move to expired pool after plan expired by cron
 
 ## 2026.02.03
 
-- Update Burst Preset to match current ISP plans (10M / 40M / 80M)
-- Remove obsolete and legacy burst presets
-- Normalize burst logic using 2x MIR with proper threshold and limit-at
-- UI cleanup for Burst Limit Preset selection
+- Actualización de los presets de Burst para ajustarlos a los planes comerciales actuales
+- Se mantienen los planes base de 10M, 40M y 80M
+- Se agregan nuevos planes de alta velocidad: 100M, 150M, 200M, 250M y 300M
+- Eliminación de presets obsoletos y escalados antiguos (planes menores a 10M)
+- Normalización de la lógica de Burst usando:
+    - MIR 2x sobre la velocidad contratada
+    - Burst Threshold al 75% del MIR
+    - Limit-at al 50% del CIR
+- Limpieza y simplificación de la interfaz de selección de Burst Limit Preset
