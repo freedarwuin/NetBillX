@@ -604,7 +604,7 @@ Customer can be move to expired pool after plan expired by cron
 ## 2023.6.20
 
 - Hide time for Created date.
-  Because the first time phpmixbill created, plan validity only for days and Months, many request ask for minutes and hours, i change it, but not the database.
+  Because the first time NetBillX created, plan validity only for days and Months, many request ask for minutes and hours, i change it, but not the database.
 ## 2023.6.15
 
 - Customer can connect to internet from Customer Dashboard
@@ -632,4 +632,4 @@ Customer can be move to expired pool after plan expired by cron
     - MIR 2x sobre la velocidad contratada
     - Burst Threshold al 75% del MIR
     - Limit-at al 50% del CIR
-- Limpieza y simplificación de la interfaz de selección de Burst Limit Preset
+- Limpieza y simplificación de la interfaz de selección de Burst Limit Preset.
