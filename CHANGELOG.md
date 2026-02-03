@@ -632,4 +632,4 @@ Customer can be move to expired pool after plan expired by cron
     - MIR 2x sobre la velocidad contratada
     - Burst Threshold al 75% del MIR
     - Limit-at al 50% del CIR
-- Limpieza y simplificación de la interfaz de selección de Burst Limit Preset.
+- Limpieza y simplificación de la interfaz de selección de Burst Limit Preset
