@@ -604,7 +604,7 @@ Customer can be move to expired pool after plan expired by cron
 ## 2023.6.20
 
 - Hide time for Created date.
-  Because the first time phpmixbill created, plan validity only for days and Months, many request ask for minutes and hours, i change it, but not the database.
+  Because the first time NetBillX created, plan validity only for days and Months, many request ask for minutes and hours, i change it, but not the database.
 ## 2023.6.15
 
 - Customer can connect to internet from Customer Dashboard
