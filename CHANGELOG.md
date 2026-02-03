@@ -621,3 +621,10 @@ Customer can be move to expired pool after plan expired by cron
 - Fixing registration without OTP
 - Username will not go to phonenumber if OTP registration is not enabled
 - Fix Bug PPOE
+
+## 2026.02.03
+
+- Update Burst Preset to match current ISP plans (10M / 40M / 80M)
+- Remove obsolete and legacy burst presets
+- Normalize burst logic using 2x MIR with proper threshold and limit-at
+- UI cleanup for Burst Limit Preset selection
