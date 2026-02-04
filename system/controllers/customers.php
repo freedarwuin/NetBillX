@@ -176,7 +176,7 @@ switch ($action) {
             $channel = $admin['fullname'];
             $cust = User::_info($id_customer);
             $plan = ORM::for_table('tbl_plans')->find_one($b['plan_id']);
-			$add_inv = User::getAttribute("Factura", $id_customer);
+			$add_inv = User::getAttribute("Invoice", $id_customer);
 			if (!empty($add_inv)) {
 				$plan['price'] = $add_inv;
 			}
