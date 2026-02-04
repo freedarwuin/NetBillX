@@ -633,3 +633,28 @@ Customer can be move to expired pool after plan expired by cron
     - Burst Threshold al 75% del MIR
     - Limit-at al 50% del CIR
 - Limpieza y simplificación de la interfaz de selección de Burst Limit Preset
+
+## 2026.02.04
+
+- Actualización de los **Burst Limit Preset** para alinearlos con los planes comerciales actuales.
+- Se mantienen los planes base:
+    - 10M → 20M
+    - 40M → 80M
+    - 80M → 160M
+- Se incorporan nuevos planes de **alta y ultra velocidad** con ráfagas:
+    - 100M → 200M
+    - 150M → 300M
+    - 200M → 400M
+    - 250M → 500M
+    - 300M → 600M
+    - 400M → 800M
+    - 500M → 900M
+    - 600M → 1G
+- Eliminación de presets obsoletos y escalados antiguos (planes menores a 10M).
+- Normalización de la lógica de Burst en todos los presets:
+    - Burst Limit (MIR): 2× la velocidad contratada
+    - Burst Threshold: 75% del MIR
+    - Limit-at: 50% del CIR
+    - Burst Time: 16s
+    - Priority: 8
+- Limpieza y simplificación de la interfaz de selección de **Burst Limit Preset**.

@@ -79,48 +79,63 @@
 	</div>
 	<div class="col-sm-4">
 	<div class="panel panel-default">
-    	<div class="panel-heading">{Lang::T('Burst Limit Preset')}</div>
-    	<div class="list-group">
+        <div class="panel-heading">{Lang::T('Burst Limit Preset')}</div>
+        <div class="list-group">
 
-    		<a href="#" class="list-group-item active">Planes actuales [Rafagas]</a>
+            <a href="#" class="list-group-item active">Planes actuales [Ráfagas]</a>
 
-    		<!-- 10 / 40 / 80 -->
-    		<a href="javascript:burstIt('10M/10M 20M/20M 15M/15M 16/16 8 5M/5M')" class="list-group-item">
-    			10M to 20M
-    		</a>
+            <!-- 10 / 40 / 80 -->
+            <a href="javascript:burstIt('10M/10M 20M/20M 15M/15M 16/16 8 5M/5M')" class="list-group-item">
+                10M to 20M
+            </a>
 
-    		<a href="javascript:burstIt('40M/40M 80M/80M 60M/60M 16/16 8 20M/20M')" class="list-group-item">
-    			40M to 80M
-    		</a>
+            <a href="javascript:burstIt('40M/40M 80M/80M 60M/60M 16/16 8 20M/20M')" class="list-group-item">
+                40M to 80M
+            </a>
 
-    		<a href="javascript:burstIt('80M/80M 160M/160M 120M/120M 16/16 8 40M/40M')" class="list-group-item">
-    			80M to 160M
-    		</a>
+            <a href="javascript:burstIt('80M/80M 160M/160M 120M/120M 16/16 8 40M/40M')" class="list-group-item">
+                80M to 160M
+            </a>
 
-    		<a href="#" class="list-group-item active">Planes alta velocidad [Rafagas]</a>
+            <a href="#" class="list-group-item active">Planes alta velocidad [Ráfagas]</a>
 
-    		<!-- 100 - 300 -->
-    		<a href="javascript:burstIt('100M/100M 200M/200M 150M/150M 16/16 8 50M/50M')" class="list-group-item">
-    			100M to 200M
-    		</a>
+            <!-- 100 - 300 -->
+            <a href="javascript:burstIt('100M/100M 200M/200M 150M/150M 16/16 8 50M/50M')" class="list-group-item">
+                100M to 200M
+            </a>
 
-    		<a href="javascript:burstIt('150M/150M 300M/300M 225M/225M 16/16 8 75M/75M')" class="list-group-item">
-    			150M to 300M
-    		</a>
+            <a href="javascript:burstIt('150M/150M 300M/300M 225M/225M 16/16 8 75M/75M')" class="list-group-item">
+                150M to 300M
+            </a>
 
-    		<a href="javascript:burstIt('200M/200M 400M/400M 300M/300M 16/16 8 100M/100M')" class="list-group-item">
-    			200M to 400M
-    		</a>
+            <a href="javascript:burstIt('200M/200M 400M/400M 300M/300M 16/16 8 100M/100M')" class="list-group-item">
+                200M to 400M
+            </a>
 
-    		<a href="javascript:burstIt('250M/250M 500M/500M 375M/375M 16/16 8 125M/125M')" class="list-group-item">
-    			250M to 500M
-    		</a>
+            <a href="javascript:burstIt('250M/250M 500M/500M 375M/375M 16/16 8 125M/125M')" class="list-group-item">
+                250M to 500M
+            </a>
 
-    		<a href="javascript:burstIt('300M/300M 600M/600M 450M/450M 16/16 8 150M/150M')" class="list-group-item">
-    			300M to 600M
-    		</a>
+            <a href="javascript:burstIt('300M/300M 600M/600M 450M/450M 16/16 8 150M/150M')" class="list-group-item">
+                300M to 600M
+            </a>
 
-    	</div>
+            <a href="#" class="list-group-item active">Planes ultra velocidad [Ráfagas]</a>
+
+            <!-- 400 - 1000 -->
+            <a href="javascript:burstIt('400M/400M 800M/800M 600M/600M 16/16 8 200M/200M')" class="list-group-item">
+                400M to 800M
+            </a>
+
+            <a href="javascript:burstIt('500M/500M 900M/900M 750M/750M 16/16 8 250M/250M')" class="list-group-item">
+                500M to 900M
+            </a>
+
+            <a href="javascript:burstIt('600M/600M 1000M/1000M 900M/900M 16/16 8 300M/300M')" class="list-group-item">
+                600M to 1G
+            </a>
+
+        </div>
     </div>
 </div>
 </div>
