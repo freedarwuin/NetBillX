@@ -631,7 +631,6 @@ class Package
         $invoice .= Lang::pad($config['address'], ' ', 2) . "\n";
         $invoice .= Lang::pad($config['phone'], ' ', 2) . "\n";
         $invoice .= Lang::pad("", '=') . "\n";
-        $invoice .= Lang::pads("Invoice", $in['invoice'], ' ') . "\n";
         $invoice .= Lang::pads(Lang::T('Invoice'), $in['invoice'], ' ') . "\n";
         $invoice .= Lang::pads(Lang::T('Date'), $date, ' ') . "\n";
         $invoice .= Lang::pads(Lang::T('Sales'), $admin['fullname'], ' ') . "\n";
@@ -678,7 +677,6 @@ class Package
         $invoice .= Lang::pad($config['address'], ' ', 2) . "\n";
         $invoice .= Lang::pad($config['phone'], ' ', 2) . "\n";
         $invoice .= Lang::pad("", '=') . "\n";
-        $invoice .= Lang::pads("Invoice", $in['invoice'], ' ') . "\n";
         $invoice .= Lang::pads(Lang::T('Invoice'), $in['invoice'], ' ') . "\n";
         $invoice .= Lang::pads(Lang::T('Date'), $date, ' ') . "\n";
         $invoice .= Lang::pads(Lang::T('Sales'), $admin['fullname'], ' ') . "\n";
