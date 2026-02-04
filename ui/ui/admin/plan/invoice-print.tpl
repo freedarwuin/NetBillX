@@ -171,7 +171,7 @@
                     </tr>
                     <tr>
                         <th>{Lang::pad(Lang::T('Password'), ' ', 2)}</th>
-                        <td>**********2</td>
+                        <td>**********</td>
                     </tr>
                     <tr>
                         <th>{Lang::pad(Lang::T('Payment Method'), ' ', 2)}</th>
