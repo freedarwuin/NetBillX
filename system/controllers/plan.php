@@ -145,7 +145,7 @@ switch ($action) {
             }
             if ($using == 'zero') {
                 $zero = 1;
-                $gateway = 'Recharge Zero';
+                $gateway = 'Recarga Cero';
             }
             $usings = explode(',', $config['payment_usings']);
             $usings = array_filter(array_unique($usings));
@@ -237,7 +237,7 @@ switch ($action) {
             if ($using == 'zero') {
                 $add_cost = 0;
                 $zero = 1;
-                $gateway = 'Recharge Zero';
+                $gateway = 'Recarga Cero';
             }
             if (Package::rechargeUser($id_customer, $server, $planId, $gateway, $channel)) {
                 if ($using == 'balance') {

@@ -208,7 +208,7 @@ switch ($action) {
             }
             if ($using == 'zero') {
                 $zero = 1;
-                $gateway = 'Recharge Zero';
+                $gateway = 'Recarga Cero';
             }
             $usings = explode(',', $config['payment_usings']);
             $usings = array_filter(array_unique($usings));
