@@ -631,7 +631,7 @@ class Package
         $invoice .= Lang::pad($config['address'], ' ', 2) . "\n";
         $invoice .= Lang::pad($config['phone'], ' ', 2) . "\n";
         $invoice .= Lang::pad("", '=') . "\n";
-        $invoice .= Lang::pads("Invoice", $in['invoice'], ' ') . "\n";
+        $invoice .= Lang::pads("Factura", $in['invoice'], ' ') . "\n";
         $invoice .= Lang::pads(Lang::T('Date'), $date, ' ') . "\n";
         $invoice .= Lang::pads(Lang::T('Sales'), $admin['fullname'], ' ') . "\n";
         $invoice .= Lang::pad("", '=') . "\n";
@@ -663,7 +663,7 @@ class Package
             $invoice .= Lang::pads(Lang::T('Full Name'), $cust['fullname'], ' ') . "\n";
         }
         $invoice .= Lang::pads(Lang::T('Username'), $in['username'], ' ') . "\n";
-        $invoice .= Lang::pads(Lang::T('Password'), '**********2', ' ') . "\n";
+        $invoice .= Lang::pads(Lang::T('Password'), '**********', ' ') . "\n";
         if ($in['type'] != 'Balance') {
             $invoice .= Lang::pads(Lang::T('Created On'), Lang::dateAndTimeFormat($in['recharged_on'], $in['recharged_time']), ' ') . "\n";
             $invoice .= Lang::pads(Lang::T('Expires On'), Lang::dateAndTimeFormat($in['expiration'], $in['time']), ' ') . "\n";
@@ -707,7 +707,7 @@ class Package
             $invoice .= Lang::pads(Lang::T('Full Name'), $cust['fullname'], ' ') . "\n";
         }
         $invoice .= Lang::pads(Lang::T('Username'), $in['username'], ' ') . "\n";
-        $invoice .= Lang::pads(Lang::T('Password'), '**********2', ' ') . "\n";
+        $invoice .= Lang::pads(Lang::T('Password'), '**********', ' ') . "\n";
         if ($in['type'] != 'Balance') {
             $invoice .= Lang::pads(Lang::T('Created On'), Lang::dateAndTimeFormat($in['recharged_on'], $in['recharged_time']), ' ') . "\n";
             $invoice .= Lang::pads(Lang::T('Expires On'), Lang::dateAndTimeFormat($in['expiration'], $in['time']), ' ') . "\n";
