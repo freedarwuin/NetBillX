@@ -146,7 +146,7 @@
                     <p>{Lang::pad($_c['address'], ' ', 2)} | {Lang::pad($_c['phone'], ' ', 2)}</p>
                 </div>
                 <div class="details">
-                    <div><strong>{Lang::pad(Lang::T('Invoic'), ' ', 2)}:</strong> {$in['invoice']}</div>
+                    <div><strong>{Lang::pad(Lang::T('Invoice'), ' ', 2)}:</strong> {$in['invoice']}</div>
                     <div><strong>{Lang::pad(Lang::T('Date'), ' ', 2)}:</strong> {$date}</div>
                     <div><strong>{Lang::pad(Lang::T('Sales'), ' ', 2)}:</strong> {Lang::pad($_admin['fullname'], ' ', 2)}
                     </div>
