@@ -82,7 +82,7 @@
     	<div class="panel-heading">{Lang::T('Burst Limit Preset')}</div>
     	<div class="list-group">
 
-    		<a href="#" class="list-group-item active">Planes actuales</a>
+    		<a href="#" class="list-group-item active">Planes actuales [Rafagas]</a>
 
     		<!-- 10 / 40 / 80 -->
     		<a href="javascript:burstIt('10M/10M 20M/20M 15M/15M 16/16 8 5M/5M')" class="list-group-item">
@@ -97,7 +97,7 @@
     			80M to 160M
     		</a>
 
-    		<a href="#" class="list-group-item active">Planes alta velocidad</a>
+    		<a href="#" class="list-group-item active">Planes alta velocidad [Rafagas]</a>
 
     		<!-- 100 - 300 -->
     		<a href="javascript:burstIt('100M/100M 200M/200M 150M/150M 16/16 8 50M/50M')" class="list-group-item">
