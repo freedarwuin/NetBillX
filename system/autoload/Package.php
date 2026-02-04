@@ -707,7 +707,7 @@ class Package
             $invoice .= Lang::pads(Lang::T('Full Name'), $cust['fullname'], ' ') . "\n";
         }
         $invoice .= Lang::pads(Lang::T('Username'), $in['username'], ' ') . "\n";
-        $invoice .= Lang::pads(Lang::T('Password'), '**********', ' ') . "\n";
+        $invoice .= Lang::pads(Lang::T('Password'), '**********2', ' ') . "\n";
         if ($in['type'] != 'Balance') {
             $invoice .= Lang::pads(Lang::T('Created On'), Lang::dateAndTimeFormat($in['recharged_on'], $in['recharged_time']), ' ') . "\n";
             $invoice .= Lang::pads(Lang::T('Expires On'), Lang::dateAndTimeFormat($in['expiration'], $in['time']), ' ') . "\n";
