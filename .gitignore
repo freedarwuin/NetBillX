@@ -56,5 +56,5 @@ docs/**
 .htaccess
 .idea
 !docs/insomnia.rest.json
-!system/uploads/old_paid.png
+!system/uploads/old__paid.png
 system/uploads/invoices/**
