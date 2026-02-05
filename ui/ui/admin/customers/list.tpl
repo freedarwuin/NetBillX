@@ -103,7 +103,7 @@
                                 <th>{Lang::T('Account Type')}</th>
                                 <th>{Lang::T('Full Name')}</th>
                                 <th>{Lang::T('Balance')}</th>
-                                <th>{Lang::T('Contact')}</th>
+                                <th>{Lang::T('WhatsApp')}</th>
                                 <th>{Lang::T('Package')}</th>
                                 <th>{Lang::T('Service Type')}</th>
                                 <th>PPPOE</th>
