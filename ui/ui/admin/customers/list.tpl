@@ -129,7 +129,7 @@
                                 <td>{Lang::moneyFormat($ds['balance'])}</td>
                                 <td align="center">
                                     {if $ds['phonenumber']}
-                                    <a href="tel:{$ds['phonenumber']}" class="btn btn-default btn-xs"
+                                    <a href="https://wa.me/{$ds['phonenumber']}" class="btn btn-default btn-xs"
                                         title="{$ds['phonenumber']}"><i class="glyphicon glyphicon-earphone"></i></a>
                                     {/if}
                                     {if $ds['email']}
