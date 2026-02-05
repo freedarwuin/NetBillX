@@ -659,6 +659,6 @@ Customer can be move to expired pool after plan expired by cron
     - Priority: 8
 - Limpieza y simplificación de la interfaz de selección de **Burst Limit Preset**.
 
-## 2026.02.04
+## 2026.02.05
 
 - Se arreglo los detalles de la factura.
