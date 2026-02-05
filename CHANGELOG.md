@@ -658,3 +658,7 @@ Customer can be move to expired pool after plan expired by cron
     - Burst Time: 16s
     - Priority: 8
 - Limpieza y simplificación de la interfaz de selección de **Burst Limit Preset**.
+
+## 2026.02.04
+
+- Se arreglo los detalles de la factura.
