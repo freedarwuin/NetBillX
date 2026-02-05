@@ -57,13 +57,13 @@
                             if (getCookie(latestVersion) != 'done') {
                                 Swal.fire({
                                     icon: 'info',
-                                    title: "New Version Available\nVersion: " + latestVersion,
+                                    title: "Nueva versión disponible\nVersión: " + latestVersion,
                                     toast: true,
                                     position: 'bottom-right',
                                     showConfirmButton: true,
                                     showCloseButton: true,
                                     timer: 30000,
-                                    confirmButtonText: '<a href="{Text::url('community')}#latestVersion" style="color: white;">Update Now</a>',
+                                    confirmButtonText: '<a href="{Text::url('community')}#latestVersion" style="color: white;">Actualizar ahora</a>',
                                     timerProgressBar: true,
                                     didOpen: (toast) => {
                                         toast.addEventListener('mouseenter', Swal.stopTimer)
