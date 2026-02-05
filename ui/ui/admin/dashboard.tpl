@@ -42,42 +42,86 @@
 {/foreach}
 
 {if $_c['new_version_notify'] != 'disable'}
-    <script>
-        window.addEventListener('DOMContentLoaded', function() {
-            $.getJSON("./version.json?" + Math.random(), function(data) {
-                var localVersion = data.version;
-                $('#version').html('Version: ' + localVersion);
-                $.getJSON(
-                    "https://raw.githubusercontent.com/freedarwuin/NetBillX/master/version.json?" +
-                    Math.random(),
-                    function(data) {
-                        var latestVersion = data.version;
-                        if (localVersion !== latestVersion) {
-                            $('#version').html('Latest Version: ' + latestVersion);
-                            if (getCookie(latestVersion) != 'done') {
-                                Swal.fire({
-                                    icon: 'info',
-                                    title: "Nueva versión disponible\nVersión: " + latestVersion,
-                                    toast: true,
-                                    position: 'bottom-right',
-                                    showConfirmButton: true,
-                                    showCloseButton: true,
-                                    timer: 30000,
-                                    confirmButtonText: '<a href="{Text::url('community')}#latestVersion" style="color: white;">Actualizar ahora</a>',
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.addEventListener('mouseenter', Swal.stopTimer)
-                                        toast.addEventListener('mouseleave', Swal.resumeTimer)
-                                    }
-                                });
-                                setCookie(latestVersion, 'done', 7);
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+
+    function formatChannel(channel) {
+        return channel ? channel.toUpperCase() : 'OFFICIAL';
+    }
+
+    function versionLabel(version, channel) {
+        return 'Versión: ' + version + ' (' + formatChannel(channel) + ')';
+    }
+
+    $.getJSON('./version.json?' + Math.random())
+        .done(function (localData) {
+
+            if (!localData.version) return;
+
+            var localVersion = localData.version;
+            var localChannel = localData.channel || 'official';
+
+            $('#version').text(
+                versionLabel(localVersion, localChannel)
+            );
+
+            $.getJSON(
+                'https://raw.githubusercontent.com/freedarwuin/NetBillX/master/version.json?' + Math.random()
+            )
+            .done(function (remoteData) {
+
+                if (!remoteData.version) return;
+
+                var latestVersion = remoteData.version;
+                var latestChannel = remoteData.channel || 'official';
+
+                if (localVersion !== latestVersion) {
+
+                    $('#version').text(
+                        'Actual disponible: ' +
+                        versionLabel(latestVersion, latestChannel)
+                    );
+
+                    var cookieName = 'nbx_version_' + latestVersion.replace(/\./g, '_');
+
+                    if (getCookie(cookieName) !== 'done') {
+
+                        Swal.fire({
+                            icon: 'info',
+                            title:
+                                'Nueva versión disponible',
+                            html:
+                                '<b>Instalada:</b> ' + localVersion + ' (' + formatChannel(localChannel) + ')<br>' +
+                                '<b>Disponible:</b> ' + latestVersion + ' (' + formatChannel(latestChannel) + ')',
+                            toast: true,
+                            position: 'bottom-right',
+                            showConfirmButton: true,
+                            showCloseButton: true,
+                            timer: 30000,
+                            confirmButtonText: 'Actualizar ahora',
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
                             }
-                        }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.open(
+                                    "{Text::url('community')}#latestVersion",
+                                    '_blank'
+                                );
+                            }
+                        });
+
+                        setCookie(cookieName, 'done', 7);
                     }
-                );
+                }
             });
+
         });
-    </script>
+
+});
+</script>
 {/if}
 
 {include file="sections/footer.tpl"}
