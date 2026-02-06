@@ -28,9 +28,9 @@ CREATE TABLE `tbl_customers` (
   `username` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `password` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `photo` VARCHAR(128) NOT NULL DEFAULT '/user.default.jpg',
-  `pppoe_username` VARCHAR(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'For PPPOE Login',
-  `pppoe_password` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'For PPPOE Login',
-  `pppoe_ip` VARCHAR(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'For PPPOE Login',
+  `pppoe_username` VARCHAR(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'Para iniciar sesión en PPPOE',
+  `pppoe_password` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'Para iniciar sesión en PPPOE',
+  `pppoe_ip` VARCHAR(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'Para iniciar sesión en PPPOE',
   `fullname` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `address` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
@@ -39,11 +39,11 @@ CREATE TABLE `tbl_customers` (
   `zip` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `phonenumber` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT '0',
   `email` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '1',
-  `coordinates` varchar(50) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'Latitude and Longitude coordinates',
-  `account_type` enum('Negocio','Personal') COLLATE utf8mb4_general_ci DEFAULT 'Personal' COMMENT 'For selecting account type',
-  `balance` decimal(15,2) NOT NULL DEFAULT '0.00' COMMENT 'For Money Deposit',
-  `service_type` enum('Hotspot','PPPoE','Otro') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'Otro' COMMENT 'For selecting user type',
-  `auto_renewal` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Auto renewall using balance',
+  `coordinates` varchar(50) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'Coordenadas de latitud y longitud',
+  `account_type` enum('Negocio','Personal') COLLATE utf8mb4_general_ci DEFAULT 'Personal' COMMENT 'Para seleccionar el tipo de cuenta',
+  `balance` decimal(15,2) NOT NULL DEFAULT '0.00' COMMENT 'Para depósito de dinero',
+  `service_type` enum('Hotspot','PPPoE','Otro') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'Otro' COMMENT 'Para seleccionar el tipo de usuario',
+  `auto_renewal` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Renovación automática usando saldo',
   `status` enum('Active','Banned','Disabled','Inactive','Limited','Suspendido') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Active',
   `created_by` int NOT NULL DEFAULT '0',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -88,8 +88,8 @@ CREATE TABLE `tbl_payment_gateway` (
   `expired_date` datetime DEFAULT NULL,
   `created_date` datetime NOT NULL,
   `paid_date` datetime DEFAULT NULL,
-  `trx_invoice` varchar(25) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'from tbl_transactions',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 unpaid 2 paid 3 failed 4 canceled'
+  `trx_invoice` varchar(25) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'de tbl_transactions',
+  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 no pagado 2 pagados 3 fallidos 4 cancelados'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `tbl_plans`;
@@ -110,13 +110,13 @@ CREATE TABLE `tbl_plans` (
   `validity_unit` enum('Mins','Hrs','Days','Months','Period') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `shared_users` int DEFAULT NULL,
   `routers` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `is_radius` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1 is radius',
+  `is_radius` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1 es el radio',
   `pool` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `plan_expired` int NOT NULL DEFAULT '0',
   `expired_date` TINYINT(1) NOT NULL DEFAULT '20',
-  `enabled` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 disabled\r\n',
-  `prepaid` enum('yes','no') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'yes' COMMENT 'is prepaid',
-  `plan_type` enum('Negocio','Personal') COLLATE utf8mb4_general_ci DEFAULT 'Personal' COMMENT 'For selecting account type',
+  `enabled` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 deshabilitado\r\n',
+  `prepaid` enum('yes','no') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'yes' COMMENT 'es prepago',
+  `plan_type` enum('Negocio','Personal') COLLATE utf8mb4_general_ci DEFAULT 'Personal' COMMENT 'Para seleccionar el tipo de cuenta',
   `device` varchar(32) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `on_login` TEXT NULL DEFAULT NULL,
   `on_logout` TEXT NULL DEFAULT NULL
@@ -143,7 +143,7 @@ CREATE TABLE `tbl_routers` (
   `status` ENUM('Online', 'Offline') DEFAULT 'Online',
   `last_seen` DATETIME,
   `coverage` VARCHAR(8) NOT NULL DEFAULT '0',
-  `enabled` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 disabled'
+  `enabled` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 deshabilitada'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `tbl_transactions`;
@@ -161,26 +161,26 @@ CREATE TABLE `tbl_transactions` (
   `method` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `routers` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `type` enum('Hotspot','PPPOE','Balance') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `note` varchar(256) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'for note',
+  `note` varchar(256) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'para nota',
   `admin_id` int NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS `tbl_users`;
 CREATE TABLE `tbl_users` (
   `id` int UNSIGNED NOT NULL,
-  `root` int NOT NULL DEFAULT '0' COMMENT 'for sub account',
+  `root` int NOT NULL DEFAULT '0' COMMENT 'para subcuenta',
   `photo` VARCHAR(128) NOT NULL DEFAULT '/admin.default.png',
   `username` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `fullname` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `password` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `phone` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `email` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
-  `city` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'kota',
-  `subdistrict` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'kecamatan',
+  `city` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'ciudad',
+  `subdistrict` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'subdistrito',
   `ward` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'kelurahan',
   `user_type` enum('SuperAdmin','Admin','Report','Agent','Sales') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `status` enum('Active','Inactive') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'Active',
-  `data` TEXT NULL DEFAULT NULL COMMENT 'to put additional data',
+  `data` TEXT NULL DEFAULT NULL COMMENT 'para poner datos adicionales',
   `last_login` datetime DEFAULT NULL,
   `login_token` VARCHAR(40),
   `creationdate` datetime NOT NULL
@@ -247,7 +247,7 @@ CREATE TABLE `tbl_customers_inbox` (
   `subject` varchar(64) COLLATE utf8mb4_general_ci NOT NULL,
   `body` TEXT  NULL DEFAULT NULL,
   `from` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'System' COMMENT 'System or Admin or Else',
-  `admin_id` int NOT NULL DEFAULT '0' COMMENT 'other than admin is 0',
+  `admin_id` int NOT NULL DEFAULT '0' COMMENT 'Aparte de admin es 0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -263,12 +263,12 @@ CREATE TABLE IF NOT EXISTS `tbl_port_pool` (
 
 CREATE TABLE IF NOT EXISTS `tbl_meta` (
   `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-  `tbl` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Table name',
-  `tbl_id` int NOT NULL COMMENT 'table value id',
+  `tbl` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Nombre de la tabla',
+  `tbl_id` int NOT NULL COMMENT 'id del valor de la tabla',
   `name` varchar(32) COLLATE utf8mb4_general_ci NOT NULL,
   `value` mediumtext COLLATE utf8mb4_general_ci,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='This Table to add additional data for any table';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='Esta tabla permite agregar datos adicionales a cualquier tabla.';
 
 CREATE TABLE IF NOT EXISTS  `tbl_coupons` (
     `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -290,7 +290,7 @@ CREATE TABLE IF NOT EXISTS  `tbl_coupons` (
 CREATE TABLE IF NOT EXISTS `tbl_widgets` (
   `id` int NOT NULL AUTO_INCREMENT,
   `orders` int NOT NULL DEFAULT '99',
-  `position` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1. top 2. left 3. right 4. bottom',
+  `position` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1. arriba 2. izquierda 3. derecha 4. abajo',
   `user` ENUM('Admin','Agent','Sales','Customer') NOT NULL DEFAULT 'Admin',
   `enabled` tinyint(1) NOT NULL DEFAULT '1',
   `title` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
