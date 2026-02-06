@@ -66,7 +66,7 @@
                             <a href="https://github.com/freedarwuin/NetBillX/discussions" target="_blank"
                             class="btn btn-success btn-sm btn-block" style="color: black;">{Lang::T('Ask Github Community')}</a>
                                 <a href="https://wa.me/584224512433?text=Hola%2C%20estoy%20usando%20el%20sistema%20NetBillX%20y%20requiero%20soporte.%0A%0ANombre%20completo%3A%0ACiudad%3A%0APa%C3%ADs%3A%0A%0AVersi%C3%B3n%20del%20sistema%3A%0AURL%20del%20sistema%3A%0AUsuario%20administrador%3A%0A%0ADescripci%C3%B3n%20del%20problema%3A%0ADesde%20cu%C3%A1ndo%20ocurre%3A%0AMensaje%20de%20error%20%28si%20aplica%29%3A%0A%0AGracias." target="_blank"
-                                    class="btn btn-primary btn-sm btn-block">{Lang::T('Ask Telegram Community')}</a>
+                                    class="btn btn-primary btn-sm btn-block">{Lang::T('Ask WhatsApp Community')}</a>
                             </div>
                             <br><br>
                             <a href="javascript::history.back()" onclick="history.back()"

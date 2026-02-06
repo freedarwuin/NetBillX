@@ -13,7 +13,7 @@ class MikrotikVpn
             'author' => 'agstr',
             'url' => [
                 'Github' => 'https://github.com/agstrxyz',
-                'Telegram' => 'https://t.me/agstrxyz',
+                'WhatsApp' => 'https://t.me/agstrxyz',
                 'Youtube' => 'https://www.youtube.com/@agstrxyz',
                 'Donate' => 'https://paypal.me/DPedroa'
             ]
