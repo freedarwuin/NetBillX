@@ -30,7 +30,7 @@
                     <a href="https://github.com/freedarwuin/NetBillX/discussions" target="_blank"
                         class="btn btn-primary btn-sm btn-block"><i class="ion ion-chatboxes"></i> {Lang::T('Github
                         Discussions')}</a>
-                    <a href="https://wa.me/584224512433?text=Hola%2C%20estoy%20usando%20el%20sistema%20NetBillX%20y%20requiero%20soporte.%0A%0ANombre%20completo%3A%0ACiudad%3A%0APa%C3%ADs%3A%0A%0AVersi%C3%B3n%20del%20sistema%3A%0AURL%20del%20sistema%3A%0AUsuario%20administrador%3A%0A%0ADescripci%C3%B3n%20del%20problema%3A%0ADesde%20cu%C3%A1ndo%20ocurre%3A%0AMensaje%20de%20error%20%28si%20aplica%29%3A%0A%0AGracias." target="_blank" class="btn btn-primary btn-sm btn-block"><i
+                    <a href="https://chat.whatsapp.com/EZnAZvsTODbBJZQC3rNuFX?mode=gi_t" target="_blank" class="btn btn-primary btn-sm btn-block"><i
                             class="ion ion-chatboxes"></i> {Lang::T('WhatsApp Group')}</a>
                 </div>
             </div>
@@ -124,7 +124,7 @@
                 {Lang::T('Confirm your donation to continue this paid support. Or, ask about alternative donations available to suit your needs.')}
             </div>
             <div class="box-footer">
-                <a href="https://wa.me/584224512433?text=Hola%2C%20estoy%20usando%20el%20sistema%20NetBillX%20y%20requiero%20soporte.%0A%0ANombre%20completo%3A%0ACiudad%3A%0APa%C3%ADs%3A%0A%0AVersi%C3%B3n%20del%20sistema%3A%0AURL%20del%20sistema%3A%0AUsuario%20administrador%3A%0A%0ADescripci%C3%B3n%20del%20problema%3A%0ADesde%20cu%C3%A1ndo%20ocurre%3A%0AMensaje%20de%20error%20%28si%20aplica%29%3A%0A%0AGracias." target="_blank" class="btn btn-primary btn-sm btn-block">{Lang::T('WhatsApp')}</a>
+                <a https://wa.me/584224514233?text=Hola%2C%20deseo%20colaborar%20con%20una%20donaci%C3%B3n%20para%20continuar%20utilizando%20el%20soporte%20de%20NetBillX.%0A%0APor%20favor%2C%20ind%C3%ADcame%20los%20datos%20disponibles%20para%20realizar%20el%20pago.%0A%0ANombre%20completo%3A%0APa%C3%ADs%3A%0ACorreo%20electr%C3%B3nico%3A%0A%0ATipo%20de%20donaci%C3%B3n%3A%0A%28Mensual%20%2F%20%C3%9Anica%20%2F%20Otra%29%0A%0AMonto%20estimado%20%28opcional%29%3A%0A%0AGracias." target="_blank" class="btn btn-primary btn-sm btn-block">{Lang::T('WhatsApp')}</a>
             </div>
         </div>
         <div class="box box-primary box-hovered mb20 activities">
