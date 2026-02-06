@@ -107,7 +107,7 @@ window.addEventListener('DOMContentLoaded', function () {
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 window.open(
-                                    "{Text::url('community')}#latestVersion",
+                                    "./update.php",
                                     '_blank'
                                 );
                             }
