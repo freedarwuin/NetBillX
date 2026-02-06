@@ -148,7 +148,7 @@
             <div class="box-body">
                 <b>NetBillX</b>
                 {Lang::T('is a Hotspot and PPPoE billing platform for Mikrotik developed using PHP. The application uses Mikrotik API to communicate with the router, ensuring efficient and easy integration. If you feel you get more benefits from this application, we would greatly appreciate your contribution through donation.')}<br>{Lang::T('Watch project –')} <a
-                    href="https://github.com/freedarwuin/NetBillX" target="_blank">{Lang::T('IN HERE')}</a>
+                    href="https://github.com/freedarwuin/NetBillXyz" target="_blank">{Lang::T('IN HERE')}</a>
             </div>
             <div class="box-footer" id="currentVersion">ver</div>
             <div class="box-footer" id="latestVersion">ver</div>
@@ -167,7 +167,7 @@
                 <div class="btn-group btn-group-justified" role="group" aria-label="...">
                     <a href="./CHANGELOG.md" target="_blank"
                         class="btn btn-default btn-sm btn-block">{Lang::T('Current Changelog')}</a>
-                    <a href="https://github.com/freedarwuin/NetBillX/blob/master/CHANGELOG.md" target="_blank"
+                    <a href="https://github.com/freedarwuin/NetBillXyz/blob/master/CHANGELOG.md" target="_blank"
                         class="btn btn-default btn-sm btn-block">{Lang::T('Repo Changelog')}</a>
                 </div>
             </div>
