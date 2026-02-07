@@ -57,11 +57,11 @@ class Package
 
         $add_cost = 0;
         $bills = [];
-        // Recarga de costo cero
+        // Zero cost recharge
         if (isset($zero) && $zero == 1) {
             $p['price'] = 0;
         } else {
-            // Costo adicional
+            // Additional cost
             list($bills, $add_cost) = User::getBills($id_customer);
             if ($add_cost != 0 && $router_name != 'balance') {
                 foreach ($bills as $k => $v) {
@@ -82,10 +82,10 @@ class Package
         }
 
         if ($p['validity_unit'] == 'Period') {
-            // Si el cliente tiene el atributo Fecha de Vencimiento, usarlo.
+            // if customer has attribute Expired Date use it
             $day_exp = User::getAttribute("Expired Date", $c['id']);
             if (!$day_exp) {
-                // Si el cliente no tiene el atributo Fecha de Vencimiento, usar la fecha de vencimiento del plan.
+                // if customer no attribute Expired Date use plan expired date
                 $day_exp = 20;
                 if ($p['prepaid'] == 'no') {
                     $day_exp = $p['expired_date'];
@@ -107,7 +107,7 @@ class Package
         }
 
         /**
-         * Un cliente solo puede tener 1 plan PPPOE y 1 plan Hotspot, 1 prepago y 1 postpago.
+         * 1 Customer only can have 1 PPPOE and 1 Hotspot Plan, 1 prepaid and 1 postpaid
          */
 
         $query = ORM::for_table('tbl_user_recharges')
@@ -128,8 +128,8 @@ class Package
             ->select('prepaid')
             ->where('tbl_user_recharges.routers', $router_name)
             ->where('tbl_user_recharges.Type', $p['type'])
-            # PPPOE o Hotspot solo pueden tener 1 por cliente, ya sea prepago o postpago.
-            # Porque un cliente puede tener 1 plan PPPOE y 1 plan Hotspot en Mikrotik.
+            # PPPOE or Hotspot only can have 1 per customer prepaid or postpaid
+            # because 1 customer can have 1 PPPOE and 1 Hotspot Plan in mikrotik
             //->where('prepaid', $p['prepaid'])
             ->left_outer_join('tbl_plans', array('tbl_plans.id', '=', 'tbl_user_recharges.plan_id'));
         if ($isVoucher) {
@@ -142,37 +142,36 @@ class Package
         run_hook("recharge_user");
 
         if ($p['validity_unit'] == 'Months') {
-            // Calcular la fecha de expiración sumando meses
             $date_exp = date("Y-m-d", strtotime('+' . $p['validity'] . ' month'));
         } else if ($p['validity_unit'] == 'Period') {
-            // Manejo de validez por períodos
             $current_date = new DateTime($date_only);
             $exp_date = clone $current_date;
             $exp_date->modify('first day of next month');
             $exp_date->setDate($exp_date->format('Y'), $exp_date->format('m'), $day_exp);
 
-            // Validación de los días de expiración según el período
             $min_days = 7 * $p['validity'];
             $max_days = 35 * $p['validity'];
+
             $days_until_exp = $exp_date->diff($current_date)->days;
 
-            // Ajustar la fecha si falta menos de min_days o más de max_days
+            // If less than min_days away, move to the next period
             while ($days_until_exp < $min_days) {
                 $exp_date->modify('+1 month');
                 $days_until_exp = $exp_date->diff($current_date)->days;
             }
 
+            // If more than max_days away, move to the previous period
             while ($days_until_exp > $max_days) {
                 $exp_date->modify('-1 month');
                 $days_until_exp = $exp_date->diff($current_date)->days;
             }
 
-            // Ajustar para asegurar que la fecha no esté en el pasado
+            // Final check to ensure we're not less than min_days or in the past
             if ($days_until_exp < $min_days || $exp_date <= $current_date) {
                 $exp_date->modify('+1 month');
             }
 
-            // Si el valor de validez es mayor a 1, ajustar el período de expiración
+            // Adjust for multiple periods
             if ($p['validity'] > 1) {
                 $exp_date->modify('+' . ($p['validity'] - 1) . ' months');
             }
@@ -180,28 +179,24 @@ class Package
             $date_exp = $exp_date->format('Y-m-d');
             $time = "23:59:59";
         } else if ($p['validity_unit'] == 'Days') {
-            // Para días
             $datetime = explode(' ', date("Y-m-d H:i:s", strtotime('+' . $p['validity'] . ' day')));
             $date_exp = $datetime[0];
             $time = $datetime[1];
         } else if ($p['validity_unit'] == 'Hrs') {
-            // Para horas
             $datetime = explode(' ', date("Y-m-d H:i:s", strtotime('+' . $p['validity'] . ' hour')));
             $date_exp = $datetime[0];
             $time = $datetime[1];
         } else if ($p['validity_unit'] == 'Mins') {
-            // Para minutos
             $datetime = explode(' ', date("Y-m-d H:i:s", strtotime('+' . $p['validity'] . ' minute')));
             $date_exp = $datetime[0];
             $time = $datetime[1];
         }
 
-        // Verificar si el plan está activo y extender la expiración si es necesario
         if ($b) {
             $lastExpired = Lang::dateAndTimeFormat($b['expiration'], $b['time']);
             $isChangePlan = false;
             if ($b['namebp'] == $p['name_plan'] && $b['status'] == 'on' && $config['extend_expiry'] == 'yes') {
-                // Si el plan es el mismo y está activo, extender la fecha de expiración
+                // if it same internet plan, expired will extend
                 switch ($p['validity_unit']) {
                     case 'Months':
                         $date_exp = date("Y-m-d", strtotime($b['expiration'] . ' +' . $p['validity'] . ' months'));
@@ -209,7 +204,7 @@ class Package
                         break;
                     case 'Period':
                         $date_exp = date("Y-m-$day_exp", strtotime($b['expiration'] . ' +' . $p['validity'] . ' months'));
-                        $time = "23:59:00";
+                        $time = date("23:59:00");
                         break;
                     case 'Days':
                         $date_exp = date("Y-m-d", strtotime($b['expiration'] . ' +' . $p['validity'] . ' days'));
@@ -229,8 +224,6 @@ class Package
             } else {
                 $isChangePlan = true;
             }
-        }
-
 
             //if ($b['status'] == 'on') {
             $dvc = Package::getDevice($p);
