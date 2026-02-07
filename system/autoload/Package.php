@@ -144,39 +144,31 @@ class Package
         if ($p['validity_unit'] == 'Months') {
             $date_exp = date("Y-m-d", strtotime('+' . $p['validity'] . ' month'));
         } else if ($p['validity_unit'] == 'Period') {
+
             $current_date = new DateTime($date_only);
-            $exp_date = clone $current_date;
-            $exp_date->modify('first day of next month');
-            $exp_date->setDate($exp_date->format('Y'), $exp_date->format('m'), $day_exp);
 
-            $min_days = 7 * $p['validity'];
-            $max_days = 35 * $p['validity'];
+            // Día de corte configurado
+            $cut_day = (int)$day_exp;
 
-            $days_until_exp = $exp_date->diff($current_date)->days;
+            // Fecha de corte del mes actual
+            $cut_date = new DateTime($current_date->format('Y-m-') . $cut_day);
 
-            // If less than min_days away, move to the next period
-            while ($days_until_exp < $min_days) {
-                $exp_date->modify('+1 month');
-                $days_until_exp = $exp_date->diff($current_date)->days;
+            // Si hoy ya pasó el corte, usar el próximo mes
+            if ($current_date > $cut_date) {
+                $cut_date->modify('first day of next month');
+                $cut_date->setDate(
+                    $cut_date->format('Y'),
+                    $cut_date->format('m'),
+                    min($cut_day, (int)$cut_date->format('t'))
+                );
             }
 
-            // If more than max_days away, move to the previous period
-            while ($days_until_exp > $max_days) {
-                $exp_date->modify('-1 month');
-                $days_until_exp = $exp_date->diff($current_date)->days;
-            }
-
-            // Final check to ensure we're not less than min_days or in the past
-            if ($days_until_exp < $min_days || $exp_date <= $current_date) {
-                $exp_date->modify('+1 month');
-            }
-
-            // Adjust for multiple periods
+            // Si son varios períodos (ej. 2 meses, 3 meses)
             if ($p['validity'] > 1) {
-                $exp_date->modify('+' . ($p['validity'] - 1) . ' months');
+                $cut_date->modify('+' . ($p['validity'] - 1) . ' months');
             }
 
-            $date_exp = $exp_date->format('Y-m-d');
+            $date_exp = $cut_date->format('Y-m-d');
             $time = "23:59:59";
         } else if ($p['validity_unit'] == 'Days') {
             $datetime = explode(' ', date("Y-m-d H:i:s", strtotime('+' . $p['validity'] . ' day')));
