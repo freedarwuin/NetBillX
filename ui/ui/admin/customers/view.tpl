@@ -138,7 +138,7 @@
                     {if Lang::arrayCount($activation)}
                         <thead>
                             <tr>
-                                <th>{Lang::T('Control Number:')}</th>
+                                <th>{Lang::T('Invoice')}</th>
                                 <th>{Lang::T('Username')}</th>
                                 <th>{Lang::T('Plan Name')}</th>
                                 <th>{Lang::T('Plan Price')}</th>
