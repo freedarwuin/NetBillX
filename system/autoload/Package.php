@@ -142,36 +142,37 @@ class Package
         run_hook("recharge_user");
 
         if ($p['validity_unit'] == 'Months') {
+            // Calcular la fecha de expiración sumando meses
             $date_exp = date("Y-m-d", strtotime('+' . $p['validity'] . ' month'));
         } else if ($p['validity_unit'] == 'Period') {
+            // Manejo de validez por períodos
             $current_date = new DateTime($date_only);
             $exp_date = clone $current_date;
             $exp_date->modify('first day of next month');
             $exp_date->setDate($exp_date->format('Y'), $exp_date->format('m'), $day_exp);
 
+            // Validación de los días de expiración según el período
             $min_days = 7 * $p['validity'];
             $max_days = 35 * $p['validity'];
-
             $days_until_exp = $exp_date->diff($current_date)->days;
 
-            // Si faltan menos de min_days, pasar al siguiente período.
+            // Ajustar la fecha si falta menos de min_days o más de max_days
             while ($days_until_exp < $min_days) {
                 $exp_date->modify('+1 month');
                 $days_until_exp = $exp_date->diff($current_date)->days;
             }
 
-            // Si faltan más de max_days, pasar al período anterior.
             while ($days_until_exp > $max_days) {
                 $exp_date->modify('-1 month');
                 $days_until_exp = $exp_date->diff($current_date)->days;
             }
 
-            // Verificación final para asegurar que no sea menor que min_days ni esté en el pasado.
+            // Ajustar para asegurar que la fecha no esté en el pasado
             if ($days_until_exp < $min_days || $exp_date <= $current_date) {
                 $exp_date->modify('+1 month');
             }
 
-            // Ajustar para múltiples períodos.
+            // Si el valor de validez es mayor a 1, ajustar el período de expiración
             if ($p['validity'] > 1) {
                 $exp_date->modify('+' . ($p['validity'] - 1) . ' months');
             }
@@ -179,24 +180,28 @@ class Package
             $date_exp = $exp_date->format('Y-m-d');
             $time = "23:59:59";
         } else if ($p['validity_unit'] == 'Days') {
+            // Para días
             $datetime = explode(' ', date("Y-m-d H:i:s", strtotime('+' . $p['validity'] . ' day')));
             $date_exp = $datetime[0];
             $time = $datetime[1];
         } else if ($p['validity_unit'] == 'Hrs') {
+            // Para horas
             $datetime = explode(' ', date("Y-m-d H:i:s", strtotime('+' . $p['validity'] . ' hour')));
             $date_exp = $datetime[0];
             $time = $datetime[1];
         } else if ($p['validity_unit'] == 'Mins') {
+            // Para minutos
             $datetime = explode(' ', date("Y-m-d H:i:s", strtotime('+' . $p['validity'] . ' minute')));
             $date_exp = $datetime[0];
             $time = $datetime[1];
         }
 
+        // Verificar si el plan está activo y extender la expiración si es necesario
         if ($b) {
             $lastExpired = Lang::dateAndTimeFormat($b['expiration'], $b['time']);
             $isChangePlan = false;
             if ($b['namebp'] == $p['name_plan'] && $b['status'] == 'on' && $config['extend_expiry'] == 'yes') {
-                // if it same internet plan, expired will extend
+                // Si el plan es el mismo y está activo, extender la fecha de expiración
                 switch ($p['validity_unit']) {
                     case 'Months':
                         $date_exp = date("Y-m-d", strtotime($b['expiration'] . ' +' . $p['validity'] . ' months'));
@@ -204,7 +209,7 @@ class Package
                         break;
                     case 'Period':
                         $date_exp = date("Y-m-$day_exp", strtotime($b['expiration'] . ' +' . $p['validity'] . ' months'));
-                        $time = date("23:59:00");
+                        $time = "23:59:00";
                         break;
                     case 'Days':
                         $date_exp = date("Y-m-d", strtotime($b['expiration'] . ' +' . $p['validity'] . ' days'));
@@ -224,6 +229,8 @@ class Package
             } else {
                 $isChangePlan = true;
             }
+        }
+
 
             //if ($b['status'] == 'on') {
             $dvc = Package::getDevice($p);
