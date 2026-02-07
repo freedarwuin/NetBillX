@@ -142,41 +142,21 @@ class Package
         run_hook("recharge_user");
 
         if ($p['validity_unit'] == 'Months') {
-            $date_exp = date("Y-m-d", strtotime('+' . $p['validity'] . ' month'));
-        } else if ($p['validity_unit'] == 'Period') {
-            $current_date = new DateTime($date_only);
-            $exp_date = clone $current_date;
-            $exp_date->modify('first day of next month');
-            $exp_date->setDate($exp_date->format('Y'), $exp_date->format('m'), $day_exp);
+            $cut_day = $p['expired_date'] ?? 28;
 
-            $min_days = 7 * $p['validity'];
-            $max_days = 35 * $p['validity'];
+            $current = new DateTime($date_only);
+            $exp = clone $current;
 
-            $days_until_exp = $exp_date->diff($current_date)->days;
-
-            // If less than min_days away, move to the next period
-            while ($days_until_exp < $min_days) {
-                $exp_date->modify('+1 month');
-                $days_until_exp = $exp_date->diff($current_date)->days;
+            if ((int)$current->format('d') <= $cut_day) {
+                // mismo mes
+                $exp->setDate($current->format('Y'), $current->format('m'), $cut_day);
+            } else {
+                // próximo mes
+                $exp->modify('first day of next month');
+                $exp->setDate($exp->format('Y'), $exp->format('m'), $cut_day);
             }
 
-            // If more than max_days away, move to the previous period
-            while ($days_until_exp > $max_days) {
-                $exp_date->modify('-1 month');
-                $days_until_exp = $exp_date->diff($current_date)->days;
-            }
-
-            // Final check to ensure we're not less than min_days or in the past
-            if ($days_until_exp < $min_days || $exp_date <= $current_date) {
-                $exp_date->modify('+1 month');
-            }
-
-            // Adjust for multiple periods
-            if ($p['validity'] > 1) {
-                $exp_date->modify('+' . ($p['validity'] - 1) . ' months');
-            }
-
-            $date_exp = $exp_date->format('Y-m-d');
+            $date_exp = $exp->format('Y-m-d');
             $time = "23:59:59";
         } else if ($p['validity_unit'] == 'Days') {
             $datetime = explode(' ', date("Y-m-d H:i:s", strtotime('+' . $p['validity'] . ' day')));
