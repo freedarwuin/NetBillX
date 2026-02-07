@@ -144,8 +144,8 @@ class Package
         if ($p['validity_unit'] == 'Months') {
             $current = new DateTime($date_only);
 
-            // último día del mes actual
-            $last_day = (int)$current->format('t'); // 't' da la cantidad de días del mes
+            // calcular último día del mes actual
+            $last_day = (int)$current->format('t');
 
             $exp = clone $current;
 
@@ -159,8 +159,10 @@ class Package
                 $exp->setDate($exp->format('Y'), $exp->format('m'), $last_day_next);
             }
 
+            // establecer la expiración a medianoche
+            $time = "00:00:00";
+
             $date_exp = $exp->format('Y-m-d');
-            $time = "23:59:59";
         } else if ($p['validity_unit'] == 'Days') {
             $datetime = explode(' ', date("Y-m-d H:i:s", strtotime('+' . $p['validity'] . ' day')));
             $date_exp = $datetime[0];
