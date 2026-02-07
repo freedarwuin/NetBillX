@@ -24,10 +24,10 @@
                             <select id="id_plan" name="id_plan" class="form-control select2">
                                 {foreach $p as $ps}
                                     <option value="{$ps['id']}" {if $d['plan_id'] eq $ps['id']} selected {/if}>
-                                        {if $ps['enabled'] neq 1}DESACTIVADO PLAN &bull; {/if}
+                                        {if $ps['enabled'] neq 1}{Lang::T('DISABLED PLAN')} &bull; {/if}
                                         {$ps['name_plan']} &bull;
                                         {Lang::moneyFormat($ps['price'])}
-                                        {if $ps['prepaid'] neq 'yes'} &bull; POSTPAGO {/if}
+                                        {if $ps['prepaid'] neq 'yes'} &bull; {Lang::T('POSTPAID')} {/if}
                                     </option>
                                 {/foreach}
                             </select>
