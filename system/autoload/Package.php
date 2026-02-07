@@ -82,14 +82,19 @@ class Package
         }
 
         if ($p['validity_unit'] == 'Period') {
-            // Obtener día de expiración del atributo del usuario o valor por defecto
+            // if customer has attribute Expired Date use it
             $day_exp = User::getAttribute("Expired Date", $c['id']);
             if (!$day_exp) {
-                $day_exp = 20; // día por defecto
-                if ($p['prepaid'] == 'no' && !empty($p['expired_date'])) {
+                // if customer no attribute Expired Date use plan expired date
+                $day_exp = 20;
+                if ($p['prepaid'] == 'no') {
                     $day_exp = $p['expired_date'];
                 }
+                if (empty($day_exp)) {
+                    $day_exp = 20;
+                }
             }
+        }
 
 
 
