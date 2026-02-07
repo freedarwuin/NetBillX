@@ -86,12 +86,12 @@ class Package
             $day_exp = User::getAttribute("Expired Date", $c['id']);
             if (!$day_exp) {
                 // if customer no attribute Expired Date use plan expired date
-                $day_exp = 20;
+                $day_exp = 7;
                 if ($p['prepaid'] == 'no') {
                     $day_exp = $p['expired_date'];
                 }
                 if (empty($day_exp)) {
-                    $day_exp = 20;
+                    $day_exp = 7;
                 }
             }
         }
