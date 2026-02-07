@@ -82,19 +82,14 @@ class Package
         }
 
         if ($p['validity_unit'] == 'Period') {
-            // if customer has attribute Expired Date use it
+            // Obtener día de expiración del atributo del usuario o valor por defecto
             $day_exp = User::getAttribute("Expired Date", $c['id']);
             if (!$day_exp) {
-                // if customer no attribute Expired Date use plan expired date
-                $day_exp = 2;
-                if ($p['prepaid'] == 'no') {
+                $day_exp = 20; // día por defecto
+                if ($p['prepaid'] == 'no' && !empty($p['expired_date'])) {
                     $day_exp = $p['expired_date'];
                 }
-                if (empty($day_exp)) {
-                    $day_exp = 2;
-                }
             }
-        }
 
 
 
@@ -141,43 +136,30 @@ class Package
 
         run_hook("recharge_user");
 
-        if ($p['validity_unit'] == 'Months') {
-            $date_exp = date("Y-m-d", strtotime('+' . $p['validity'] . ' month'));
-        } else if ($p['validity_unit'] == 'Period') {
+        // Fecha de activación
             $current_date = new DateTime($date_only);
-            $exp_date = clone $current_date;
+
+            // Empezamos con el primer día del próximo mes
+            $exp_date = new DateTime($date_only);
             $exp_date->modify('first day of next month');
+
+            // Ajustamos al día de expiración
             $exp_date->setDate($exp_date->format('Y'), $exp_date->format('m'), $day_exp);
 
-            $min_days = 7 * $p['validity'];
-            $max_days = 35 * $p['validity'];
-
-            $days_until_exp = $exp_date->diff($current_date)->days;
-
-            // If less than min_days away, move to the next period
-            while ($days_until_exp < $min_days) {
+            // Si la fecha resultante está antes del día actual, mover al siguiente mes
+            if ($exp_date <= $current_date) {
                 $exp_date->modify('+1 month');
-                $days_until_exp = $exp_date->diff($current_date)->days;
+                $exp_date->setDate($exp_date->format('Y'), $exp_date->format('m'), $day_exp);
             }
 
-            // If more than max_days away, move to the previous period
-            while ($days_until_exp > $max_days) {
-                $exp_date->modify('-1 month');
-                $days_until_exp = $exp_date->diff($current_date)->days;
-            }
-
-            // Final check to ensure we're not less than min_days or in the past
-            if ($days_until_exp < $min_days || $exp_date <= $current_date) {
-                $exp_date->modify('+1 month');
-            }
-
-            // Adjust for multiple periods
+            // Ajuste para múltiples períodos
             if ($p['validity'] > 1) {
                 $exp_date->modify('+' . ($p['validity'] - 1) . ' months');
+                $exp_date->setDate($exp_date->format('Y'), $exp_date->format('m'), $day_exp);
             }
 
             $date_exp = $exp_date->format('Y-m-d');
-            $time = "23:59:59";
+            $time = "00:00:00"; // hora de corte
         } else if ($p['validity_unit'] == 'Days') {
             $datetime = explode(' ', date("Y-m-d H:i:s", strtotime('+' . $p['validity'] . ' day')));
             $date_exp = $datetime[0];
