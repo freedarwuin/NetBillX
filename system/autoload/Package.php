@@ -142,11 +142,7 @@ class Package
         run_hook("recharge_user");
 
         if ($p['validity_unit'] == 'Months') {
-            // Crear una nueva fecha
-            $date_exp = new DateTime();
-            $date_exp->modify('+' . $p['validity'] . ' month');
-            $date_exp->modify('last day of this month');  // Ajustar al último día del mes
-            $date_exp = $date_exp->format('Y-m-d');
+            $date_exp = date("Y-m-d", strtotime('+' . $p['validity'] . ' month'));
         } else if ($p['validity_unit'] == 'Period') {
             $current_date = new DateTime($date_only);
             $exp_date = clone $current_date;
@@ -195,7 +191,6 @@ class Package
             $date_exp = $datetime[0];
             $time = $datetime[1];
         }
-
 
         if ($b) {
             $lastExpired = Lang::dateAndTimeFormat($b['expiration'], $b['time']);
