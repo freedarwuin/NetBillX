@@ -57,11 +57,11 @@ class Package
 
         $add_cost = 0;
         $bills = [];
-        // Zero cost recharge
+        // Recarga de costo cero
         if (isset($zero) && $zero == 1) {
             $p['price'] = 0;
         } else {
-            // Additional cost
+            // Costo adicional
             list($bills, $add_cost) = User::getBills($id_customer);
             if ($add_cost != 0 && $router_name != 'balance') {
                 foreach ($bills as $k => $v) {
@@ -82,10 +82,10 @@ class Package
         }
 
         if ($p['validity_unit'] == 'Period') {
-            // if customer has attribute Expired Date use it
+            // Si el cliente tiene el atributo Fecha de Vencimiento, usarlo.
             $day_exp = User::getAttribute("Expired Date", $c['id']);
             if (!$day_exp) {
-                // if customer no attribute Expired Date use plan expired date
+                // Si el cliente no tiene el atributo Fecha de Vencimiento, usar la fecha de vencimiento del plan.
                 $day_exp = 20;
                 if ($p['prepaid'] == 'no') {
                     $day_exp = $p['expired_date'];
@@ -107,7 +107,7 @@ class Package
         }
 
         /**
-         * 1 Customer only can have 1 PPPOE and 1 Hotspot Plan, 1 prepaid and 1 postpaid
+         * Un cliente solo puede tener 1 plan PPPOE y 1 plan Hotspot, 1 prepago y 1 postpago.
          */
 
         $query = ORM::for_table('tbl_user_recharges')
@@ -128,8 +128,8 @@ class Package
             ->select('prepaid')
             ->where('tbl_user_recharges.routers', $router_name)
             ->where('tbl_user_recharges.Type', $p['type'])
-            # PPPOE or Hotspot only can have 1 per customer prepaid or postpaid
-            # because 1 customer can have 1 PPPOE and 1 Hotspot Plan in mikrotik
+            # PPPOE o Hotspot solo pueden tener 1 por cliente, ya sea prepago o postpago.
+            # Porque un cliente puede tener 1 plan PPPOE y 1 plan Hotspot en Mikrotik.
             //->where('prepaid', $p['prepaid'])
             ->left_outer_join('tbl_plans', array('tbl_plans.id', '=', 'tbl_user_recharges.plan_id'));
         if ($isVoucher) {
@@ -142,7 +142,11 @@ class Package
         run_hook("recharge_user");
 
         if ($p['validity_unit'] == 'Months') {
-            $date_exp = date("Y-m-d", strtotime('+' . $p['validity'] . ' month'));
+            // Crear una nueva fecha
+            $date_exp = new DateTime();
+            $date_exp->modify('+' . $p['validity'] . ' month');
+            $date_exp->modify('last day of this month');  // Ajustar al último día del mes
+            $date_exp = $date_exp->format('Y-m-d');
         } else if ($p['validity_unit'] == 'Period') {
             $current_date = new DateTime($date_only);
             $exp_date = clone $current_date;
@@ -154,24 +158,24 @@ class Package
 
             $days_until_exp = $exp_date->diff($current_date)->days;
 
-            // If less than min_days away, move to the next period
+            // Si faltan menos de min_days, pasar al siguiente período.
             while ($days_until_exp < $min_days) {
                 $exp_date->modify('+1 month');
                 $days_until_exp = $exp_date->diff($current_date)->days;
             }
 
-            // If more than max_days away, move to the previous period
+            // Si faltan más de max_days, pasar al período anterior.
             while ($days_until_exp > $max_days) {
                 $exp_date->modify('-1 month');
                 $days_until_exp = $exp_date->diff($current_date)->days;
             }
 
-            // Final check to ensure we're not less than min_days or in the past
+            // Verificación final para asegurar que no sea menor que min_days ni esté en el pasado.
             if ($days_until_exp < $min_days || $exp_date <= $current_date) {
                 $exp_date->modify('+1 month');
             }
 
-            // Adjust for multiple periods
+            // Ajustar para múltiples períodos.
             if ($p['validity'] > 1) {
                 $exp_date->modify('+' . ($p['validity'] - 1) . ' months');
             }
@@ -191,6 +195,7 @@ class Package
             $date_exp = $datetime[0];
             $time = $datetime[1];
         }
+
 
         if ($b) {
             $lastExpired = Lang::dateAndTimeFormat($b['expiration'], $b['time']);
