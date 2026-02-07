@@ -282,7 +282,7 @@ switch ($action) {
 
         $ui->assign('public_url', getUrl("voucher/invoice/$id/".md5($id. $db_pass)));
         $ui->assign('logo', $logo);
-        $ui->assign('_title', 'View Invoice');
+        $ui->assign('_title', 'View Invoice2');
         $ui->display('admin/plan/invoice.tpl');
         break;
 
