@@ -108,7 +108,7 @@ window.addEventListener('DOMContentLoaded', function () {
                             if (result.isConfirmed) {
                                 window.open(
                                     "./update.php",
-                                    '_blank'
+                                    '_self''
                                 );
                             }
                         });
