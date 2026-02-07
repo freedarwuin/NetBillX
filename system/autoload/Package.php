@@ -631,7 +631,7 @@ class Package
         $invoice .= Lang::pad($config['address'], ' ', 2) . "\n";
         $invoice .= Lang::pad($config['phone'], ' ', 2) . "\n";
         $invoice .= Lang::pad("", '=') . "\n";
-        $invoice .= Lang::pads(Lang::T('Invoice 2'), $in['invoice'], ' ') . "\n";
+        $invoice .= Lang::pads(Lang::T('Control Number:'), $in['invoice'], ' ') . "\n"; //Numero de Control
         $invoice .= Lang::pads(Lang::T('Date'), $date, ' ') . "\n";
         $invoice .= Lang::pads(Lang::T('Sales'), $admin['fullname'], ' ') . "\n";
         $invoice .= Lang::pad("", '=') . "\n";
