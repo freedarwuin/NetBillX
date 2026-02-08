@@ -13,7 +13,7 @@ on:
       description:
         description: 'Descripción del release'
         required: false
-        default: 'Release generado manualmente desde GitHub Actions'
+        default: 'Release generado automáticamente'
 
 permissions:
   contents: write
@@ -26,16 +26,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Create ZIP package
+        run: |
+          ZIP_NAME="NetBillX-${{ inputs.tag }}.zip"
+          zip -r "$ZIP_NAME" . \
+            -x ".git/*" \
+            -x ".github/*"
+
       - name: Create Git tag
         run: |
           git tag ${{ inputs.tag }}
           git push origin ${{ inputs.tag }}
 
-      - name: Create GitHub Release
+      - name: Create GitHub Release and upload asset
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.tag }}
           name: ${{ inputs.title }}
           body: ${{ inputs.description }}
+          files: |
+            NetBillX-${{ inputs.tag }}.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
