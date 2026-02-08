@@ -129,8 +129,8 @@
                         <p class="help-block col-md-4"><small>
                                 {Lang::T('Hotspot Authentication Method. Make sure you have changed your
                                 hotspot login
-                                page.')} <a href="https://github.com/agstrxyz/NetBillX-login-hotspot"
-                                    target="_blank">Download
+                                page.')} <a href="https://github.com/freedarwuin/NetBillX-mikrotik-login-template"
+                                    target="_blank">{Lang::T('Download')}
                                     NetBillX-login-hotspot</a></small>
                         </p>
                     </div>
