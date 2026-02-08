@@ -2,6 +2,18 @@ name: NetBillX Release
 
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag del release (ej: v2026.2.8)'
+        required: true
+      title:
+        description: 'Título del release'
+        required: true
+        default: 'NetBillX Release'
+      description:
+        description: 'Descripción del release'
+        required: false
+        default: 'Release generado manualmente desde GitHub Actions'
 
 permissions:
   contents: write
@@ -14,36 +26,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Read version.json
-        id: version
-        run: |
-          VERSION=$(jq -r '.version' version.json)
-          CHANNEL=$(jq -r '.channel' version.json)
-
-          if [ "$VERSION" = "null" ] || [ -z "$VERSION" ]; then
-            echo "version.json no contiene 'version'"
-            exit 1
-          fi
-
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "channel=$CHANNEL" >> $GITHUB_OUTPUT
-
       - name: Create Git tag
         run: |
-          git tag v${{ steps.version.outputs.version }}
-          git push origin v${{ steps.version.outputs.version }}
+          git tag ${{ inputs.tag }}
+          git push origin ${{ inputs.tag }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.version.outputs.version }}
-          name: NetBillX v${{ steps.version.outputs.version }}
-          body: |
-            🚀 **NetBillX Release**
-            
-            Versión: **${{ steps.version.outputs.version }}**
-            Canal: **${{ steps.version.outputs.channel }}**
-            
-            Release generado automáticamente desde `version.json`.
+          tag_name: ${{ inputs.tag }}
+          name: ${{ inputs.title }}
+          body: ${{ inputs.description }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
