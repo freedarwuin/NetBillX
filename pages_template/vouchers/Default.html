@@ -1,27 +1,37 @@
-<table border="0" cellspacing="0" cellpadding="2">
-    <tbody><tr>
-        <td valign="middle">
-            <center><strong style="font-size:38px">[[company_name]]</strong></center>
-            <table width="100%" border="1" cellspacing="0" cellpadding="1" bordercolor="#757575">
+<table border="0" cellspacing="0" cellpadding="10" style="width:100%; max-width:450px; margin:auto; font-family:Arial, sans-serif; background-color:#fefefe; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1);">
+    <tbody>
+    <tr>
+        <td align="center">
+            <!-- Nombre de la compañía -->
+            <strong style="font-size:38px; color:#2c3e50;">[[company_name]]</strong>
+
+            <!-- Contenedor del voucher -->
+            <table width="100%" border="0" cellspacing="0" cellpadding="10" style="border:2px dashed #4CAF50; border-radius:12px; margin-top:15px; background-color:#ffffff;">
                 <tbody>
-                    <tr>
-                        <td rowspan="4" width="1">[[qrcode]]
-                        </td>
-                    </tr>
-                    <tr>
-                        <td valign="middle" align="center" style="font-size:25px">
-                            [[price]]</td>
-                    </tr>
-                    <tr>
-                        <td valign="middle" align="center" style="font-size:20px">
-                            [[voucher_code]]</td>
-                    </tr>
-                    <tr>
-                        <td valign="middle" align="center" style="font-size:15px">
-                            [[plan]] - [[counter]]<br></td>
-                    </tr>
+                <tr>
+                    <td rowspan="4" width="120" align="center" style="vertical-align:middle;">
+                        [[qrcode]]
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="font-size:26px; font-weight:bold; color:#27ae60; padding:5px 0;">
+                        [[price]]
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="font-size:22px; font-weight:bold; color:#2980b9; padding:5px 0;">
+                        [[voucher_code]]
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="font-size:16px; color:#555; padding:5px 0;">
+                        [[plan]] - [[counter]]
+                    </td>
+                </tr>
                 </tbody>
             </table>
+
         </td>
     </tr>
-</tbody></table>
+    </tbody>
+</table>
