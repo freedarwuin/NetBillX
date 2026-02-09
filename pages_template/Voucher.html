@@ -1,36 +1,33 @@
-<table border="0" cellspacing="0" cellpadding="10" style="width:100%; max-width:450px; margin:auto; font-family:Arial, sans-serif; background-color:#fefefe; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1);">
+<table border="0" cellspacing="0" cellpadding="10" style="width:100%; max-width:400px; margin:auto; font-family:Arial, sans-serif; background-color:#f9f9f9; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1);">
     <tbody>
     <tr>
         <td align="center">
-            <!-- Nombre de la compañía -->
-            <strong style="font-size:38px; color:#2c3e50; margin-bottom:15px; display:block;">[[company_name]]</strong>
+            <!-- Logo -->
+            <img src="system/uploads/logo.png" alt="Logo" style="max-width:120px; margin-bottom:15px;">
 
-            <!-- Contenedor del voucher -->
-            <table width="100%" border="0" cellspacing="0" cellpadding="12" style="border:2px dashed #4CAF50; border-radius:12px; background-color:#ffffff;">
+            <!-- Voucher Container -->
+            <table width="100%" border="0" cellspacing="0" cellpadding="8" style="border:2px dashed #4CAF50; border-radius:10px; background-color:#ffffff;">
                 <tbody>
                 <tr>
-                    <td rowspan="4" width="120" align="center" style="vertical-align:middle;">
+                    <td align="center" style="font-size:28px; font-weight:bold; color:#333;">
                         [[qrcode]]
                     </td>
                 </tr>
                 <tr>
-                    <td align="center" style="font-size:26px; font-weight:bold; color:#27ae60; padding:5px 0;">
-                        [[price]]
-                    </td>
-                </tr>
-                <tr>
-                    <td align="center" style="font-size:22px; font-weight:bold; color:#2980b9; padding:5px 0;">
+                    <td align="center" style="font-size:22px; font-weight:bold; color:#4CAF50; margin-top:10px;">
                         [[voucher_code]]
                     </td>
                 </tr>
                 <tr>
-                    <td align="center" style="font-size:16px; color:#555; padding:5px 0;">
-                        [[plan]]
+                    <td align="center" style="font-size:16px; color:#555; margin-top:5px;">
+                        [[plan]] - <strong>[[price]]</strong>
                     </td>
                 </tr>
                 </tbody>
             </table>
 
+            <!-- Company Name -->
+            <p style="margin-top:12px; font-size:14px; color:#888;">[[company_name]]</p>
         </td>
     </tr>
     </tbody>
