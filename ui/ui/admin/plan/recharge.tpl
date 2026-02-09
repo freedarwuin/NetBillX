@@ -54,7 +54,7 @@
                                     <option value="{trim($using)}">{trim(ucWords($using))}</option>
                                 {/foreach}
                                 {if $_c['enable_balance'] eq 'yes'}
-                                    <option value="balance">{Lang::T('Customer Balance')}</option>
+                                    <option value="balance">{Lang::T('Customer2 Balance2')}</option>
                                 {/if}
                                 {if in_array($_admin['user_type'],['SuperAdmin','Admin'])}
                                     <option value="zero">{$_c['currency_code']} 0</option>
