@@ -26,7 +26,7 @@
                         <div class="col-lg-offset-2 col-lg-10">
                             <button class="btn btn-success" onclick="return ask(this, '{Lang::T('Continue the Refill process')}?')"
                                 type="submit">{Lang::T('Recharge')}</button>
-                            {Lang::T('Or')}  <a href="{Text::url('')}customers/list">{Lang::T('Cancel')}</a>
+                            {Lang::T('Or')} <a href="{Text::url('')}customers/list">{Lang::T('Cancel')}</a>
                         </div>
                     </div>
                 </form>
