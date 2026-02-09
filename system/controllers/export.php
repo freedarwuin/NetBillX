@@ -49,7 +49,7 @@ switch ($action) {
         $sd = _req('sd', $start_date);
         $ed = _req('ed', $mdate);
         $ts = _req('ts', '00:00:00');
-        $te = _req('te', '11:59:59');
+        $te = _req('te', '23:59:59');
 
         $query = ORM::for_table('tbl_transactions')
             ->whereRaw("UNIX_TIMESTAMP(CONCAT(`recharged_on`,' ',`recharged_time`)) >= " . strtotime("$sd $ts"))
@@ -109,7 +109,7 @@ switch ($action) {
         $sd = _req('sd', $start_date);
         $ed = _req('ed', $mdate);
         $ts = _req('ts', '00:00:00');
-        $te = _req('te', '11:59:59');
+        $te = _req('te', '23:59:59');
 
         $query = ORM::for_table('tbl_transactions')
             ->whereRaw("UNIX_TIMESTAMP(CONCAT(`recharged_on`,' ',`recharged_time`)) >= " . strtotime("$sd $ts"))
