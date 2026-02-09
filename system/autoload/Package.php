@@ -177,7 +177,7 @@ class Package
             }
 
             $date_exp = $exp_date->format('Y-m-d');
-            $time = "23:59:59";
+            $time = "11:59:59";
         } else if ($p['validity_unit'] == 'Days') {
             $datetime = explode(' ', date("Y-m-d H:i:s", strtotime('+' . $p['validity'] . ' day')));
             $date_exp = $datetime[0];
@@ -204,7 +204,7 @@ class Package
                         break;
                     case 'Period':
                         $date_exp = date("Y-m-$day_exp", strtotime($b['expiration'] . ' +' . $p['validity'] . ' months'));
-                        $time = date("23:59:00");
+                        $time = date("11:59:00");
                         break;
                     case 'Days':
                         $date_exp = date("Y-m-d", strtotime($b['expiration'] . ' +' . $p['validity'] . ' days'));

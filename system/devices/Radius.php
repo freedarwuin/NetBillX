@@ -85,7 +85,7 @@ class Radius
             }
 
             $date_exp = $exp_date->format('Y-m-d');
-            $time = "23:59:59";
+            $time = "11:59:59";
         } else if ($p['validity_unit'] == 'Days') {
             $datetime = explode(' ', date("Y-m-d H:i:s", strtotime('+' . $p['validity'] . ' day')));
             $date_exp = $datetime[0];
