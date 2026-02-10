@@ -1,9 +1,9 @@
 {
   "expired": "🔴 *Aviso de vencimiento de servicio*\n\nHola *[[name]]* 👋\n\nTe informamos que el período mensual de tu *plan [[package]]*, por *[[price]]*, ha vencido.\n\nPara continuar disfrutando del servicio sin interrupciones, te invitamos a renovar tu plan realizando el pago correspondiente ✅\n\n🧾 Renovaciones disponibles:\n*[[bills]]*\n\n💳 Renueva tu servicio aquí:\n👉 *[[payment_link]]*\n\nSi ya realizaste tu pago, por favor ignora este mensaje.\n\nGracias por confiar en nuestro servicio 🙌",
 
-  "balance_send": "Has transferido exitosamente *[[balance]]* a *[[name]]*.",
+  "balance_send": "💸 *Transferencia realizada con éxito*\n\nHas transferido *[[balance]]* a *[[name]]* ✅\n\n💼 *Saldo actual disponible:* [[current_balance]]\n\nGracias por usar nuestro sistema de saldo electrónico 🙌",
 
-  "balance_received": "Has recibido *[[balance]]* de *[[name]]*.",
+  "balance_received": "💰 *Has recibido una transferencia*\n\nRecibiste *[[balance]]* de *[[name]]* ✅\n\n💼 *Tu saldo actual es:* [[current_balance]]\n\nPuedes usar tu saldo para renovar servicios o realizar nuevas transferencias 🙌",
 
   "reminder_7_day": "📶 *Recordatorio de vencimiento de servicio*\n\nHola *[[name]]* 👋\n\nTe recordamos que el período mensual de tu *plan [[package]]*, por *[[price]]*, vencerá en *7 días* (*[[expired_date]]*).\n\nTe recomendamos renovar tu plan con anticipación para disfrutar del servicio sin interrupciones ✅\n\n💳 Renueva tu servicio aquí:\n👉 *[[payment_link]]*\n\nGracias por preferirnos 🙌",
 
