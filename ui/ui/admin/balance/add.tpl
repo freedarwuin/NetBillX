@@ -47,7 +47,7 @@
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-10">
                             <button class="btn btn-success" onclick="return ask(this, '{Lang::T("Continue the balance top-up process?")}')" type="submit">{Lang::T('Save Changes')}</button>
-                            Or <a href="{Text::url('services/balance')}">{Lang::T('Cancel')}</a>
+                            Lang::T('Or')} <a href="{Text::url('services/balance')}">{Lang::T('Cancel')}</a>
                         </div>
                     </div>
                 </form>

@@ -123,7 +123,7 @@
                             <button class="btn btn-primary" type="submit">
                                 {Lang::T('Save')}
                             </button>
-                            Or <a href="{Text::url('coupons/list')}">{Lang::T('Cancel')}</a>
+                            Lang::T('Or')} <a href="{Text::url('coupons/list')}">{Lang::T('Cancel')}</a>
                         </div>
                     </div>
                 </form>
