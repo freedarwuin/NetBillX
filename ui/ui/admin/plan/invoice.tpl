@@ -26,12 +26,12 @@
                     <a href="nux://print?text={urlencode($invoice)}"
                         class="btn btn-success text-black btn-sm hidden-md hidden-lg">
                         <i class="glyphicon glyphicon-phone"></i>
-                        NuxPrint
+                        NetPrint
                     </a>
                     <a href="https://github.com/hotspotbilling/android-printer"
                         class="btn btn-success text-black btn-sm hidden-xs hidden-sm" target="_blank">
                         <i class="glyphicon glyphicon-phone"></i>
-                        NuxPrint
+                        NetPrint
                     </a>
                 </form>
             </div>
