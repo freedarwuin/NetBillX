@@ -1114,6 +1114,10 @@
                             <option value="10" {if $_c['tax_rate']=='10' }selected="selected" {/if}>
                                 10
                             </option>
+                            </option>
+                            <option value="10" {if $_c['tax_rate']=='10' }selected="selected" {/if}>
+                                16
+                            </option>
                             <!-- Custom tax rate option -->
                             <option value="custom" {if $_c['tax_rate']=='custom' }selected="selected" {/if}>
                                 {Lang::T('Custome')}</option>
