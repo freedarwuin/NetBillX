@@ -1115,7 +1115,7 @@
                                 10
                             </option>
                             </option>
-                            <option value="10" {if $_c['tax_rate']=='10' }selected="selected" {/if}>
+                            <option value="16" {if $_c['tax_rate']=='16' }selected="selected" {/if}>
                                 16
                             </option>
                             <!-- Custom tax rate option -->
