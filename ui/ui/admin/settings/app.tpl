@@ -1212,14 +1212,14 @@
 
 <script>
     function testWa() {
-        var target = prompt("Phone number\nSave First before Test", "");
+        var target = prompt("Phone number\nGuardar primero antes de probar", "");
         if (target != null) {
             window.location.href = '{Text::url('settings/app&testWa=')}' + target;
         }
     }
 
     function testSms() {
-        var target = prompt("Phone number\nSave First before Test", "");
+        var target = prompt("Phone number\nGuardar primero antes de probar", "");
         if (target != null) {
             window.location.href = '{Text::url('settings/app&testSms=')}' + target;
         }
@@ -1227,7 +1227,7 @@
 
 
     function testEmail() {
-        var target = prompt("Email\nSave First before Test", "");
+        var target = prompt("Email\nGuardar primero antes de probar", "");
         if (target != null) {
             window.location.href = '{Text::url('settings/app&testEmail=')}' + target;
         }
