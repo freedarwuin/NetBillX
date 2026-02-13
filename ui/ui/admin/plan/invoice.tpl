@@ -3,95 +3,43 @@
 <div class="row">
     <div class="col-md-6 col-sm-12 col-md-offset-3">
         <div class="panel panel-hovered panel-primary panel-stacked mb30">
-            <div class="panel-heading text-center">
-                <strong>FACTURA</strong>
-            </div>
-
+            <div class="panel-heading">{$in['invoice']}</div>
             <div class="panel-body">
-
                 <form class="form-horizontal" method="post" action="{Text::url('')}plan/print" target="_blank">
-
-                    <!-- CONTENIDO FACTURA -->
-                    <pre id="content" style="border:0;text-align:left;background-color:white;font-family:monospace;padding:15px;"></pre>
-
-                    <textarea class="hidden" id="formcontent" name="content">
-==============================
-            FACTURA
-==============================
-
-{$in['empresa_nombre']}
-RIF: {$in['empresa_rif']}
-Dirección: {$in['empresa_direccion']}
-Teléfono: {$in['empresa_telefono']}
-
---------------------------------
-Factura N°: {$in['invoice']}
-N° Control: {$in['control_number']}
-Fecha: {$in['fecha']}
---------------------------------
-
-Cliente: {$in['cliente_nombre']}
-RIF / C.I.: {$in['cliente_rif']}
-Dirección: {$in['cliente_direccion']}
-
-================================
-DETALLE
-================================
-{$invoice}
---------------------------------
-
-Base Imponible: Bs. {$in['base']}
-IVA ({$in['iva_porcentaje']}%): Bs. {$in['iva']}
-
-================================
-TOTAL A PAGAR:
-Bs. {$in['total']}
-================================
-
-Documento emitido conforme a la
-normativa fiscal vigente.
-Conserve para efectos fiscales.
-
-</textarea>
-
+                    <pre id="content" style="border: 0px; ;text-align: center; background-color: transparent; background-image: url('{$app_url}/system/uploads/paid.png');background-repeat:no-repeat;background-position: center"></pre>
+                    <textarea class="hidden" id="formcontent" name="content">{$invoice}</textarea>
                     <input type="hidden" name="id" value="{$in['id']}">
-
-                    <!-- BOTONES ORIGINALES -->
-                    <a href="{Text::url('')}plan/list" class="btn btn-default btn-sm">
-                        <i class="ion-reply-all"></i>{Lang::T('Finish')}
-                    </a>
-
+                    <a href="{Text::url('')}plan/list" class="btn btn-default btn-sm"><i
+                            class="ion-reply-all"></i>{Lang::T('Finish')}</a>
                     <a href="https://api.whatsapp.com/send/?text={$whatsapp}" target="_blank"
                         class="btn btn-primary btn-sm">
-                        <i class="glyphicon glyphicon-share"></i> WhatsApp
-                    </a>
-
-                    <a href="{Text::url('')}plan/view/{$in['id']}/send"
-                        class="btn btn-info text-black btn-sm">
-                        <i class="glyphicon glyphicon-envelope"></i> {Lang::T("Resend")}
-                    </a>
-
+                        <i class="glyphicon glyphicon-share"></i> WhatsApp</a>
+                    <a href="{Text::url('')}plan/view/{$in['id']}/send" class="btn btn-info text-black btn-sm"><i
+                            class="glyphicon glyphicon-envelope"></i> {Lang::T("Resend")}</a>
                     <hr>
-
                     <a href="{Text::url('')}plan/print/{$in['id']}" target="_print"
-                        class="btn btn-info text-black btn-sm">
-                        <i class="glyphicon glyphicon-print"></i> {Lang::T('Print')} HTML
+                        class="btn btn-info text-black btn-sm"><i class="glyphicon glyphicon-print"></i>
+                        {Lang::T('Print')} HTML</a>
+                    <button type="submit" class="btn btn-info text-black btn-sm"><i
+                            class="glyphicon glyphicon-print"></i>
+                        {Lang::T('Print')} Text</button>
+                    <a href="nux://print?text={urlencode($invoice)}"
+                        class="btn btn-success text-black btn-sm hidden-md hidden-lg">
+                        <i class="glyphicon glyphicon-phone"></i>
+                        NetPrint
                     </a>
-
-                    <button type="submit" class="btn btn-info text-black btn-sm">
-                        <i class="glyphicon glyphicon-print"></i> {Lang::T('Print')} Text
-                    </button>
-
+                    <a href="https://github.com/hotspotbilling/android-printer"
+                        class="btn btn-success text-black btn-sm hidden-xs hidden-sm" target="_blank">
+                        <i class="glyphicon glyphicon-phone"></i>
+                        NetPrint
+                    </a>
                 </form>
-
             </div>
         </div>
     </div>
 </div>
-
 <script type="text/javascript">
-    document.getElementById('content').innerHTML =
-        document.getElementById('formcontent').innerHTML;
+    var s5_taf_parent = window.location;
+    document.getElementById('content').innerHTML = document.getElementById('formcontent').innerHTML;
 </script>
-
 {include file="sections/footer.tpl"}
