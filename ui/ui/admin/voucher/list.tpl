@@ -18,7 +18,7 @@
     <div class="panel-heading">
         {if in_array($_admin['user_type'],['SuperAdmin','Admin'])}
             <div class="btn-group pull-right">
-                <a class="btn btn-danger btn-xs" title="Remove used Voucher" href="{Text::url('')}plan/remove-voucher"
+                <a class="btn btn-danger btn-xs" title="Lang::T('Remove used Voucher')" href="{Text::url('')}plan/remove-voucher"
                     onclick="return ask(this, 'Delete all used voucher code more than 3 months?')"><span
                         class="glyphicon glyphicon-trash" aria-hidden="true"></span> {Lang::T('Delete')} &gt; {Lang::T('3
                 Months')}</a>
