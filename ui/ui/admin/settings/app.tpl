@@ -853,7 +853,7 @@
                     <label class="col-md-3 control-label">{Lang::T('SMTP Security')}</label>
                     <div class="col-md-5">
                         <select name="smtp_ssltls" id="smtp_ssltls" class="form-control">
-                            <option value="" {if $_c['smtp_ssltls']=='' }selected="selected" {/if}>{Lang::T('Not Secure')
+                            <option value="" {if $_c['smtp_ssltls']=='' }selected="selected" {/if}>Not Secure
                             </option>
                             <option value="ssl" {if $_c['smtp_ssltls']=='ssl' }selected="selected" {/if}>SSL
                             </option>
