@@ -317,7 +317,12 @@ switch ($action) {
         if ($customer) {
             $_SESSION['uid'] = $id;
             User::setCookie($id);
-            _alert("You are logging in as $customer[fullname],<br>don't logout just close tab.", 'info', "home", 10);
+            //_alert("You are logging in as $customer[fullname],<br>don't logout just close tab.", 'info', "home", 10);
+            // Usando concatenación
+                _alert(Lang::T('You are logging in as') . " $customer[fullname],<br>don't logout just close tab.", 'info', "home", 10);
+
+                // O usando sprintf si quieres un placeholder
+                // _alert(sprintf(Lang::T('You are logging in as %s'), $customer['fullname']) . ",<br>don't logout just close tab.", 'info', "home", 10);
         }
         _alert(Lang::T('Customer not found'), 'danger', "customers");
         break;
