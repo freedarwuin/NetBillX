@@ -39,7 +39,7 @@ class Timezone {
         return $timezoneList;
     }
 
-    public static function getTimeOffset($tz = 'Asia/Jakarta'){
+    public static function getTimeOffset($tz = 'America/Caracas'){
         $utcTime = new DateTime('now', new DateTimeZone('UTC'));
         $currentTimezone = new DateTimeZone($tz);
         $offset = $currentTimezone->getOffset($utcTime);
