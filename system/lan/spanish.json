@@ -455,7 +455,7 @@
   "Customer_can_request_to_extend_expirations": "El cliente puede solicitar la extensión de los vencimientos.",
   "Extend_Days": "Extender días",
   "Confirmation_Message": "Mensaje de confirmación",
-  "i_agree_to_extends_and_will_paid_full_after_this": "Acepto extender y pagaré el total después de esto.",
+  "i_agree_to_extends_and_will_paid_full_after_this": "Autorizo la extensión de mi pago mensual y me comprometo a cancelarlo completamente después del plazo establecido",
   "Customer_Balance_System": "Sistema de saldo de clientes",
   "Telegram_Bot_Token": "Token de bot de Telegram",
   "Telegram_User_Channel_Group_ID": "ID de usuario/canal/grupo de Telegram",
