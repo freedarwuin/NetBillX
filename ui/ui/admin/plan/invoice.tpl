@@ -1,109 +1,97 @@
 {include file="sections/header.tpl"}
 
 <div class="row">
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-6 col-sm-12 col-md-offset-3">
+        <div class="panel panel-hovered panel-primary panel-stacked mb30">
+            <div class="panel-heading text-center">
+                <strong>FACTURA</strong>
+            </div>
 
-        <div class="panel panel-primary">
-            <div class="panel-body" style="font-size:13px;">
+            <div class="panel-body">
 
-                <!-- ENCABEZADO -->
-                <div class="text-center">
-                    <h3><strong>FACTURA</strong></h3>
-                </div>
+                <form class="form-horizontal" method="post" action="{Text::url('')}plan/print" target="_blank">
 
-                <table width="100%">
-                    <tr>
-                        <td>
-                            <strong>{$empresa.nombre}</strong><br>
-                            RIF: {$empresa.rif}<br>
-                            Dirección Fiscal: {$empresa.direccion}<br>
-                            Teléfono: {$empresa.telefono}
-                        </td>
-                        <td align="right">
-                            <strong>Factura N°:</strong> {$factura.numero}<br>
-                            <strong>N° Control:</strong> {$factura.control}<br>
-                            <strong>Fecha:</strong> {$factura.fecha}
-                        </td>
-                    </tr>
-                </table>
+                    <!-- CONTENIDO FACTURA -->
+                    <pre id="content" style="border:0;text-align:left;background-color:white;font-family:monospace;padding:15px;"></pre>
 
-                <hr>
+                    <textarea class="hidden" id="formcontent" name="content">
+==============================
+            FACTURA
+==============================
 
-                <!-- DATOS DEL CLIENTE -->
-                <table width="100%">
-                    <tr>
-                        <td>
-                            <strong>Cliente:</strong> {$cliente.nombre}<br>
-                            <strong>RIF / C.I.:</strong> {$cliente.rif}<br>
-                            <strong>Dirección:</strong> {$cliente.direccion}
-                        </td>
-                    </tr>
-                </table>
+{$in['empresa_nombre']}
+RIF: {$in['empresa_rif']}
+Dirección: {$in['empresa_direccion']}
+Teléfono: {$in['empresa_telefono']}
 
-                <br>
+--------------------------------
+Factura N°: {$in['invoice']}
+N° Control: {$in['control_number']}
+Fecha: {$in['fecha']}
+--------------------------------
 
-                <!-- DETALLE -->
-                <table class="table table-bordered" width="100%" style="font-size:12px;">
-                    <thead>
-                        <tr>
-                            <th>Descripción</th>
-                            <th width="10%">Cant.</th>
-                            <th width="20%">Precio Unit.</th>
-                            <th width="20%">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {foreach $items as $item}
-                        <tr>
-                            <td>{$item.descripcion}</td>
-                            <td align="center">{$item.cantidad}</td>
-                            <td align="right">{$item.precio|number_format:2:",":"."}</td>
-                            <td align="right">{$item.total|number_format:2:",":"."}</td>
-                        </tr>
-                        {/foreach}
-                    </tbody>
-                </table>
+Cliente: {$in['cliente_nombre']}
+RIF / C.I.: {$in['cliente_rif']}
+Dirección: {$in['cliente_direccion']}
 
-                <!-- TOTALES -->
-                <table width="100%">
-                    <tr>
-                        <td align="right">
-                            Base Imponible: Bs. {$factura.base|number_format:2:",":"."}<br>
-                            IVA ({$factura.iva_porcentaje}%): Bs. {$factura.iva|number_format:2:",":"."}<br>
-                            <strong>Total a Pagar: Bs. {$factura.total|number_format:2:",":"."}</strong>
-                        </td>
-                    </tr>
-                </table>
+================================
+DETALLE
+================================
+{$invoice}
+--------------------------------
 
-                <hr>
+Base Imponible: Bs. {$in['base']}
+IVA ({$in['iva_porcentaje']}%): Bs. {$in['iva']}
 
-                <!-- NOTA LEGAL -->
-                <div style="font-size:11px;">
-                    Documento emitido conforme a la normativa fiscal vigente del SENIAT.
-                    Conserve esta factura para efectos fiscales.
-                </div>
+================================
+TOTAL A PAGAR:
+Bs. {$in['total']}
+================================
+
+Documento emitido conforme a la
+normativa fiscal vigente.
+Conserve para efectos fiscales.
+
+</textarea>
+
+                    <input type="hidden" name="id" value="{$in['id']}">
+
+                    <!-- BOTONES ORIGINALES -->
+                    <a href="{Text::url('')}plan/list" class="btn btn-default btn-sm">
+                        <i class="ion-reply-all"></i>{Lang::T('Finish')}
+                    </a>
+
+                    <a href="https://api.whatsapp.com/send/?text={$whatsapp}" target="_blank"
+                        class="btn btn-primary btn-sm">
+                        <i class="glyphicon glyphicon-share"></i> WhatsApp
+                    </a>
+
+                    <a href="{Text::url('')}plan/view/{$in['id']}/send"
+                        class="btn btn-info text-black btn-sm">
+                        <i class="glyphicon glyphicon-envelope"></i> {Lang::T("Resend")}
+                    </a>
+
+                    <hr>
+
+                    <a href="{Text::url('')}plan/print/{$in['id']}" target="_print"
+                        class="btn btn-info text-black btn-sm">
+                        <i class="glyphicon glyphicon-print"></i> {Lang::T('Print')} HTML
+                    </a>
+
+                    <button type="submit" class="btn btn-info text-black btn-sm">
+                        <i class="glyphicon glyphicon-print"></i> {Lang::T('Print')} Text
+                    </button>
+
+                </form>
 
             </div>
         </div>
-
-        <!-- BOTONES -->
-        <div class="text-center">
-            <a href="{Text::url('')}plan/list" class="btn btn-default btn-sm">
-                <i class="ion-reply-all"></i> Finalizar
-            </a>
-
-            <a href="{Text::url('')}plan/print/{$factura.id}" target="_blank"
-               class="btn btn-info btn-sm">
-                <i class="glyphicon glyphicon-print"></i> Imprimir
-            </a>
-
-            <a href="https://api.whatsapp.com/send/?text={$whatsapp}"
-               target="_blank" class="btn btn-success btn-sm">
-                <i class="glyphicon glyphicon-share"></i> WhatsApp
-            </a>
-        </div>
-
     </div>
 </div>
+
+<script type="text/javascript">
+    document.getElementById('content').innerHTML =
+        document.getElementById('formcontent').innerHTML;
+</script>
 
 {include file="sections/footer.tpl"}
