@@ -102,7 +102,7 @@
     </div>
     <div class="form-group text-center">
         <button class="btn btn-primary" onclick="return ask(this, 'Continue the process of adding Admin?')" type="submit">{Lang::T('Save Changes')}</button>
-        Or <a href="{Text::url('settings/users')}">{Lang::T('Cancel')}</a>
+        {Lang::T('Or')} <a href="{Text::url('settings/users')}">{Lang::T('Cancel')}</a>
     </div>
 </form>
 {literal}
