@@ -4,7 +4,6 @@ use PEAR2\Net\RouterOS;
 
 class pppoe
 {
-    // Información del plugin
     public function description()
     {
         return [
@@ -34,13 +33,12 @@ class pppoe
         return new RouterOS\Client($iport[0], $user, $pass, $iport[1] ?? null);
     }
 
-    // ======== CLIENTE PPPoE ========
+    // ======== CUSTOMER ========
     public function add_customer($customer, $plan)
     {
         $mikrotik = $this->getRouterInfo($plan['routers']);
         $client = $this->getClient($mikrotik['ip_address'], $mikrotik['username'], $mikrotik['password']);
         $cid = $this->getIdByCustomer($customer, $client);
-
         $isExp = ORM::for_table('tbl_plans')->select("id")->where('plan_expired', $plan['id'])->find_one();
 
         if (empty($cid)) {
@@ -52,11 +50,9 @@ class pppoe
             $setRequest->setArgument('password', $customer['pppoe_password'] ?? $customer['password']);
             $setRequest->setArgument('profile', $plan['name_plan']);
             $setRequest->setArgument('comment', $customer['fullname'] . ' | ' . $customer['email'] . ' | ' . implode(', ', User::getBillNames($customer['id'])));
-
             if (!empty($customer['pppoe_ip']) && !$isExp) {
                 $setRequest->setArgument('remote-address', $customer['pppoe_ip']);
             }
-
             $client->sendSync($setRequest);
         }
     }
@@ -73,7 +69,6 @@ class pppoe
     {
         $mikrotik = $this->getRouterInfo($plan['routers']);
         $client = $this->getClient($mikrotik['ip_address'], $mikrotik['username'], $mikrotik['password']);
-
         $printRequest = new RouterOS\Request('/ppp/secret/print');
         $printRequest->setQuery(RouterOS\Query::where('name', $from));
         $cid = $client->sendSync($printRequest)->getProperty('.id');
@@ -124,6 +119,32 @@ class pppoe
             ->setArgument('remote-address', $pool['pool_name'])
             ->setArgument('rate-limit', $rate)
         );
+    }
+
+    public function update_plan($old_name, $new_plan)
+    {
+        $mikrotik = $this->getRouterInfo($new_plan['routers']);
+        $client = $this->getClient($mikrotik['ip_address'], $mikrotik['username'], $mikrotik['password']);
+
+        $printRequest = new RouterOS\Request('/ppp/profile/print');
+        $printRequest->setQuery(RouterOS\Query::where('name', $old_name['name_plan']));
+        $profileID = $client->sendSync($printRequest)->getProperty('.id');
+
+        if (!$profileID) {
+            $this->add_plan($new_plan);
+        } else {
+            $bw = ORM::for_table("tbl_bandwidth")->find_one($new_plan['id_bw']);
+            $rate = ($bw['rate_up'] ?? 0) . ($bw['rate_up_unit'] === 'Kbps' ? 'K' : 'M') . "/" . ($bw['rate_down'] ?? 0) . ($bw['rate_down_unit'] === 'Kbps' ? 'K' : 'M');
+            if (!empty($bw['burst'])) $rate .= ' ' . $bw['burst'];
+
+            $pool = ORM::for_table("tbl_pool")->where("pool_name", $new_plan['pool'])->find_one();
+            $setRequest = new RouterOS\Request('/ppp/profile/set');
+            $setRequest->setArgument('numbers', $profileID);
+            $setRequest->setArgument('local-address', $pool['local_ip'] ?: $pool['pool_name']);
+            $setRequest->setArgument('remote-address', $pool['pool_name']);
+            $setRequest->setArgument('rate-limit', $rate);
+            $client->sendSync($setRequest);
+        }
     }
 
     public function remove_plan($plan)
