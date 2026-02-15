@@ -42,7 +42,7 @@
 							<button class="btn btn-primary"
 								onclick="return ask(this, '{Lang::T("Continue the process of adding Ports?")}')"
 								type="submit">{Lang::T('Save')}</button>
-							Or <a href="{Text::url('')}pool/port">{Lang::T('Cancel')}</a>
+							{Lang::T('Or')} <a href="{Text::url('')}pool/port">{Lang::T('Cancel')}</a>
 						</div>
 					</div>
 				</form>

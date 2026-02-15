@@ -76,7 +76,7 @@
                             <button class="btn btn-primary"
                                 onclick="return ask(this, '{Lang::T("Continue the process of adding Radius NAS?")}')"
                                 type="submit">{Lang::T('Save Changes')}</button>
-                            Or <a href="{Text::url('')}radius/nas-list">{Lang::T('Cancel')}</a>
+                            {Lang::T('Or')} <a href="{Text::url('')}radius/nas-list">{Lang::T('Cancel')}</a>
                         </div>
                     </div>
                 </form>

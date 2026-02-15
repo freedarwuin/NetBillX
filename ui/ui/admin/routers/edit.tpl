@@ -79,7 +79,7 @@
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-10">
                             <button class="btn btn-primary" onclick="return ask(this, '{Lang::T("Continue the process of changing Routers?")}')" type="submit">{Lang::T('Save Changes')}</button>
-                            Or <a href="{Text::url('')}routers/list">{Lang::T('Cancel')}</a>
+                            {Lang::T('Or')} <a href="{Text::url('')}routers/list">{Lang::T('Cancel')}</a>
                         </div>
                     </div>
                 </form>

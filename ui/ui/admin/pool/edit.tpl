@@ -46,7 +46,7 @@
 							<button class="btn btn-success"
 								onclick="return ask(this, '{Lang::T("Continue the Port change process?")}')"
 								type="submit">{Lang::T('Save Changes')}</button>
-							Or <a href="{Text::url('')}pool/list">{Lang::T('Cancel')}</a>
+							{Lang::T('Or')} <a href="{Text::url('')}pool/list">{Lang::T('Cancel')}</a>
 						</div>
 					</div>
 				</form>

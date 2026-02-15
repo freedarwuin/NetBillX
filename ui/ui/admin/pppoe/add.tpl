@@ -148,7 +148,7 @@
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
                             <button class="btn btn-primary" onclick="return ask(this, '{Lang::T("Continue the process of adding the PPPoE Package?")}')" type="submit">{Lang::T('Save Changes')}</button>
-                            Or <a href="{Text::url('')}services/pppoe">{Lang::T('Cancel')}</a>
+                            {Lang::T('Or')} <a href="{Text::url('')}services/pppoe">{Lang::T('Cancel')}</a>
                         </div>
                     </div>
                 </form>
