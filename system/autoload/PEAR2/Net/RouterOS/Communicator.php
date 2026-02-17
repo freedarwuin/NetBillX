@@ -167,7 +167,7 @@ class Communicator
             );
         } catch (T\Exception $e) {
             throw new SocketException(
-                'Error connecting to RouterOS',
+                'Error al conectarse a RouterOS',
                 SocketException::CODE_CONNECTION_FAIL,
                 $e
             );
