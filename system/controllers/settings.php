@@ -76,7 +76,7 @@ switch ($action) {
                 r2(getUrl('settings/app'), 'e', Lang::T('You cannot perform this action in Demo mode'));
             }
             Message::sendEmail(_get('testEmail'), 'NetBillX Test Email', 'NetBillX Test Email Body');
-            r2(getUrl('settings/app'), 's', 'Test Email has been send');
+            r2(getUrl('settings/app'), 's', Lang::T('Test Email has been send'));
         }
         if (!empty(_get('testTg'))) {
             if ($_app_stage == 'Demo') {
