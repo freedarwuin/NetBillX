@@ -1,7 +1,7 @@
 {include file="sections/header.tpl"}
 
 <center><a href="https://s.id/standwithpalestine" target="_blank"><img
-            src="https://raw.githubusercontent.com/Safouene1/support-palestine-banner/master/banner-support.svg"
+            src="https://raw.githubusercontent.com/freedarwuin/support-palestine-banner/master/banner-support.svg"
             class="img-responsive"></a></center>
 <br><br>
 
