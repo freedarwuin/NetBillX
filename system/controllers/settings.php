@@ -61,8 +61,8 @@ switch ($action) {
             if ($_app_stage == 'Demo') {
                 r2(getUrl('settings/app'), 'e', 'You cannot perform this action in Demo mode');
             }
-            $result = Message::sendWhatsapp(_get('testWa'), Lang::T('NetBillX Test Whatsapp');
-            r2(getUrl('settings/app'), 's', Lang::T('Test Whatsapp has been send<br>Result: ') . $result);
+            $result = Message::sendWhatsapp(_get('testWa'), Lang::T('NetBillX Test Whatsapp'));
+            r2(getUrl('settings/app'), 's', Lang::T('Test Whatsapp has been send<br>Result: ')) . $result);
         }
         if (!empty(_get('testSms'))) {
             if ($_app_stage == 'Demo') {
