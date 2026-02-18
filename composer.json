@@ -1,0 +1,16 @@
+{
+    "name": "freedarwuin/NetBillX",
+    "type": "template",
+    "description": "NetBillX a Hotspot Billing Software.",
+    "keywords": ["template","PHPMixBill","NetBillX","Mikrotik","Hotspot","Billing"],
+    "homepage": "https://github.com/freedarwuin/NetBillX",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "freedarwuin",
+            "email": "me@freedarwuin.net",
+            "homepage": "https://freedarwuin.net",
+            "role": "Developer"
+        }
+    ]
+}
