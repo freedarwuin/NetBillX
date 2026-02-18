@@ -222,7 +222,7 @@ switch ($do) {
                         Message::sendSMS($phone_number, $config['CompanyName'] . "\n\n" . Lang::T("Registration code") . "\n$otp");
                     }
                     $ui->assign('phone_number', $phone_number);
-                    $ui->assign('notify', 'Registration code has been sent to your phone');
+                    $ui->assign('notify', Lang::T('Registration code has been sent to your phone'));
                     $ui->assign('notify_t', 's');
                     $ui->assign('_title', Lang::T('Register'));
                     $ui->assign('customFields', User::getFormCustomField($ui, true));
