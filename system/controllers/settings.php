@@ -59,14 +59,14 @@ switch ($action) {
 
         if (!empty(_get('testWa'))) {
             if ($_app_stage == 'Demo') {
-                r2(getUrl('settings/app'), 'e', 'You cannot perform this action in Demo mode');
+                r2(getUrl('settings/app'), 'e', Lang::T('You cannot perform this action in Demo mode'));
             }
             $result = Message::sendWhatsapp(_get('testWa'), 'NetBillX Test Whatsapp');
             r2(getUrl('settings/app'), 's', Lang::T('Test Whatsapp has been send<br>Result: ') . $result);
         }
         if (!empty(_get('testSms'))) {
             if ($_app_stage == 'Demo') {
-                r2(getUrl('settings/app'), 'e', 'You cannot perform this action in Demo mode');
+                r2(getUrl('settings/app'), 'e', Lang::T('You cannot perform this action in Demo mode'));
             }
             $result = Message::sendSMS(_get('testSms'), 'NetBillX Test SMS');
             r2(getUrl('settings/app'), 's', Lang::T('Test SMS has been send<br>Result: ') . $result);
@@ -83,7 +83,7 @@ switch ($action) {
                 r2(getUrl('settings/app'), 'e', 'You cannot perform this action in Demo mode');
             }
             $result = Message::sendTelegram('NetBillX Test Telegram');
-            r2(getUrl('settings/app'), 's', 'Test Telegram has been send<br>Result: ' . $result);
+            r2(getUrl('settings/app'), 's', Lang::T('Test Telegram has been send<br>Result: ') . $result);
         }
 
         $UPLOAD_URL_PATH = str_replace($root_path, '', $UPLOAD_PATH);
