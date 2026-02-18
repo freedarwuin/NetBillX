@@ -1,6 +1,6 @@
 <?php
 
-class Dummy {
+class MyDevice {
 
     // show Description
     function description()
