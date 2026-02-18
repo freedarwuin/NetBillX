@@ -206,7 +206,7 @@ switch ($do) {
                 $otpPath .= sha1($phone_number . $db_pass) . ".txt";
                 if (file_exists($otpPath) && time() - filemtime($otpPath) < 600) {
                     $ui->assign('phone_number', $phone_number);
-                    $ui->assign('notify', 'Please wait ' . (600 - (time() - filemtime($otpPath))) . ' seconds before sending another SMS');
+                    $ui->assign('notify', Lang::T('Please wait ') . (600 - (time() - filemtime($otpPath))) . Lang::T(' seconds before sending another SMS'));
                     $ui->assign('notify_t', 'd');
                     $ui->assign('_title', Lang::T('Register'));
                     $ui->display('customer/register-otp.tpl');
