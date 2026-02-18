@@ -69,7 +69,7 @@ switch ($action) {
                 r2(getUrl('settings/app'), 'e', 'You cannot perform this action in Demo mode');
             }
             $result = Message::sendSMS(_get('testSms'), 'NetBillX Test SMS');
-            r2(getUrl('settings/app'), 's', 'Test SMS has been send<br>Result: ' . $result);
+            r2(getUrl('settings/app'), 's', Lang::T('Test SMS has been send<br>Result: ') . $result);
         }
         if (!empty(_get('testEmail'))) {
             if ($_app_stage == 'Demo') {
