@@ -19,7 +19,7 @@
                                 <td>
                                     <a href="/update.php?update_url=https://github.com/freedarwuin/NetBillX/archive/{$data['sha']}.zip"
                                         class="btn btn-sm btn-primary">
-                                        {Lang::T('Install Master')}
+                                        {Lang::T('Install official')}
                                     </a>
                                 </td>
                                 <td>{nl2br($data['commit']['message'])}</td>
