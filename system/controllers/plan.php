@@ -141,7 +141,7 @@ switch ($action) {
                 if ($cust['balance'] < $total_cost) {
                     r2(getUrl('plan/recharge'), 'e', Lang::T('insufficient balance'));
                 }
-                $gateway = 'Recharge Balance';
+                $gateway = 'Recargar saldo';
             }
             if ($using == 'zero') {
                 $zero = 1;
@@ -232,7 +232,7 @@ switch ($action) {
                 if ($cust['balance'] < $total_cost) {
                     r2(getUrl('plan/recharge'), 'e', Lang::T('insufficient balance'));
                 }
-                $gateway = 'Recharge Balance';
+                $gateway = 'Recargar saldo';
             }
             if ($using == 'zero') {
                 $add_cost = 0;
