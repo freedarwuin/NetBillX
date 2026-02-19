@@ -17,8 +17,8 @@ class graph_monthly_sales
                 ->select_expr('MONTH(recharged_on)', 'month')
                 ->select_expr('SUM(price)', 'total')
                 ->where_raw("YEAR(recharged_on) = YEAR(CURRENT_DATE())") // Filter by the current year
-                ->where_not_equal('method', 'Customer - Balance')
-                ->where_not_equal('method', 'Recharge Balance - Administrator')
+                ->where_not_equal('method', 'Cliente - Balance')
+                ->where_not_equal('method', 'Recargar saldo - Administrador')
                 ->group_by_expr('MONTH(recharged_on)')
                 ->find_many();
 

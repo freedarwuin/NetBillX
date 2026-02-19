@@ -9,8 +9,8 @@ class top_widget
 
         $iday = ORM::for_table('tbl_transactions')
             ->where('recharged_on', $current_date)
-            ->where_not_equal('method', 'Customer - Balance')
-            ->where_not_equal('method', 'Recharge Balance - Administrator')
+            ->where_not_equal('method', 'Cliente - Balance')
+            ->where_not_equal('method', 'Recargar saldo - Administrador')
             ->sum('price');
 
         if ($iday == '') {
@@ -19,8 +19,8 @@ class top_widget
         $ui->assign('iday', $iday);
 
         $imonth = ORM::for_table('tbl_transactions')
-            ->where_not_equal('method', 'Customer - Balance')
-            ->where_not_equal('method', 'Recharge Balance - Administrator')
+            ->where_not_equal('method', 'Cliente - Balance')
+            ->where_not_equal('method', 'Recargar saldo - Administrador')
             ->where_gte('recharged_on', $start_date)
             ->where_lte('recharged_on', $current_date)->sum('price');
         if ($imonth == '') {
