@@ -385,7 +385,7 @@
                         <li {if $_system_menu eq 'community' }class="active" {/if}>
                             <a href="{Text::url('community')}">
                                 <i class="ion ion-chatboxes"></i>
-                                <span class="text">Community</span>
+                                <span class="text">Community2</span>
                             </a>
                         </li>
                     {/if}
