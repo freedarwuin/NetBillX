@@ -8,7 +8,7 @@
     <div class="col-sm-6">
         <div class="box box-hovered mb20 box-primary">
             <div class="box-header">
-                <h3 class="box-title">Master</h3>
+                <h3 class="box-title">{Lang::T('Official')}</h3>
             </div>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
@@ -33,7 +33,7 @@
     <div class="col-sm-6">
         <div class="box box-hovered mb20 box-primary">
             <div class="box-header">
-                <h3 class="box-title">Development</h3>
+                <h3 class="box-title">Desarrollo</h3>
             </div>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
@@ -44,7 +44,7 @@
                                 <td>
                                     <a href="/update.php?update_url=https://github.com/freedarwuin/NetBillX/archive/{$data['sha']}.zip"
                                         class="btn btn-sm btn-primary">
-                                        {Lang::T('Install Development')}
+                                        {Lang::T('Install')}
                                     </a>
                                 </td>
                                 <td>{nl2br($data['commit']['message'])}</td>
