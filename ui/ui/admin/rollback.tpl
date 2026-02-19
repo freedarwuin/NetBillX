@@ -33,7 +33,7 @@
     <div class="col-sm-6">
         <div class="box box-hovered mb20 box-primary">
             <div class="box-header">
-                <h3 class="box-title">{Lang::T('Install')}</h3>
+                <h3 class="box-title">{Lang::T('Development')}</h3>
             </div>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
