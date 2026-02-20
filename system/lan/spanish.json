@@ -485,7 +485,7 @@
   "Access_Token": "Token de acceso",
   "Empty_this_to_randomly_created_API_key": "Vacíe esto para crear una clave API aleatoria",
   "This_Token_will_act_as_SuperAdmin_Admin": "Este token actuará como SuperAdmin/Admin",
-  "Miscellaneous": "Misceláneas",
+  "Miscellaneous": "Servicios Adicionales",
   "Enable_Session_Timeout": "Habilitar tiempo de espera de sesión",
   "Logout_Admin_if_not_Available_Online_a_period_of_time": "Cerrar sesión como administrador si no está disponible o en línea durante un período de tiempo",
   "Timeout_Duration": "Duración del tiempo de espera",
