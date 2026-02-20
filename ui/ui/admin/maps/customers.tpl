@@ -55,9 +55,9 @@
 
             // Create a popup for the marker
             var popupContent = "<strong>Name</strong>: " + name + "<br>" +
-                "<strong>Info</strong>: " + info + "<br>" +
+                "<strong>Informacion</strong>: " + info + "<br>" +
                 "<strong>Balance</strong>: " + balance + "<br>" +
-                "<strong>Address</strong>: " + address + "<br>" +
+                "<strong>Direccion</strong>: " + address + "<br>" +
                 "<a href='{/literal}{Text::url('customers/view/')}{literal}"+ customer.id +"'>More Info</a> &bull; " +
                 "<a href='https://www.google.com/maps/dir//" + direction + "' target='maps'>Get Direction</a><br>";
 
