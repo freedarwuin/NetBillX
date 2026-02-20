@@ -2,9 +2,9 @@
 
 /**
  * PHP Mikrotik Billing (https://github.com/freedarwuin/NetBillX/)
- *
- * Este script es para actualizar NetBillX
- **/
+ * Script de actualización NetBillX
+ */
+
 session_start();
 include "config.php";
 
@@ -137,9 +137,7 @@ if (empty($step)) {
                 foreach ($queries as $q) {
                     try {
                         $db->exec($q);
-                    } catch (PDOException $e) {
-                        // ignorar si ya existe
-                    }
+                    } catch (PDOException $e) {}
                 }
                 $dones[] = $version;
             }
@@ -153,10 +151,10 @@ if (empty($step)) {
 } else {
 
     $path = 'ui/compiled/';
-    $files = scandir($path);
-    foreach ($files as $filec) {
-        if (is_file($path . $filec)) {
-            unlink($path . $filec);
+    if (file_exists($path)) {
+        $files = scandir($path);
+        foreach ($files as $filec) {
+            if (is_file($path . $filec)) unlink($path . $filec);
         }
     }
 
@@ -179,15 +177,18 @@ function r2($to, $ntype = 'e', $msg = ''){
     die();
 }
 
-function copyFolder($from, $to, $exclude = []){
+function copyFolder($from, $to){
+    if (!file_exists($from)) return;
     $files = scandir($from);
     foreach ($files as $file) {
-        if (is_file($from . $file) && !in_array($file, $exclude)) {
-            if (file_exists($to . $file)) unlink($to . $file);
-            rename($from . $file, $to . $file);
-        } else if (is_dir($from . $file) && !in_array($file, ['.', '..'])) {
-            if (!file_exists($to . $file)) mkdir($to . $file);
-            copyFolder($from . $file . DIRECTORY_SEPARATOR, $to . $file . DIRECTORY_SEPARATOR);
+        if ($file != '.' && $file != '..') {
+            if (is_dir($from . $file)) {
+                if (!file_exists($to . $file)) mkdir($to . $file);
+                copyFolder($from . $file . DIRECTORY_SEPARATOR, $to . $file . DIRECTORY_SEPARATOR);
+            } else {
+                if (file_exists($to . $file)) unlink($to . $file);
+                rename($from . $file, $to . $file);
+            }
         }
     }
 }
@@ -213,85 +214,133 @@ function deleteFolder($path){
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Actualizador NetBillX</title>
+<title>NetBillX ISP Core Update</title>
 
 <link rel="shortcut icon" href="ui/ui/images/logo.png">
 <link rel="stylesheet" href="ui/ui/styles/bootstrap.min.css">
 <link rel="stylesheet" href="ui/ui/fonts/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" href="ui/ui/styles/modern-AdminLTE.min.css">
 
 <?php if ($continue) { ?>
 <meta http-equiv="refresh" content="3; ./update.php?step=<?= $step ?>">
 <?php } ?>
 
+<style>
+body{
+    background:#0b1220;
+    color:#e5e7eb;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.network-bg{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background: radial-gradient(circle at 20% 30%, #1e3a8a 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, #0ea5e9 0%, transparent 40%);
+    opacity:0.15;
+    z-index:-1;
+}
+
+.isp-panel{
+    background:#111827;
+    border:1px solid #1d4ed8;
+    border-radius:12px;
+    padding:40px;
+    box-shadow:0 0 50px rgba(0,191,255,0.2);
+}
+
+.progress{
+    height:25px;
+    background:#1f2937;
+}
+
+.progress-bar{
+    background:linear-gradient(90deg,#00c6ff,#0072ff);
+    font-weight:bold;
+}
+
+.status{
+    margin-top:15px;
+    font-size:16px;
+}
+
+.footer-text{
+    margin-top:30px;
+    font-size:12px;
+    color:#6b7280;
+}
+</style>
+
 </head>
+<body>
 
-<body class="hold-transition skin-blue">
+<div class="network-bg"></div>
 
-<div class="container" style="margin-top:60px;">
-    <div class="row">
-        <div class="col-md-3"></div>
-        <div class="col-md-6">
+<div class="container" style="margin-top:100px;">
+<div class="row">
+<div class="col-md-3"></div>
+<div class="col-md-6 text-center">
 
-            <div class="box box-primary">
-                <div class="box-header text-center">
-                    <h3 class="box-title">
-                        <i class="fa fa-refresh"></i> Actualizando NetBillX
-                    </h3>
-                </div>
+<div class="isp-panel">
 
-                <div class="box-body text-center">
+<h3><i class="fa fa-signal text-info"></i> NETBILLX ISP CORE SYSTEM</h3>
+<hr>
 
-                    <?php
-                    $progress = 0;
-                    if ($step == 1) $progress = 20;
-                    if ($step == 2) $progress = 40;
-                    if ($step == 3) $progress = 70;
-                    if ($step == 4) $progress = 90;
-                    if ($step == 5) $progress = 100;
-                    ?>
+<?php
+$progress = 0;
+if ($step == 1) $progress = 20;
+if ($step == 2) $progress = 40;
+if ($step == 3) $progress = 70;
+if ($step == 4) $progress = 90;
+if ($step == 5) $progress = 100;
+?>
 
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-striped active"
-                             style="width: <?= $progress ?>%">
-                            <?= $progress ?>%
-                        </div>
-                    </div>
+<div class="progress">
+<div class="progress-bar progress-bar-striped active" style="width: <?= $progress ?>%">
+<?= $progress ?>%
+</div>
+</div>
 
-                    <br>
+<div class="status">
 
-                    <?php if (!empty($msgType)) { ?>
-                        <div class="alert alert-<?= $msgType ?>">
-                            <?= $msg ?>
-                        </div>
-                    <?php } ?>
+<?php if (!empty($msgType)) { ?>
+<div class="alert alert-<?= $msgType ?>">
+<?= $msg ?>
+</div>
+<?php } ?>
 
-                    <?php if ($step == 1) { ?>
-                        <h4><i class="fa fa-download text-primary"></i> Descargando actualización...</h4>
+<?php if ($step == 1) { ?>
+<i class="fa fa-cloud-download text-info"></i> Descargando paquete del servidor central...
 
-                    <?php } elseif ($step == 2) { ?>
-                        <h4><i class="fa fa-file-archive-o text-warning"></i> Extrayendo archivos...</h4>
+<?php } elseif ($step == 2) { ?>
+<i class="fa fa-archive text-warning"></i> Extrayendo actualización...
 
-                    <?php } elseif ($step == 3) { ?>
-                        <h4><i class="fa fa-cogs text-info"></i> Instalando archivos...</h4>
+<?php } elseif ($step == 3) { ?>
+<i class="fa fa-cogs text-primary"></i> Aplicando cambios al núcleo del sistema...
 
-                    <?php } elseif ($step == 4) { ?>
-                        <h4><i class="fa fa-database text-purple"></i> Actualizando base de datos...</h4>
+<?php } elseif ($step == 4) { ?>
+<i class="fa fa-database text-success"></i> Ejecutando migraciones de base de datos...
 
-                    <?php } elseif ($step == 5) { ?>
-                        <div class="alert alert-success">
-                            <h4><i class="fa fa-check"></i> Actualización completada</h4>
-                            Versión instalada: <b><?= $version ?></b>
-                        </div>
-                        <meta http-equiv="refresh" content="5; ./?_route=dashboard">
-                    <?php } ?>
+<?php } elseif ($step == 5) { ?>
+<div class="alert alert-success">
+<i class="fa fa-check-circle"></i>
+Actualización completada<br>
+Versión instalada: <b><?= $version ?></b>
+</div>
+<meta http-equiv="refresh" content="5; ./?_route=dashboard">
+<?php } ?>
 
-                </div>
-            </div>
+</div>
 
-        </div>
-        <div class="col-md-3"></div>
-    </div>
+<div class="footer-text">
+Infraestructura NetBillX • Plataforma Profesional para ISP
+</div>
+
+</div>
+
+</div>
+<div class="col-md-3"></div>
+</div>
 </div>
 
 </body>
