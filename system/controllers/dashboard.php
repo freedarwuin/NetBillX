@@ -17,7 +17,7 @@ if (isset($_GET['refresh'])) {
             unlink($CACHE_PATH . DIRECTORY_SEPARATOR . $file);
         }
     }
-    r2(getUrl('dashboard'), 's', 'Data Refreshed');
+    r2(getUrl('dashboard'), 's', Lang::T('Data Refreshed'));
 }
 
 $tipeUser = _req("user");
