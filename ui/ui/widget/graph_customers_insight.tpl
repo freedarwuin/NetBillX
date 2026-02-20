@@ -21,9 +21,9 @@
             }
             // Create the chart data
             var data = {
-                labels: ['Active Users', 'Expired Users', 'Inactive Users'],
+                labels: ['Usuarios activos', 'Usuarios expirados', 'Usuarios inactivos'],
                 datasets: [{
-                    label: 'User Recharges',
+                    label: 'Recargas de usuario',
                     data: [parseInt(u_act), parseInt(expired), parseInt(inactive)],
                     backgroundColor: ['rgba(4, 191, 13)', 'rgba(191, 35, 4)', 'rgba(0, 0, 255, 0.5'],
                     borderColor: ['rgba(0, 255, 0, 1)', 'rgba(255, 99, 132, 1)', 'rgba(0, 0, 255, 0.7'],
