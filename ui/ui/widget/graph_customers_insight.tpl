@@ -24,20 +24,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const ultra3DPlugin = {
         id: 'ultra3D',
+
         beforeDraw(chart) {
             const ctx = chart.ctx;
             const width = chart.width;
             const height = chart.height;
 
-            // sombra base
+            // sombra base elegante
             ctx.save();
-            ctx.fillStyle = "rgba(0,0,0,0.15)";
+            ctx.fillStyle = "rgba(0,0,0,0.08)";
             ctx.beginPath();
-            ctx.ellipse(width/2, height/2 + 25, 140, 35, 0, 0, 2 * Math.PI);
+            ctx.ellipse(width/2, height/2 + 32, 160, 42, 0, 0, 2 * Math.PI);
             ctx.fill();
             ctx.restore();
         },
-        beforeDatasetDraw(chart, args) {
+
+        beforeDatasetDraw(chart) {
             const {ctx} = chart;
             const meta = chart.getDatasetMeta(0);
 
@@ -45,11 +47,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 ctx.save();
                 ctx.fillStyle = bottomColors[index];
 
-                // perspectiva inclinada
-                ctx.transform(1, 0, 0, 0.7, 0, 35);
+                // ligera inclinación 3D
+                ctx.transform(1, 0, 0, 0.78, 0, 28);
 
-                // grosor
-                for(let i = 0; i < 15; i++){
+                // grosor refinado
+                for(let i = 0; i < 8; i++){
                     ctx.translate(0, 1);
                     element.draw(ctx);
                 }
@@ -57,19 +59,23 @@ document.addEventListener("DOMContentLoaded", function() {
                 ctx.restore();
             });
         },
+
         afterDatasetDraw(chart) {
             const {ctx} = chart;
-            const meta = chart.getDatasetMeta(0);
+            const width = chart.width;
+            const height = chart.height;
 
-            // brillo glossy superior
-            meta.data.forEach((element) => {
-                ctx.save();
-                ctx.fillStyle = "rgba(255,255,255,0.15)";
-                ctx.beginPath();
-                ctx.arc(element.x, element.y - 15, 100, 0, Math.PI, true);
-                ctx.fill();
-                ctx.restore();
-            });
+            // reflejo superior sutil
+            const gradient = ctx.createLinearGradient(0, height/2 - 100, 0, height/2);
+            gradient.addColorStop(0, "rgba(255,255,255,0.12)");
+            gradient.addColorStop(1, "rgba(255,255,255,0)");
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.ellipse(width/2, height/2 - 18, 105, 32, 0, Math.PI, 2 * Math.PI);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            ctx.restore();
         }
     };
 
