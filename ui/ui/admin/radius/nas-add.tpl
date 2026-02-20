@@ -46,7 +46,7 @@
                         <div class="col-md-2">
                             <input type="text" class="form-control" id="server" name="server" placeholder="{Lang::T('null')}">
                         </div>
-                        <label class="col-md-2 control-label">Community</label>
+                        <label class="col-md-2 control-label">{Lang::T('Community')}</label>
                         <div class="col-md-2">
                             <input type="text" class="form-control" id="community" name="community" placeholder="{Lang::T('null')}">
                         </div>
