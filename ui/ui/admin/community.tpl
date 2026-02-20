@@ -132,7 +132,7 @@
                 <h3 class="box-title">{Lang::T('WhatsApp Gateway')}</h3>
             </div>
             <div class="box-body">
-                {Lang::T('Connect your NetBillX to WhatsApp efficiently using WhatsApp Gateway.')}
+                {Lang::T('Connect your NetBillX to WhatsApp efficiently using go-whatsapp-web-multidevice.')}
             </div>
             <div class="box-footer">
                 <a href="https://github.com/freedarwuin/go-whatsapp-web-multidevice" target="_blank"
