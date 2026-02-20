@@ -65,7 +65,7 @@ Soporte para [Freeradius con Base de Datos](https://github.com/freedarwuin/NetBi
 ## Soporte comunitario
 
 - [Discusión en Github](https://github.com/freedarwuin/NetBillX/discussions)
-- [Grupo de WhatsApp](https://t.me/phpmixbill)
+- [Grupo de WhatsApp]()
 
 ## Soporte técnico
 
