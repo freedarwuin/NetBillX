@@ -21,7 +21,7 @@
             }
             // Create the chart data
             var data = {
-                labels: ['Usuarios activos', 'Usuarios expirados', 'Usuarios inactivos'],
+                labels: ['Active Users', 'Expired Users', 'Inactive Users'],
                 datasets: [{
                     label: 'User Recharges',
                     data: [parseInt(u_act), parseInt(expired), parseInt(inactive)],

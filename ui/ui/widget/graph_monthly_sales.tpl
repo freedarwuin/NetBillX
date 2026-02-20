@@ -23,8 +23,8 @@
                 var monthlySales = JSON.parse('{/literal}{$monthlySales|json_encode}{literal}');
 
                 var monthNames = [
-                    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
                 ];
 
                 var labels = [];
@@ -42,7 +42,7 @@
                     data: {
                         labels: labels,
                         datasets: [{
-                            label: 'Ventas mensuales',
+                            label: 'Monthly Sales',
                             data: data,
                             backgroundColor: 'rgba(2, 10, 242)', // Customize the background color
                             borderColor: 'rgba(255, 99, 132, 1)', // Customize the border color
