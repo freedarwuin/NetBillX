@@ -34,9 +34,7 @@ ui/themes/**
 scanLang.php
 system/lan/**
 !system/lan/index.html
-!system/lan/indonesia.json
 !system/lan/spanish.json
-!system/lan/turkish.json
 !system/lan/english.json
 !system/lan/country.json
 *.zip
