@@ -3,662 +3,538 @@
 # CHANGELOG
 
 ## 2024.10.23
-
-- Custom Balance admin refill Requested by Javi Tech
-- Only Admin can edit Customer Requested by Fiberwan
-- Only Admin can show password Requested by Fiberwan
+- Recarga personalizada de saldo para administrador — solicitada por Javi Tech
+- Solo el administrador puede editar clientes — solicitado por Fiberwan
+- Solo el administrador puede mostrar la contraseña — solicitado por Fiberwan
 
 ## 2024.10.18
-
-- Single Session Admin Can be set in the Settings
-- Auto expired unpaid transaction
-- Registration Type
-- Can Login as User from Customer View
-- Can select customer register must using OTP or not
-- Add Meta.php for additional information
+- El administrador puede configurar sesión única desde Ajustes
+- Las transacciones no pagadas expiran automáticamente
+- Tipo de registro
+- Posibilidad de iniciar sesión como usuario desde la vista de cliente
+- Permite seleccionar si el registro del cliente requiere OTP o no
+- Se agrega Meta.php para información adicional
 
 ## 2024.10.15
-
-- CSRF Security
-- Admin can only have 1 active session
-- Move Miscellaneous Settings to new page
-- Fix Customer Online
-- Count Shared user online for Radius REST
-- Fix Invoice Print
+- Seguridad CSRF
+- El administrador solo puede tener una sesión activa
+- Mover la configuración miscelánea a una nueva página
+- Corregir estado de cliente en línea
+- Contar usuarios compartidos en línea para Radius REST
+- Corregir impresión de factura
 
 ## 2024.10.7
-
-- Show Customer is Online or not
-- Change Invoice Theme for printing
-- Rearange Customer View
+- Mostrar si el cliente está en línea o no
+- Cambiar el tema de la factura para impresión
+- Reorganizar la vista del cliente
 
 ## 2024.9.23
-
-- Discount Price
-- Burst Preset
+- Precio con descuento
+- Preajuste de ráfaga (Burst Preset)
 
 ## 2024.9.20
-
-- Forgot Password
-- Forgot Username
-- Public header template
+- Olvidé mi contraseña
+- Olvidé mi nombre de usuario
+- Plantilla de encabezado público
 
 ## 2024.9.13
-
-- Add Selling Mikrotik VPN By @agstrxyz
-- Theme Redesign by @Focuslinkstech
-- Fix That and this
-
+- Agregar venta de VPN MikroTik — por @agstrxyz
+- Rediseño del tema — por @Focuslinkstech
+- Corrección de varios errores y ajustes generales
 
 ## 2024.8.28
-
-- add Router Status Offline/Online by @Focuslinkstech
-- Show Router Offline in the Dashbord
-- Fix Translation by by @ahmadhusein17
-- Add Payment Info Page, to show to customer before buy
-- Voucher Template
-- Change Niceedit to summernote
-- Customer can change their language by @Focuslinkstech
-- Fix Voucher case sensitive
-- 3 Tabs Plugin Manager
+- Agregar estado del router (Offline/Online) — por @Focuslinkstech
+- Mostrar router offline en el panel principal
+- Corregir traducciones — por @ahmadhusein17
+- Agregar página de información de pago para mostrar al cliente antes de comprar
+- Plantilla de voucher
+- Cambiar Niceedit por Summernote
+- El cliente puede cambiar su idioma — por @Focuslinkstech
+- Corregir sensibilidad a mayúsculas/minúsculas en vouchers
+- Administrador de plugins con 3 pestañas
 
 ## 2024.8.19
-
-- New Page, Payment Info, To Inform Customer, which payment gateway is good
-- Move Customer UI to user-ui folder
-- Voucher Template
-- Change editor to summernote
-- Customer can change language
-
-## 2024.8.6
-
-- Fix QRCode Scanner
-- Simplify Chap verification password
-- Quota based Freeradius Rest
-- Fix Payment Gateway Audit
+- Nueva página “Información de Pago” para informar al cliente qué pasarela de pago es recomendable
+- Mover la interfaz de cliente a la carpeta user-ui
+- Plantilla de voucher
+- Cambiar editor a Summernote
+- El cliente puede cambiar idioma
 
 ## 2024.8.6
+- Corregir escáner de código QR
+- Simplificar verificación de contraseña CHAP
+- Cuotas basadas en FreeRadius REST
+- Corregir auditoría de pasarela de pago
 
-- Fix Customer pppoe username
+## 2024.8.6
+- Corregir nombre de usuario PPPoE del cliente
 
 ## 2024.8.5
-
-- Add Customer Mail Inbox
-- Add pppoe customer and pppoe IP to make static username and IP
-- Add Sync button
-- Allow Mac Address Username
-- Router Maps
+- Agregar bandeja de entrada de correo para clientes
+- Agregar cliente PPPoE e IP PPPoE para crear usuario e IP estáticos
+- Agregar botón Sync
+- Permitir dirección MAC como nombre de usuario
+- Mapas de router
 
 ## 2024.8.1
-
-- Show Bandwidth Plan in the customer dashboard
-- Add Audit Payment Gateway
-- Fix Plugin Manager
-
-## 2024.7.23
-
-- add Voucher Used Date
-- Reports page just 1 for all
-- fix start date at dashboard
-- fix installation parameter
+- Mostrar plan de ancho de banda en el panel del cliente
+- Agregar auditoría de pasarela de pago
+- Corregir Plugin Manager
 
 ## 2024.7.23
+- Agregar fecha de uso del voucher
+- Página de reportes unificada en una sola
+- Corregir fecha de inicio en el dashboard
+- Corregir parámetros de instalación
 
-- Add Additional Bill Info to Customer
-- Add Voucher only Login, without username
-- Add Additional Bill info to Mikrotik Comment
-- Add dynamic Application URL For Installation
-- Fix Active Customers for Voucher
+## 2024.7.23
+- Agregar información adicional de factura al cliente
+- Agregar inicio de sesión solo con voucher, sin nombre de usuario
+- Agregar información adicional de factura en comentarios de MikroTik
+- Agregar URL dinámica de la aplicación para instalación
+- Corregir clientes activos para vouchers
 
 ## 2024.7.15
-
-- Radius Rest API
-- Getting Started Documentation
-- Only Show new update just once
+- API Radius REST
+- Documentación de inicio rápido
+- Mostrar nueva actualización solo una vez
 
 ## 2024.6.21
-
-- Add filter result in voucher and internet plan
-- Add input script on-login and on-logout
-- Add local ip for pppoe
+- Agregar filtro de resultados en vouchers y planes de internet
+- Agregar scripts on-login y on-logout
+- Agregar IP local para PPPoE
 
 ## 2024.6.19
-
-- new system for device, it can support non mikrotik devices, as long someone create device file
-- add local ip in the pool
-- Custom Fix Expired Date for postpaid
-- Expired customer can move to another Internet Plan
-- Plugin installer
-- refresh plugin manager cache
-- Docker File by George Njeri (@Swagfin)
+- Nuevo sistema de dispositivos compatible con equipos que no sean MikroTik mediante archivos personalizados
+- Agregar IP local en el pool
+- Corrección personalizada de fecha de expiración para postpago
+- Clientes expirados pueden cambiar a otro plan de internet
+- Instalador de plugins
+- Actualizar caché del gestor de plugins
+- Archivo Docker — por George Njeri (@Swagfin)
 
 ## 2024.5.21
-
-- Add Maintenance Mode by @freeispradius
-- Add Tax System by @freeispradius
-- Add Export Customer List to CSV with Filter
-- Fix some Radius Variable by @freeispradius
-- Add Rollback update
+- Agregar modo mantenimiento — por @freeispradius
+- Agregar sistema de impuestos — por @freeispradius
+- Exportar lista de clientes a CSV con filtros
+- Corregir variables de Radius — por @freeispradius
+- Agregar rollback de actualización
 
 ## 2024.5.17
-
-- Status Customer: Active/Banned/Disabled
-- Add search with order in Customer list
+- Estado del cliente: Activo / Bloqueado / Deshabilitado
+- Agregar búsqueda con orden en la lista de clientes
 
 ## 2024.5.16
-
-- Confirm can change Using
+- Confirmar cambio de uso
 
 ## 2024.5.14
-
-- Show Plan and Location on expired list
-- Customizeable payment for recharge
+- Mostrar plan y ubicación en la lista de expirados
+- Pago personalizable para recargas
 
 ## 2024.5.8
-
-- Fix bugs burst by @Gerandonk
-- Fix sync for burst by @Gerandonk
+- Corregir errores de burst — por @Gerandonk
+- Corregir sincronización de burst — por @Gerandonk
 
 ## 2024.5.7
-
-- Fix time for period Days
-- Fix Free radius attributes by @agstrxyz
-- Add Numeric Voucher Code by @pro-cms
+- Corregir tiempo para períodos en días
+- Corregir atributos FreeRadius — por @agstrxyz
+- Agregar código de voucher numérico — por @pro-cms
 
 ## 2024.4.30
-
-- CRITICAL UPDATE: last update Logic recharge not check is status on or off, it make expired customer stay in expired pool
-- Prevent double submit for recharge balance
+- ACTUALIZACIÓN CRÍTICA: la lógica de recarga no verificaba el estado activo/inactivo, provocando que clientes expirados permanecieran en el pool expirado
+- Prevenir doble envío en recarga de saldo
 
 ## 2024.4.29
-
-- Maps Pagination
-- Maps Search
-- Fix extend logic
-- Fix logic customer recharge to not delete when customer not change the plan
+- Paginación en mapas
+- Búsqueda en mapas
+- Corregir lógica de extensión
+- Corregir lógica de recarga para no eliminar datos cuando el cliente no cambia de plan
 
 ## 2024.4.23
-
-- Fix Pagination Voucher
-- Fix Languange Translation
-- Fix Alert Confirmation for requesting Extend
-- Send Telegram Notification when Customer request to extend expiration
-- prepaid users export list by @freeispradius
-- fix show voucher by @agstrxyz
+- Corregir paginación de vouchers
+- Corregir traducción de idioma
+- Corregir confirmación al solicitar extensión
+- Enviar notificación por Telegram cuando el cliente solicita extensión
+- Exportar lista de usuarios prepago — por @freeispradius
+- Corregir visualización de vouchers — por @agstrxyz
 
 ## 2024.4.21
-
-- Restore old cron
+- Restaurar cron antiguo
 
 ## 2024.4.15
-
-- Postpaid Customer can request extends expiration day if it enabled
-- Some Code Fixing by @ahmadhusein17 and @agstrxyz
+- Clientes postpago pueden solicitar extensión de expiración si está habilitado
+- Correcciones de código — por @ahmadhusein17 y @agstrxyz
 
 ## 2024.4.4
-
-- Data Tables for Customers List by @Focuslinkstech
-- Add Bills to Reminder
-- Prevent double submit for recharge and renew
+- DataTables para lista de clientes — por @Focuslinkstech
+- Agregar facturas a recordatorios
+- Prevenir doble envío en recarga y renovación
 
 ## 2024.4.3
-
-- Export logs to CSV by @agstrxyz
-- Change to Username if Country code empty
+- Exportar logs a CSV — por @agstrxyz
+- Usar nombre de usuario si el código de país está vacío
 
 ## 2024.4.2
-
-- Fix REST API
-- Fix Log IP Cloudflare by @Gerandonk
-- Show Personal or Business in customer dashboard
+- Corregir API REST
+- Corregir registro de IP con Cloudflare — por @Gerandonk
+- Mostrar tipo de cliente Personal o Empresa en el dashboard
 
 ## 2024.3.26
-
-- Change paginator, to make easy customization using pagination.tpl
+- Cambiar paginador para facilitar personalización usando pagination.tpl
 
 ## 2024.3.25
-
-- Fix maps on HTTP
-- Fix Cancel payment
+- Corregir mapas en HTTP
+- Corregir cancelación de pagos
 
 ## 2024.3.23
-
-- Maps full height
-- Show Get Directions instead Coordinates
-- Maps Label always show
+- Mapas a altura completa
+- Mostrar “Obtener direcciones” en lugar de coordenadas
+- Etiquetas de mapas siempre visibles
 
 ## 2024.3.22
-
-- Fix Broadcast Message by @Focuslinkstech
-- Add Location Picker
+- Corregir mensajes broadcast — por @Focuslinkstech
+- Agregar selector de ubicación
 
 ## 2024.3.20
-
-- Fixing some bugs
+- Corrección de varios errores
 
 ## 2024.3.19
-
-- Add Customer Type Personal or Bussiness by @pro-cms
-- Fix Broadcast Message by @Focuslinkstech
-- Add Customer Geolocation by @Focuslinkstech
-- Change Customer Menu
+- Agregar tipo de cliente: Personal o Empresa — por @pro-cms
+- Corregir mensajes broadcast — por @Focuslinkstech
+- Agregar geolocalización del cliente — por @Focuslinkstech
+- Cambiar menú de cliente
 
 ## 2024.3.18
-
-- Add Broadcasting SMS by @Focuslinkstech
-- Fix Notification with Bills
+- Agregar envío masivo de SMS — por @Focuslinkstech
+- Corregir notificaciones con facturas
 
 ## 2024.3.16
-
-- Fix Zero Charging
-- Fix Disconnect Customer from Radius without loop by @Gerandonk
+- Corregir cobro en cero
+- Desconectar cliente desde Radius sin bucle — por @Gerandonk
 
 ## 2024.3.15
-
-- Fix Customer View to list active Plan
-- Additional Bill using Customer Attributes
+- Corregir vista del cliente para listar plan activo
+- Facturación adicional usando atributos del cliente
 
 ## 2024.3.14
-
-- Add Note to Invoices
-- Add Additional Bill
-- View Invoice from Customer side
+- Agregar notas a facturas
+- Agregar facturación adicional
+- Ver facturas desde el panel del cliente
 
 ## 2024.3.13
-
-- Postpaid System
-- Additional Cost
+- Sistema postpago
+- Costos adicionales
 
 ## 2024.3.12
-
-- Check if Validity Period, so calculate price will not affected other validity
-- Add firewall using .htaccess for apache only
-- Multiple Payment Gateway by @Focuslinkstech
-- Fix Logic Multiple Payment gateway
-- Fix delete Attribute
-- Allow Delete Payment Gateway
-- Allow Delete Plugin
+- Verificar período de validez para que el cálculo de precios no afecte otros períodos
+- Agregar firewall con .htaccess (solo Apache)
+- Múltiples pasarelas de pago — por @Focuslinkstech
+- Corregir lógica de múltiples pasarelas de pago
+- Corregir eliminación de atributos
+- Permitir eliminar pasarelas de pago
+- Permitir eliminar plugins
 
 ## 2024.3.6
-
-- change attributes view
+- Cambiar vista de atributos
 
 ## 2024.3.4
-
-- add [[username]] for reminder
-- fix agent show when editing
-- fix password admin when sending notification
-- add file exists for pages
+- Agregar [[username]] a recordatorios
+- Corregir visualización de agente al editar
+- Corregir contraseña del administrador al enviar notificaciones
+- Verificar existencia de archivos para páginas
 
 ## 2024.3.3
-
-- Change loading button by @Focuslinkstech
-- Add Customer Announcements by @Gerandonk
-- Add PPPOE Period Validity by @Gerandonk
+- Cambiar botón de carga — por @Focuslinkstech
+- Agregar anuncios para clientes — por @Gerandonk
+- Agregar validez por período PPPoE — por @Gerandonk
 
 ## 2024.2.29
-
-- Fix Hook Functionality
-- Change Customer Menu
+- Corregir funcionalidad de hooks
+- Cambiar menú de cliente
 
 ## 2024.2.28
-
-- Fix Buy Plan with Balance
-- Add Expired date for reminder
+- Corregir compra de plan con saldo
+- Agregar fecha de expiración en recordatorios
 
 ## 2024.2.27
-
-- fix path notification
-- redirect to dashboard if already login
+- Corregir rutas de notificaciones
+- Redirigir al dashboard si ya está logueado
 
 ## 2024.2.26
-
-- Clean Unused JS and CSS
-- Add some Authorization check
-- Custom Path for folder
-- fix some bugs
+- Limpiar JS y CSS no utilizados
+- Agregar validaciones de autorización
+- Ruta personalizada para carpetas
+- Corregir varios errores
 
 ## 2024.2.23
-
-- Integrate with NetBillX Printer
-- Fix Invoice
-- add admin ID in transaction
+- Integración con impresora NetBillX
+- Corregir facturas
+- Agregar ID de administrador en transacciones
 
 ## 2024.2.22
-
-- Add Loading when click submit
-- link to settings when hide widget
+- Agregar carga al enviar formularios
+- Enlace a ajustes cuando se oculta un widget
 
 ## 2024.2.21
-
-- Fix SQL Installer
-- remove multiple space in language
-- Change Phone Number require OTP by @Focuslinkstech
-- Change burst Form
-- Delete Table Responsive, first Column Freeze
+- Corregir instalador SQL
+- Eliminar espacios múltiples en idiomas
+- Cambiar teléfono para requerir OTP — por @Focuslinkstech
+- Cambiar formulario de burst
+- Eliminar tabla responsive, congelar primera columna
 
 ## 2024.2.20
-
-- Fix list admin
-- Burst Limit
-- Pace Loading by @Focuslinkstech
+- Corregir lista de administradores
+- Límite de Burst
+- Mejorar carga — por @Focuslinkstech
 
 ## 2024.2.19
-
-- Start API Development
-- Multiple Admin Level
-- Customer Attributes by @Focuslinkstech
-- Radius Menu
+- Inicio del desarrollo de API
+- Múltiples niveles de administrador
+- Atributos de cliente — por @Focuslinkstech
+- Menú Radius
 
 ## 2024.2.13
-
-- Auto translate language
-- change language structur to json
-- save collapse menu
+- Traducción automática de idiomas
+- Cambio de estructura de idioma a JSON
+- Guardar menú colapsado
 
 ## 2024.2.12
-
-- Admin Level : SuperAdmin,Admin,Report,Agent,Sales
-- Export Customers to CSV
-- Session using Cookie
+- Niveles de administrador: SuperAdmin, Admin, Reportes, Agente, Ventas
+- Exportar clientes a CSV
+- Sesiones usando cookies
 
 ## 2024.2.7
-
-- Hide Dashboard content
+- Ocultar contenido del dashboard
 
 ## 2024.2.6
-
-- Cache graph for faster opening graph
+- Cachear gráficos para apertura más rápida
 
 ## 2024.2.5
-
-- Admin Dashboard Update
-  - Add Monthly Registered Customers
-  - Total Monthly Sales
-  - Active Users
+- Actualización del dashboard de administrador:
+    - Clientes registrados mensuales
+    - Ventas mensuales totales
+    - Usuarios activos
 
 ## 2024.2.2
-
-- Fix edit plan for user
+- Corregir edición de plan para usuario
 
 ## 2024.1.24
-
-- Add Send test for SMS, Whatsapp and Telegram
+- Agregar envío de prueba para SMS, WhatsApp y Telegram
 
 ## 2024.1.19
-
-- Paid Plugin, Theme, and payment gateway marketplace using codecanyon.net
-- Fix Plugin manager List
+- Marketplace de plugins, temas y pasarelas de pago de pago (Codecanyon)
+- Corregir lista del gestor de plugins
 
 ## 2024.1.18
-
-- fix(mikrotik): set pool $poolId always empty
+- Corregir MikroTik: pool $poolId siempre vacío
 
 ## 2024.1.17
-
-- Add minor change, for plugin, menu can have notifications by @Focuslinkstech
+- Cambio menor: menú de plugins con notificaciones — por @Focuslinkstech
 
 ## 2024.1.16
-
-- Add yellow color to table for plan not allowed to purchase
-- Fix Radius pool select
-- add price to reminder notification
-- Support thermal printer for invoice
+- Agregar color amarillo a planes no permitidos para compra
+- Corregir selección de pool Radius
+- Agregar precio a notificaciones de recordatorio
+- Soporte para impresora térmica en facturas
 
 ## 2024.1.15
-
-- Fix cron job for Plan only for admin by @Focuslinkstech
+- Corregir cron de planes solo para administrador — por @Focuslinkstech
 
 ## 2024.1.11
-
-- Add Plan only for admin by @Focuslinkstech
-- Fix Plugin Manager
+- Planes solo para administrador — por @Focuslinkstech
+- Corregir Plugin Manager
 
 ## 2024.1.9
-
-- Add Prefix when generate Voucher
+- Agregar prefijo al generar vouchers
 
 ## 2024.1.8
-
-- User Expired Order by Expired Date
+- Pedido de usuario expirado por fecha de expiración
 
 ## 2024.1.2
-
-- Pagination User Expired by @Focuslinkstech
+- Paginación de usuarios expirados — por @Focuslinkstech
 
 ## 2023.12.21
-
-- Modern AdminLTE by @sabtech254
-- Update user-dashboard.tpl by @Focuslinkstech
+- AdminLTE moderno — por @sabtech254
+- Actualizar user-dashboard.tpl — por @Focuslinkstech
 
 ## 2023.12.19
-
-- Fix Search Customer
-- Disable Registration, Customer just activate voucher Code, and the voucher will be their password
-- Remove all used voucher codes
+- Corregir búsqueda de clientes
+- Deshabilitar registro: el cliente activa solo con voucher y el voucher es la contraseña
+- Eliminar todos los vouchers usados
 
 ## 2023.12.18
-
-- Split sms to 160 characters only for Mikrotik Modem
+- Dividir SMS a 160 caracteres solo para módem MikroTik
 
 ## 2023.12.14
-
-- Can send SMS using Mikrotik with Modem Installed
-- Add Customer Type, so Customer can only show their PPPOE or Hotspot Package or both
+- Envío de SMS usando MikroTik con módem instalado
+- Agregar tipo de cliente: mostrar solo PPPOE, Hotspot o ambos
 
 ## 2023.11.17
-
-- Error details not show in Customer
+- Detalles de error no visibles para el cliente
 
 ## 2023.11.15
-
-- Customer Multi Router package
-- Fix edit package, Admin can change Customer to another router
+- Paquetes multi-router para clientes
+- Corregir edición de paquetes: el administrador puede cambiar cliente a otro router
 
 ## 2023.11.9
-
-- fix bug variable in cron
-- fix update plan
+- Corregir variables en cron
+- Corregir actualización de planes
 
 ## 2023.10.27
-
-- Backup and restore database
-- Fix checking radius client
+- Respaldo y restauración de base de datos
+- Corregir verificación de clientes Radius
 
 ## 2023.10.25
-
-- fix wrong file check in cron, error only for newly installed
+- Corregir verificación de archivos en cron (error solo en instalaciones nuevas)
 
 ## 2023.10.24
-
-- Fix logic cronjob
-- assign router to NAS, but not yet used
-- Fix Pagination
-- Move Alert from hardcode
+- Corregir lógica de cronjob
+- Asignar router a NAS (aún no utilizado)
+- Corregir paginación
+- Mover alertas fuera de hardcode
 
 ## 2023.10.20
-
-- View Invoice
-- Resend Invoice
-- Custom Voucher
+- Ver factura
+- Reenviar factura
+- Voucher personalizado
 
 ## 2023.10.17
-
-- Happy Birthday To Me 🎂 \(^o^)/
-- Support FreeRadius with Mysql
-- Bring back Themes support
-- Log Viewer
+- ¡Feliz cumpleaños para mí 🎂!
+- Soporte FreeRadius con MySQL
+- Regreso del soporte de temas
+- Visor de logs
 
 ## 2023.9.21
-
-- Customer can extend Plan
-- Customer can Deactivate active plan
-- add variable nux-router to select  only plan from that router
-- Show user expired until 30 items
+- El cliente puede extender su plan
+- El cliente puede desactivar su plan activo
+- Variable nux-router para seleccionar solo planes de ese router
+- Mostrar hasta 30 usuarios expirados
 
 ## 2023.9.20
-
-- Fix Customer balance header
-- Deactivate Customer active plan
-- Sync Customer Plan to Mikrotik
-- Recharge Customer from Customer Details
-- Add Privacy Policy and Terms and Conditions Pages
+- Corregir encabezado de saldo del cliente
+- Desactivar plan activo del cliente
+- Sincronizar plan del cliente con MikroTik
+- Recargar cliente desde detalles
+- Agregar páginas de Política de Privacidad y Términos y Condiciones
 
 ## 2023.9.13
+- Agregar saldo actual en notificaciones
+- Comprar plan para un amigo
+- Recargar plan de un amigo
+- Corregir recarga de plan
+- Mostrar plan activo en la lista de clientes
+- Corregir contador de clientes en el dashboard
+- Mostrar saldo del cliente en el encabezado
+- Corregir Plugin Manager usando Http::Get
+- Mostrar página de error cuando el sistema falla
 
-- add Current balance in notification
-- Buy Plan for Friend
-- Recharge Friend plan
-- Fix recharge Plan
-- Show Customer active plan in Customer list
-- Fix Customer counter in dashboard
-- Show Customer Balance in header
-- Fix Plugin Manager using Http::Get
-- Show Some error page when crash
 ## 2023.9.7
-
-- Fix PPPOE Delete Customer
-- Remove active Customer before deleting
-- Show IP and Mac even if it not Hotspot
+- Corregir eliminación de cliente PPPoE
+- Eliminar cliente activo antes de borrar
+- Mostrar IP y MAC aunque no sea Hotspot
 
 ## 2023.9.6
-
-- Expired Pool
-Customer can be move to expired pool after plan expired by cron
-- Fix Delete customer
-- tbl_language removed
+- Pool expirado: el cliente se mueve automáticamente tras expirar el plan
+- Corregir eliminación de cliente
+- Eliminar tabla tbl_language
 
 ## 2023.9.1.1
-
-- Fix cronjob Delete customer
-- Fix reminder text
+- Corregir eliminación de clientes por cron
+- Corregir texto de recordatorio
 
 ## 2023.9.1
-
-- Critical bug fixes, bug happen when user buy package, expired time will be calculated from last expired, not from when they buy the package
-- Time not change after user buy package for extending
-- Add Cancel Button to user dashboard when it show unpaid package
-- Fix username in user dashboard
+- Correcciones críticas: el tiempo de expiración se calculaba desde la expiración anterior
+- El tiempo no se actualizaba al extender el plan
+- Agregar botón Cancelar en dashboard cuando hay paquete no pagado
+- Corregir nombre de usuario en dashboard
 
 ## 2023.8.30
-
-- Upload Logo from settings
-- Fix Print value
-- Fix Time when editing prepaid
+- Subir logo desde ajustes
+- Corregir valores de impresión
+- Corregir tiempo al editar prepago
 
 ## 2023.8.28
-
-- Extend expiration if buy same package
-- Fix calendar
-- Add recharge time
-- Fix allow balance transfer
+- Extender expiración al comprar el mismo paquete
+- Corregir calendario
+- Agregar tiempo de recarga
+- Corregir transferencia de saldo
 
 ## 2023.8.24
-
-- Balance transfer between Customer
-- Optimize Cronjob
-- View Customer Info
-- Ajax for select customer
+- Transferencia de saldo entre clientes
+- Optimizar cronjob
+- Ver información del cliente
+- AJAX para selección de clientes
 
 ## 2023.8.18
-
-- Fix Auto Renewall Cronjob
-- Add comment to Mikrotik User
+- Corregir cron de renovación automática
+- Agregar comentario al usuario en MikroTik
 
 ## 2023.8.16
-
-- Admin Can Add Balance to Customer
-- Show Balance in user
-- Using Select2 for Dropdown
+- El administrador puede agregar saldo al cliente
+- Mostrar saldo al usuario
+- Usar Select2 para desplegables
 
 ## 2023.8.15
-
-- Fix PPPOE Delete Customer
-- Fix Header Admin and Customer
-- Fix PDF Export by Period
-- Add pppoe_password for Customer, this pppoe_password only admin can change
-- Country Code Number Settings
-- Customer Meta Table for Customers Attributess
-- Fix Add and Edit Customer Form for admin
-- add Notification Message Editor
-- cron reminder
-- Balance System, Customer can deposit money
-- Auto renewal when package expired using Customer Balance
-
+- Corregir eliminación de cliente PPPoE
+- Corregir encabezado admin y cliente
+- Corregir exportación PDF por período
+- Agregar contraseña PPPoE editable solo por administrador
+- Configuración de código de país
+- Tabla Meta de clientes para atributos
+- Corregir formulario de agregar/editar cliente
+- Editor de mensajes de notificación
+- Cron de recordatorios
+- Sistema de saldo: el cliente puede depositar dinero
+- Renovación automática usando saldo del cliente
 
 ## 2023.8.1
-
-- Add Update file script, one click updating NetBillX
-- Add Custom UI folder, to custome your own template
-- Delete debug text
-- Fix Vendor JS
+- Script de actualización con un clic
+- Carpeta de UI personalizada
+- Eliminar textos de depuración
+- Corregir JS de proveedores
 
 ## 2023.7.28
+- Corregir enlace de compra de voucher
+- Agregar campo email al registro
+- Cambiar diseño del formulario de registro
+- Agregar ajuste para deshabilitar vouchers
+- Corregir título de planes PPPoE
+- Corregir caché de plugins
 
-- Fix link buy Voucher
-- Add email field to registration form
-- Change registration design Form
-- Add Setting to disable Voucher
-- Fix Title for PPPOE plans
-- Fix Plugin Cache
 ## 2023.6.20
+- Ocultar hora en fecha de creación (compatibilidad con validez por minutos y horas)
 
-- Hide time for Created date.
-  Because the first time NetBillX created, plan validity only for days and Months, many request ask for minutes and hours, i change it, but not the database.
 ## 2023.6.15
-
-- Customer can connect to internet from Customer Dashboard
-- Fix Confirm when delete
-- Change Logo NetBillX
-- Using Composer
-- Fix Search Customer
-- Fix Customer check, if not found will logout
-- Customer password show but hidden
-- Voucher code hidden
+- El cliente puede conectarse a internet desde el dashboard
+- Corregir confirmación al eliminar
+- Cambiar logo de NetBillX
+- Uso de Composer
+- Corregir búsqueda de clientes
+- Verificación de cliente, si no existe se cierra sesión
+- Contraseña visible pero oculta
+- Código de voucher oculto
 
 ## 2023.6.8
-
-- Fixing registration without OTP
-- Username will not go to phonenumber if OTP registration is not enabled
-- Fix Bug PPOE
+- Corregir registro sin OTP
+- El usuario no usará teléfono como username si OTP está deshabilitado
+- Corregir bug PPPoE
 
 ## 2026.02.03
-
-- Actualización de los presets de Burst para ajustarlos a los planes comerciales actuales
-- Se mantienen los planes base de 10M, 40M y 80M
-- Se agregan nuevos planes de alta velocidad: 100M, 150M, 200M, 250M y 300M
-- Eliminación de presets obsoletos y escalados antiguos (planes menores a 10M)
-- Normalización de la lógica de Burst usando:
-    - MIR 2x sobre la velocidad contratada
-    - Burst Threshold al 75% del MIR
-    - Limit-at al 50% del CIR
-- Limpieza y simplificación de la interfaz de selección de Burst Limit Preset
+- Actualización de presets Burst para planes comerciales actuales
+- Mantener planes base: 10M, 40M y 80M
+- Agregar planes de alta velocidad: 100M, 150M, 200M, 250M y 300M
+- Eliminar presets obsoletos (menores a 10M)
+- Normalizar lógica Burst:
+    - MIR = 2× velocidad contratada
+    - Burst Threshold = 75% del MIR
+    - Limit-at = 50% del CIR
+- Simplificar interfaz de selección de Burst Preset
 
 ## 2026.02.04
-
-- Actualización de los **Burst Limit Preset** para alinearlos con los planes comerciales actuales.
-- Se mantienen los planes base:
-    - 10M → 20M
-    - 40M → 80M
-    - 80M → 160M
-- Se incorporan nuevos planes de **alta y ultra velocidad** con ráfagas:
-    - 100M → 200M
-    - 150M → 300M
-    - 200M → 400M
-    - 250M → 500M
-    - 300M → 600M
-    - 400M → 800M
-    - 500M → 900M
-    - 600M → 1G
-- Eliminación de presets obsoletos y escalados antiguos (planes menores a 10M).
-- Normalización de la lógica de Burst en todos los presets:
-    - Burst Limit (MIR): 2× la velocidad contratada
-    - Burst Threshold: 75% del MIR
-    - Limit-at: 50% del CIR
-    - Burst Time: 16s
-    - Priority: 8
-- Limpieza y simplificación de la interfaz de selección de **Burst Limit Preset**.
+- Actualización de presets Burst alineados a planes comerciales
+- Nuevos planes hasta 1G
+- Normalización completa de Burst
+- Limpieza de presets antiguos
 
 ## 2026.02.05
-
-- Se arreglo los detalles de la factura.
+- Corrección de detalles de la factura
