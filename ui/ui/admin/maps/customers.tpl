@@ -55,7 +55,7 @@
 
             // Create a popup for the marker
             var popupContent = "<strong>Nombre</strong>: " + name + "<br>" +
-                "<strong>Informacion</strong>: " + info + "<br>" +
+                "<strong>Información</strong>: " + info + "<br>" +
                 "<strong>Saldo</strong>: " + balance + "<br>" +
                 "<strong>Direccion</strong>: " + address + "<br>" +
                 "<a href='{/literal}{Text::url('customers/view/')}{literal}"+ customer.id +"'>Mas informacion</a> &bull; " +

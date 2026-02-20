@@ -50,11 +50,11 @@
             var coordinates = router.coordinates;
             console.log(coordinates.split(","))
             // Create a popup for the marker
-            var popupContent = "<strong>Name</strong>: " + name + "<br>" +
-                "<strong>Info</strong>: " + info + "<br>" +
-                "<a href='{/literal}{Text::url('routers/edit/')}{literal}"+ router.id +"'>More Info</a> &bull; " +
+            var popupContent = "<strong>Nombre</strong>: " + name + "<br>" +
+                "<strong>Información</strong>: " + info + "<br>" +
+                "<a href='{/literal}{Text::url('routers/edit/')}{literal}"+ router.id +"'>Más información</a> &bull; " +
                 "<a href='https://www.google.com/maps/dir//" + coordinates +
-                "' target='maps'>Get Direction</a><br>";
+                "' target='maps'>Obtener dirección</a><br>";
 
             // Add marker to map
             if (router.enabled == 1) {
