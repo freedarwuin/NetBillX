@@ -1,31 +1,30 @@
 <style>
-.panel-glass {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+.card-modern {
+    background: #ffffff;
+    border-radius: 20px;
     padding: 25px;
-    transition: 0.3s ease-in-out;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
 }
 
-.panel-glass:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.2);
+.card-modern:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.12);
 }
 
-.panel-title {
+.card-title {
     font-size: 18px;
     font-weight: 600;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 </style>
 
-<div class="panel-glass">
-    <div class="panel-title">{Lang::T('All Users Insights')}</div>
+<div class="card-modern">
+    <div class="card-title">{Lang::T('All Users Insights')}</div>
     <canvas id="userRechargesChart"></canvas>
 </div>
 
-<script type="text/javascript">
+<script>
 {literal}
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -38,45 +37,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (inactive < 0) inactive = 0;
 
-    var totalUsers = u_act + expired + inactive;
-
     var ctx = document.getElementById('userRechargesChart').getContext('2d');
 
-    // 🎨 Crear gradientes dinámicos
-    var gradientActive = ctx.createLinearGradient(0, 0, 0, 400);
-    gradientActive.addColorStop(0, '#22c55e');
-    gradientActive.addColorStop(1, '#15803d');
+    // 🎨 Gradientes radiales suaves
+    function createGradient(color1, color2) {
+        var gradient = ctx.createRadialGradient(200, 200, 50, 200, 200, 300);
+        gradient.addColorStop(0, color1);
+        gradient.addColorStop(1, color2);
+        return gradient;
+    }
 
-    var gradientExpired = ctx.createLinearGradient(0, 0, 0, 400);
-    gradientExpired.addColorStop(0, '#f43f5e');
-    gradientExpired.addColorStop(1, '#9f1239');
-
-    var gradientInactive = ctx.createLinearGradient(0, 0, 0, 400);
-    gradientInactive.addColorStop(0, '#3b82f6');
-    gradientInactive.addColorStop(1, '#1e3a8a');
-
-    // Plugin para texto central dinámico
-    const centerTextPlugin = {
-        id: 'centerText',
-        beforeDraw(chart) {
-            const {width} = chart;
-            const {height} = chart;
-            const ctx = chart.ctx;
-
-            ctx.restore();
-            const fontSize = (height / 130).toFixed(2);
-            ctx.font = fontSize + "em sans-serif";
-            ctx.textBaseline = "middle";
-
-            const text = totalUsers + " Usuarios";
-            const textX = Math.round((width - ctx.measureText(text).width) / 2);
-            const textY = height / 2;
-
-            ctx.fillStyle = "#111";
-            ctx.fillText(text, textX, textY);
-            ctx.save();
-        }
-    };
+    var gradientActive = createGradient('#4ade80', '#15803d');
+    var gradientExpired = createGradient('#fb7185', '#9f1239');
+    var gradientInactive = createGradient('#60a5fa', '#1e3a8a');
 
     new Chart(ctx, {
         type: 'doughnut',
@@ -89,46 +62,47 @@ document.addEventListener("DOMContentLoaded", function() {
                     gradientExpired,
                     gradientInactive
                 ],
-                borderWidth: 0,
-                hoverOffset: 18
+                borderColor: '#ffffff',
+                borderWidth: 4,
+                hoverOffset: 15
             }]
         },
         options: {
             responsive: true,
-            cutout: '70%',
+            cutout: '65%',
             animation: {
-                animateScale: true,
-                animateRotate: true,
-                duration: 1400,
-                easing: 'easeOutQuart'
+                duration: 1200,
+                easing: 'easeOutExpo'
             },
             plugins: {
                 legend: {
                     position: 'bottom',
                     labels: {
-                        padding: 25,
-                        boxWidth: 18,
+                        padding: 20,
+                        boxWidth: 15,
                         font: {
-                            size: 14,
+                            size: 13,
                             weight: '600'
                         }
                     }
                 },
                 tooltip: {
-                    backgroundColor: '#111827',
+                    backgroundColor: '#1f2937',
+                    titleFont: { size: 14 },
+                    bodyFont: { size: 13 },
                     padding: 12,
                     cornerRadius: 8,
                     callbacks: {
                         label: function(context) {
+                            let total = context.dataset.data.reduce((a,b)=>a+b,0);
                             let value = context.raw;
-                            let percentage = ((value / totalUsers) * 100).toFixed(1);
+                            let percentage = ((value/total)*100).toFixed(1);
                             return context.label + ': ' + value + ' (' + percentage + '%)';
                         }
                     }
                 }
             }
-        },
-        plugins: [centerTextPlugin]
+        }
     });
 
 });
