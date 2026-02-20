@@ -5,53 +5,79 @@
     </div>
 </div>
 
-
 <script type="text/javascript">
-    {literal}
-        document.addEventListener("DOMContentLoaded", function() {
-            // Get the data from PHP and assign it to JavaScript variables
-            var u_act = '{/literal}{$u_act}{literal}';
-            var c_all = '{/literal}{$c_all}{literal}';
-            var u_all = '{/literal}{$u_all}{literal}';
-            //lets calculate the inactive users as reported
-            var expired = u_all - u_act;
-            var inactive = c_all - u_all;
-            if (inactive < 0) {
-                inactive = 0;
-            }
-            // Create the chart data
-            var data = {
-                labels: ['Usuarios activos', 'Usuarios expirados', 'Usuarios inactivos'],
-                datasets: [{
-                    label: 'Recargas de usuario',
-                    data: [parseInt(u_act), parseInt(expired), parseInt(inactive)],
-                    backgroundColor: ['rgba(4, 191, 13)', 'rgba(191, 35, 4)', 'rgba(0, 0, 255, 0.5'],
-                    borderColor: ['rgba(0, 255, 0, 1)', 'rgba(255, 99, 132, 1)', 'rgba(0, 0, 255, 0.7'],
-                    borderWidth: 1
-                }]
-            };
+{literal}
+document.addEventListener("DOMContentLoaded", function() {
 
-            // Create chart options
-            var options = {
-                responsive: true,
-                aspectRatio: 1,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            boxWidth: 15
-                        }
+    var u_act = '{/literal}{$u_act}{literal}';
+    var c_all = '{/literal}{$c_all}{literal}';
+    var u_all = '{/literal}{$u_all}{literal}';
+
+    var expired = u_all - u_act;
+    var inactive = c_all - u_all;
+
+    if (inactive < 0) inactive = 0;
+
+    var ctx = document.getElementById('userRechargesChart').getContext('2d');
+
+    var data = {
+        labels: ['Usuarios Activos', 'Usuarios Expirados', 'Usuarios Inactivos'],
+        datasets: [{
+            label: 'Estado de Usuarios',
+            data: [parseInt(u_act), parseInt(expired), parseInt(inactive)],
+            backgroundColor: [
+                'rgba(34, 197, 94, 0.85)',   // Verde moderno
+                'rgba(239, 68, 68, 0.85)',   // Rojo suave
+                'rgba(59, 130, 246, 0.85)'   // Azul elegante
+            ],
+            borderColor: [
+                'rgba(21, 128, 61, 1)',
+                'rgba(185, 28, 28, 1)',
+                'rgba(29, 78, 216, 1)'
+            ],
+            borderWidth: 2,
+            hoverOffset: 12
+        }]
+    };
+
+    var options = {
+        responsive: true,
+        aspectRatio: 1.2,
+        animation: {
+            animateScale: true,
+            animateRotate: true
+        },
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    boxWidth: 18,
+                    padding: 20,
+                    font: {
+                        size: 14,
+                        weight: 'bold'
                     }
                 }
-            };
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                        let value = context.raw;
+                        let percentage = ((value / total) * 100).toFixed(1);
+                        return context.label + ': ' + value + ' (' + percentage + '%)';
+                    }
+                }
+            }
+        }
+    };
 
-            // Get the canvas element and create the chart
-            var ctx = document.getElementById('userRechargesChart').getContext('2d');
-            var chart = new Chart(ctx, {
-                type: 'pie',
-                data: data,
-                options: options
-            });
-        });
-    {/literal}
+    new Chart(ctx, {
+        type: 'doughnut', // Más moderno que pie
+        data: data,
+        options: options
+    });
+
+});
+{/literal}
 </script>
