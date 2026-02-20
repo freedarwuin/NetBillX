@@ -1,25 +1,8 @@
-<div class="box box-solid ">
-    <div class="box-header">
-        <i class="fa fa-inbox"></i>
-
-        <h3 class="box-title">{Lang::T('Total Monthly Sales')}</h3>
-
-        <div class="box-tools pull-right">
-            <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
-            </button>
-            <a href="{Text::url('dashboard&refresh')}" class="btn bg-teal btn-sm"><i class="fa fa-refresh"></i>
-            </a>
-        </div>
-    </div>
-    <div class="box-body border-radius-none">
-        <canvas class="chart" id="salesChart" style="height: 250px;"></canvas>
-    </div>
-</div>
-
 <script type="text/javascript">
     {if $_c['hide_tmc'] != 'yes'}
         {literal}
             document.addEventListener("DOMContentLoaded", function() {
+
                 var monthlySales = JSON.parse('{/literal}{$monthlySales|json_encode}{literal}');
 
                 var monthNames = [
@@ -37,6 +20,24 @@
                 }
 
                 var ctx = document.getElementById('salesChart').getContext('2d');
+
+                // Gradiente futurista
+                var gradient = ctx.createLinearGradient(0, 0, 0, 250);
+                gradient.addColorStop(0, 'rgba(59,130,246,0.9)');
+                gradient.addColorStop(1, 'rgba(30,58,138,0.9)');
+
+                const futuristicBarPlugin = {
+                    id: 'futuristicBar',
+
+                    beforeDraw(chart) {
+                        const {ctx, chartArea} = chart;
+                        ctx.save();
+                        ctx.fillStyle = "rgba(0,0,0,0.04)";
+                        ctx.fillRect(chartArea.left, chartArea.bottom + 5, chartArea.width, 8);
+                        ctx.restore();
+                    }
+                };
+
                 var chart = new Chart(ctx, {
                     type: 'bar',
                     data: {
@@ -44,27 +45,58 @@
                         datasets: [{
                             label: 'Ventas mensuales',
                             data: data,
-                            backgroundColor: 'rgba(2, 10, 242)', // Customize the background color
-                            borderColor: 'rgba(255, 99, 132, 1)', // Customize the border color
-                            borderWidth: 1
+                            backgroundColor: gradient,
+                            borderRadius: 8,
+                            borderWidth: 0,
+                            hoverBackgroundColor: 'rgba(37,99,235,1)'
                         }]
                     },
                     options: {
                         responsive: true,
+                        animation: {
+                            duration: 1800,
+                            easing: 'easeOutQuart'
+                        },
                         scales: {
                             x: {
                                 grid: {
                                     display: false
+                                },
+                                ticks: {
+                                    font: {
+                                        weight: '600'
+                                    }
                                 }
                             },
                             y: {
                                 beginAtZero: true,
                                 grid: {
-                                    color: 'rgba(0, 0, 0, 0.1)'
+                                    color: 'rgba(0,0,0,0.06)'
+                                },
+                                ticks: {
+                                    font: {
+                                        weight: '600'
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                backgroundColor: '#111827',
+                                padding: 12,
+                                cornerRadius: 10,
+                                callbacks: {
+                                    label: function(context) {
+                                        return 'Ventas: ' + context.raw.toLocaleString();
+                                    }
                                 }
                             }
                         }
-                    }
+                    },
+                    plugins: [futuristicBarPlugin]
                 });
             });
 
