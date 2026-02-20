@@ -277,7 +277,7 @@
         $.getJSON("https://raw.githubusercontent.com/freedarwuin/NetBillX/master/version.json?" + Math
             .random(),
             function(data) {
-                $('#latestVersion').html('Latest Version: ' + data.version);
+                $('#latestVersion').html('{Lang::T('Latest Version:')} ' + data.version);
             });
     });
 </script>
