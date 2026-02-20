@@ -129,14 +129,14 @@
         </div>
         <div class="box box-primary box-hovered mb20 activities">
             <div class="box-header">
-                <h3 class="box-title">{Lang::T('WhatsApp Gateway and Free Telegram Bot')}</h3>
+                <h3 class="box-title">{Lang::T('WhatsApp Gateway')}</h3>
             </div>
             <div class="box-body">
-                {Lang::T('Connect your NetBillX to WhatsApp efficiently using WhatsApp Gateway. Also, create Telegram bots easily and practically.')}
+                {Lang::T('Connect your NetBillX to WhatsApp efficiently using WhatsApp Gateway.')}
             </div>
             <div class="box-footer">
                 <a href="https://github.com/freedarwuin/go-whatsapp-web-multidevice" target="_blank"
-                    class="btn btn-primary btn-sm btn-block">wa.nux.my.id</a>
+                    class="btn btn-primary btn-sm btn-block">go-whatsapp-web-multidevice</a>
             </div>
         </div>
     </div>
