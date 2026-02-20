@@ -135,7 +135,7 @@
                 {Lang::T('Connect your NetBillX to WhatsApp efficiently using WhatsApp Gateway. Also, create Telegram bots easily and practically.')}
             </div>
             <div class="box-footer">
-                <a href="https://wa.nux.my.id/login" target="_blank"
+                <a href="https://github.com/freedarwuin/go-whatsapp-web-multidevice" target="_blank"
                     class="btn btn-primary btn-sm btn-block">wa.nux.my.id</a>
             </div>
         </div>

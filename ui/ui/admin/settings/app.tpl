@@ -763,7 +763,7 @@
                     </div>
                 </div>
                 <small id="emailHelp" class="form-text text-muted">{Lang::T('You can use')} WhatsApp
-                    {Lang::T('in here too.')} <a href="https://wa.nux.my.id/login" target="_blank">{Lang::T('Free
+                    {Lang::T('in here too.')} <a href="https://github.com/freedarwuin/go-whatsapp-web-multidevice" target="_blank">{Lang::T('Free
                         Server')}</a></small>
 
                 <button class="btn btn-success btn-block" type="submit">
@@ -798,7 +798,7 @@
                         {Lang::T('it will be replaced.')}</p>
                 </div>
                 <small id="emailHelp" class="form-text text-muted">{Lang::T('You can use')} WhatsApp
-                    {Lang::T('in here too.')} <a href="https://wa.nux.my.id/login" target="_blank">{Lang::T('Free
+                    {Lang::T('in here too.')} <a href="https://github.com/freedarwuin/go-whatsapp-web-multidevice" target="_blank">{Lang::T('Free
                         Server')}</a></small>
                 <button class="btn btn-success btn-block" type="submit">
                     {Lang::T('Save Changes')}
