@@ -19,32 +19,55 @@ document.addEventListener("DOMContentLoaded", function() {
 
     var ctx = document.getElementById('userRechargesChart').getContext('2d');
 
-    // 🎨 Colores superiores
-    var colorsTop = [
-        '#22c55e',  // Verde moderno
-        '#ef4444',  // Rojo elegante
-        '#3b82f6'   // Azul corporativo
-    ];
+    const topColors = ['#22c55e', '#ef4444', '#3b82f6'];
+    const bottomColors = ['#14532d', '#7f1d1d', '#1e3a8a'];
 
-    // 🎨 Colores inferiores (más oscuros para efecto 3D)
-    var colorsBottom = [
-        '#14532d',
-        '#7f1d1d',
-        '#1e3a8a'
-    ];
+    const ultra3DPlugin = {
+        id: 'ultra3D',
+        beforeDraw(chart) {
+            const ctx = chart.ctx;
+            const width = chart.width;
+            const height = chart.height;
 
-    // Plugin para crear profundidad 3D
-    const threeDPlugin = {
-        id: 'threeD',
+            // sombra base
+            ctx.save();
+            ctx.fillStyle = "rgba(0,0,0,0.15)";
+            ctx.beginPath();
+            ctx.ellipse(width/2, height/2 + 25, 140, 35, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.restore();
+        },
         beforeDatasetDraw(chart, args) {
             const {ctx} = chart;
             const meta = chart.getDatasetMeta(0);
 
             meta.data.forEach((element, index) => {
                 ctx.save();
-                ctx.fillStyle = colorsBottom[index];
-                ctx.translate(0, 12); // grosor hacia abajo
-                element.draw(ctx);
+                ctx.fillStyle = bottomColors[index];
+
+                // perspectiva inclinada
+                ctx.transform(1, 0, 0, 0.7, 0, 35);
+
+                // grosor
+                for(let i = 0; i < 15; i++){
+                    ctx.translate(0, 1);
+                    element.draw(ctx);
+                }
+
+                ctx.restore();
+            });
+        },
+        afterDatasetDraw(chart) {
+            const {ctx} = chart;
+            const meta = chart.getDatasetMeta(0);
+
+            // brillo glossy superior
+            meta.data.forEach((element) => {
+                ctx.save();
+                ctx.fillStyle = "rgba(255,255,255,0.15)";
+                ctx.beginPath();
+                ctx.arc(element.x, element.y - 15, 100, 0, Math.PI, true);
+                ctx.fill();
                 ctx.restore();
             });
         }
@@ -56,18 +79,19 @@ document.addEventListener("DOMContentLoaded", function() {
             labels: ['Usuarios Activos', 'Usuarios Expirados', 'Usuarios Inactivos'],
             datasets: [{
                 data: [u_act, expired, inactive],
-                backgroundColor: colorsTop,
+                backgroundColor: topColors,
                 borderColor: '#ffffff',
-                borderWidth: 3,
-                hoverOffset: 15
+                borderWidth: 2,
+                hoverOffset: 25
             }]
         },
         options: {
             responsive: true,
-            aspectRatio: 1.2,
+            aspectRatio: 1.3,
+            rotation: -90,
             animation: {
-                duration: 1400,
-                easing: 'easeOutCubic'
+                duration: 1800,
+                easing: 'easeOutQuart'
             },
             plugins: {
                 legend: {
@@ -84,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 tooltip: {
                     backgroundColor: '#111827',
                     padding: 12,
-                    cornerRadius: 8,
+                    cornerRadius: 10,
                     callbacks: {
                         label: function(context) {
                             let total = context.dataset.data.reduce((a,b)=>a+b,0);
@@ -96,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
         },
-        plugins: [threeDPlugin]
+        plugins: [ultra3DPlugin]
     });
 
 });
