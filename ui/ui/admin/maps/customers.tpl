@@ -54,12 +54,12 @@
             var address = customer.address;
 
             // Create a popup for the marker
-            var popupContent = "<strong>Name</strong>: " + name + "<br>" +
+            var popupContent = "<strong>Nombre</strong>: " + name + "<br>" +
                 "<strong>Informacion</strong>: " + info + "<br>" +
-                "<strong>Balance</strong>: " + balance + "<br>" +
+                "<strong>Saldo</strong>: " + balance + "<br>" +
                 "<strong>Direccion</strong>: " + address + "<br>" +
-                "<a href='{/literal}{Text::url('customers/view/')}{literal}"+ customer.id +"'>More Info</a> &bull; " +
-                "<a href='https://www.google.com/maps/dir//" + direction + "' target='maps'>Get Direction</a><br>";
+                "<a href='{/literal}{Text::url('customers/view/')}{literal}"+ customer.id +"'>Mas informacion</a> &bull; " +
+                "<a href='https://www.google.com/maps/dir//" + direction + "' target='maps'>Obtener dirección</a><br>";
 
             // Add marker to map
             var marker = L.marker(JSON.parse(coordinates)).addTo(group);
