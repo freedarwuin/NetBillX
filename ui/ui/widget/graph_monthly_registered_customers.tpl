@@ -1,7 +1,25 @@
+<div class="box box-solid ">
+    <div class="box-header">
+        <i class="fa fa-th"></i>
+
+        <h3 class="box-title">{Lang::T('Monthly Registered Customers')}</h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <a href="{Text::url('dashboard&refresh')}" class="btn bg-teal btn-sm"><i class="fa fa-refresh"></i>
+            </a>
+        </div>
+    </div>
+    <div class="box-body border-radius-none">
+        <canvas class="chart" id="chart" style="height: 250px;"></canvas>
+    </div>
+</div>
+
+
 <script type="text/javascript">
     {literal}
         document.addEventListener("DOMContentLoaded", function() {
-
             var counts = JSON.parse('{/literal}{$monthlyRegistered|json_encode}{literal}');
 
             var monthNames = [
@@ -19,23 +37,6 @@
             }
 
             var ctx = document.getElementById('chart').getContext('2d');
-
-            // Degradado moderno verde-azulado
-            var gradient = ctx.createLinearGradient(0, 0, 0, 250);
-            gradient.addColorStop(0, 'rgba(16,185,129,0.9)');
-            gradient.addColorStop(1, 'rgba(5,150,105,0.9)');
-
-            const premiumBarPlugin = {
-                id: 'premiumBar',
-                beforeDraw(chart) {
-                    const {ctx, chartArea} = chart;
-                    ctx.save();
-                    ctx.fillStyle = "rgba(0,0,0,0.04)";
-                    ctx.fillRect(chartArea.left, chartArea.bottom + 6, chartArea.width, 8);
-                    ctx.restore();
-                }
-            };
-
             var chart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -43,61 +44,28 @@
                     datasets: [{
                         label: 'Miembros registrados',
                         data: data,
-                        backgroundColor: gradient,
-                        borderRadius: 10,
-                        borderSkipped: false,
-                        borderWidth: 0,
-                        hoverBackgroundColor: 'rgba(4,120,87,1)'
+                        backgroundColor: 'rgba(0, 0, 255, 0.5)',
+                        borderColor: 'rgba(0, 0, 255, 0.7)',
+                        borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
-                    animation: {
-                        duration: 1700,
-                        easing: 'easeOutQuart'
-                    },
                     scales: {
                         x: {
                             grid: {
                                 display: false
-                            },
-                            ticks: {
-                                font: {
-                                    weight: '600'
-                                }
                             }
                         },
                         y: {
                             beginAtZero: true,
                             grid: {
-                                color: 'rgba(0,0,0,0.06)'
-                            },
-                            ticks: {
-                                font: {
-                                    weight: '600'
-                                }
-                            }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            backgroundColor: '#111827',
-                            padding: 12,
-                            cornerRadius: 10,
-                            callbacks: {
-                                label: function(context) {
-                                    return 'Registrados: ' + context.raw.toLocaleString();
-                                }
+                                color: 'rgba(0, 0, 0, 0.1)'
                             }
                         }
                     }
-                },
-                plugins: [premiumBarPlugin]
+                }
             });
-
         });
     {/literal}
 </script>
