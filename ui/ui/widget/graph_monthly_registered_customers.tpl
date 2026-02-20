@@ -23,8 +23,8 @@
             var counts = JSON.parse('{/literal}{$monthlyRegistered|json_encode}{literal}');
 
             var monthNames = [
-                'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
-                'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
+                'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
             ];
 
             var labels = [];
@@ -42,7 +42,7 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Usuarios registrados',
+                        label: 'Registered Members',
                         data: data,
                         backgroundColor: 'rgba(0, 0, 255, 0.5)',
                         borderColor: 'rgba(0, 0, 255, 0.7)',
