@@ -272,7 +272,7 @@
 <script>
     window.addEventListener('DOMContentLoaded', function() {
         $.getJSON("./version.json?" + Math.random(), function(data) {
-            $('#currentVersion').html('Current Version: ' + data.version);
+            $('#currentVersion').html('{Lang::T('Current Version:')} ' + data.version);
         });
         $.getJSON("https://raw.githubusercontent.com/freedarwuin/NetBillX/master/version.json?" + Math
             .random(),
