@@ -1,30 +1,11 @@
-<style>
-.card-modern {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-    transition: all 0.3s ease;
-}
-
-.card-modern:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 45px rgba(0,0,0,0.12);
-}
-
-.card-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 20px;
-}
-</style>
-
-<div class="card-modern">
-    <div class="card-title">{Lang::T('All Users Insights')}</div>
-    <canvas id="userRechargesChart"></canvas>
+<div class="panel panel-info panel-hovered mb20 activities">
+    <div class="panel-heading">{Lang::T('All Users Insights')}</div>
+    <div class="panel-body">
+        <canvas id="userRechargesChart"></canvas>
+    </div>
 </div>
 
-<script>
+<script type="text/javascript">
 {literal}
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -34,45 +15,59 @@ document.addEventListener("DOMContentLoaded", function() {
 
     var expired = u_all - u_act;
     var inactive = c_all - u_all;
-
     if (inactive < 0) inactive = 0;
 
     var ctx = document.getElementById('userRechargesChart').getContext('2d');
 
-    // 🎨 Gradientes radiales suaves
-    function createGradient(color1, color2) {
-        var gradient = ctx.createRadialGradient(200, 200, 50, 200, 200, 300);
-        gradient.addColorStop(0, color1);
-        gradient.addColorStop(1, color2);
-        return gradient;
-    }
+    // 🎨 Colores superiores
+    var colorsTop = [
+        '#22c55e',  // Verde moderno
+        '#ef4444',  // Rojo elegante
+        '#3b82f6'   // Azul corporativo
+    ];
 
-    var gradientActive = createGradient('#4ade80', '#15803d');
-    var gradientExpired = createGradient('#fb7185', '#9f1239');
-    var gradientInactive = createGradient('#60a5fa', '#1e3a8a');
+    // 🎨 Colores inferiores (más oscuros para efecto 3D)
+    var colorsBottom = [
+        '#14532d',
+        '#7f1d1d',
+        '#1e3a8a'
+    ];
+
+    // Plugin para crear profundidad 3D
+    const threeDPlugin = {
+        id: 'threeD',
+        beforeDatasetDraw(chart, args) {
+            const {ctx} = chart;
+            const meta = chart.getDatasetMeta(0);
+
+            meta.data.forEach((element, index) => {
+                ctx.save();
+                ctx.fillStyle = colorsBottom[index];
+                ctx.translate(0, 12); // grosor hacia abajo
+                element.draw(ctx);
+                ctx.restore();
+            });
+        }
+    };
 
     new Chart(ctx, {
-        type: 'doughnut',
+        type: 'pie',
         data: {
             labels: ['Usuarios Activos', 'Usuarios Expirados', 'Usuarios Inactivos'],
             datasets: [{
                 data: [u_act, expired, inactive],
-                backgroundColor: [
-                    gradientActive,
-                    gradientExpired,
-                    gradientInactive
-                ],
+                backgroundColor: colorsTop,
                 borderColor: '#ffffff',
-                borderWidth: 4,
+                borderWidth: 3,
                 hoverOffset: 15
             }]
         },
         options: {
             responsive: true,
-            cutout: '65%',
+            aspectRatio: 1.2,
             animation: {
-                duration: 1200,
-                easing: 'easeOutExpo'
+                duration: 1400,
+                easing: 'easeOutCubic'
             },
             plugins: {
                 legend: {
@@ -81,15 +76,13 @@ document.addEventListener("DOMContentLoaded", function() {
                         padding: 20,
                         boxWidth: 15,
                         font: {
-                            size: 13,
+                            size: 14,
                             weight: '600'
                         }
                     }
                 },
                 tooltip: {
-                    backgroundColor: '#1f2937',
-                    titleFont: { size: 14 },
-                    bodyFont: { size: 13 },
+                    backgroundColor: '#111827',
                     padding: 12,
                     cornerRadius: 8,
                     callbacks: {
@@ -102,7 +95,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                 }
             }
-        }
+        },
+        plugins: [threeDPlugin]
     });
 
 });
