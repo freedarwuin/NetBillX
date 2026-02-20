@@ -1,3 +1,21 @@
+<style>
+.panel-info {
+    background: #0f172a !important;
+    border-radius: 18px;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 0.08);
+}
+
+.panel-heading {
+    color: #38bdf8 !important;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+canvas {
+    filter: drop-shadow(0 0 20px rgba(0,255,255,0.15));
+}
+</style>
+
 <div class="panel panel-info panel-hovered mb20 activities">
     <div class="panel-heading">{Lang::T('All Users Insights')}</div>
     <div class="panel-body">
@@ -5,7 +23,7 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
 {literal}
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -19,55 +37,53 @@ document.addEventListener("DOMContentLoaded", function() {
 
     var ctx = document.getElementById('userRechargesChart').getContext('2d');
 
-    const topColors = ['#22c55e', '#ef4444', '#3b82f6'];
-    const bottomColors = ['#14532d', '#7f1d1d', '#1e3a8a'];
+    const neonColors = [
+        '#00ff9f',   // Verde neon
+        '#ff006e',   // Rosa neon
+        '#00d4ff'    // Azul neon
+    ];
 
-    const ultra3DPlugin = {
-        id: 'ultra3D',
+    const darkNeon = [
+        '#007f5f',
+        '#8b003a',
+        '#004c6d'
+    ];
+
+    const futuristicPlugin = {
+        id: 'futuristicGlow',
+
         beforeDraw(chart) {
             const ctx = chart.ctx;
             const width = chart.width;
             const height = chart.height;
 
-            // sombra base
+            // Sombra base flotante
             ctx.save();
-            ctx.fillStyle = "rgba(0,0,0,0.15)";
+            ctx.fillStyle = "rgba(0,255,255,0.08)";
             ctx.beginPath();
-            ctx.ellipse(width/2, height/2 + 25, 140, 35, 0, 0, 2 * Math.PI);
+            ctx.ellipse(width/2, height/2 + 30, 160, 40, 0, 0, 2 * Math.PI);
             ctx.fill();
             ctx.restore();
         },
-        beforeDatasetDraw(chart, args) {
+
+        beforeDatasetDraw(chart) {
             const {ctx} = chart;
             const meta = chart.getDatasetMeta(0);
 
             meta.data.forEach((element, index) => {
                 ctx.save();
-                ctx.fillStyle = bottomColors[index];
 
-                // perspectiva inclinada
-                ctx.transform(1, 0, 0, 0.7, 0, 35);
+                // Glow neon
+                ctx.shadowColor = neonColors[index];
+                ctx.shadowBlur = 25;
 
-                // grosor
-                for(let i = 0; i < 15; i++){
+                // Espesor 3D
+                ctx.fillStyle = darkNeon[index];
+                for(let i = 0; i < 12; i++){
                     ctx.translate(0, 1);
                     element.draw(ctx);
                 }
 
-                ctx.restore();
-            });
-        },
-        afterDatasetDraw(chart) {
-            const {ctx} = chart;
-            const meta = chart.getDatasetMeta(0);
-
-            // brillo glossy superior
-            meta.data.forEach((element) => {
-                ctx.save();
-                ctx.fillStyle = "rgba(255,255,255,0.15)";
-                ctx.beginPath();
-                ctx.arc(element.x, element.y - 15, 100, 0, Math.PI, true);
-                ctx.fill();
                 ctx.restore();
             });
         }
@@ -79,10 +95,10 @@ document.addEventListener("DOMContentLoaded", function() {
             labels: ['Usuarios Activos', 'Usuarios Expirados', 'Usuarios Inactivos'],
             datasets: [{
                 data: [u_act, expired, inactive],
-                backgroundColor: topColors,
-                borderColor: '#ffffff',
-                borderWidth: 2,
-                hoverOffset: 25
+                backgroundColor: neonColors,
+                borderColor: '#0f172a',
+                borderWidth: 3,
+                hoverOffset: 30
             }]
         },
         options: {
@@ -90,13 +106,14 @@ document.addEventListener("DOMContentLoaded", function() {
             aspectRatio: 1.3,
             rotation: -90,
             animation: {
-                duration: 1800,
+                duration: 2000,
                 easing: 'easeOutQuart'
             },
             plugins: {
                 legend: {
                     position: 'bottom',
                     labels: {
+                        color: '#e2e8f0',
                         padding: 20,
                         boxWidth: 15,
                         font: {
@@ -106,8 +123,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                 },
                 tooltip: {
-                    backgroundColor: '#111827',
-                    padding: 12,
+                    backgroundColor: '#020617',
+                    titleColor: '#00f5ff',
+                    bodyColor: '#ffffff',
+                    padding: 14,
                     cornerRadius: 10,
                     callbacks: {
                         label: function(context) {
@@ -120,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             }
         },
-        plugins: [ultra3DPlugin]
+        plugins: [futuristicPlugin]
     });
 
 });
