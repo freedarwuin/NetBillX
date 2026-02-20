@@ -23,8 +23,8 @@
                 var monthlySales = JSON.parse('{/literal}{$monthlySales|json_encode}{literal}');
 
                 var monthNames = [
-                    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+                    'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'
                 ];
 
                 var labels = [];
