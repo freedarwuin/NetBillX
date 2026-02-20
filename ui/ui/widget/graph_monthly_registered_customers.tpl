@@ -42,7 +42,7 @@
                 data: {
                     labels: labels,
                     datasets: [{
-                        label: 'Usuarios registrados',
+                        label: 'Usuarioss registrados',
                         data: data,
                         backgroundColor: 'rgba(0, 0, 255, 0.5)',
                         borderColor: 'rgba(0, 0, 255, 0.7)',
