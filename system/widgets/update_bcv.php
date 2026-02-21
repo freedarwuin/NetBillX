@@ -45,7 +45,7 @@ class update_bcv
             $ui->assign('timezone', $timezone);
 
             // 🔹 Obtener últimos 7 días de historial
-            $stmtHist = $dbh->prepare("SELECT rate_date, rate FROM bcv_rate ORDER BY rate_date DESC LIMIT 7");
+            $stmtHist = $dbh->prepare("SELECT rate_date, rate FROM bcv_rate ORDER BY rate_date DESC LIMIT 9");
             $stmtHist->execute();
             $history = $stmtHist->fetchAll(PDO::FETCH_ASSOC);
             $ui->assign('bcv_history', $history);
