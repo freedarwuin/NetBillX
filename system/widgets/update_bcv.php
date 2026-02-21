@@ -1,6 +1,6 @@
 <?php
 
-class widget_bcv_rate
+class update_bcv
 {
     public static function getWidget($data)
     {
