@@ -7,14 +7,15 @@ class update_bcv
         global $config, $ui, $timezone;
 
         try {
+            // 🔹 Conexión PDO a MySQL vía TCP
             $dbh = new PDO(
-                "mysql:host={$config['db_host']};dbname={$config['db_name']}",
+                "mysql:host=127.0.0.1;dbname={$config['db_name']};charset=utf8mb4",
                 $config['db_user'],
                 $config['db_pass'],
                 [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
             );
 
-            // Obtener tasa actual desde API
+            // 🔹 Obtener tasa actual desde API
             $json = @file_get_contents("https://ve.dolarapi.com/v1/dolares/oficial");
             $apiData = $json ? json_decode($json, true) : null;
             $rate = $apiData['promedio'] ?? $apiData['valor'] ?? null;
@@ -36,12 +37,12 @@ class update_bcv
                 $message = "❌ No se pudo obtener la tasa de la API";
             }
 
-            // Pasar datos al template
+            // 🔹 Asignar datos al template
             $ui->assign('bcv_rate', $rate);
             $ui->assign('bcv_message', $message);
             $ui->assign('timezone', $timezone);
 
-            // Obtener últimos 7 días de historial
+            // 🔹 Obtener últimos 7 días de historial
             $stmtHist = $dbh->prepare("SELECT rate_date, rate FROM bcv_rate ORDER BY rate_date DESC LIMIT 7");
             $stmtHist->execute();
             $history = $stmtHist->fetchAll(PDO::FETCH_ASSOC);
@@ -51,6 +52,8 @@ class update_bcv
 
         } catch (PDOException $e) {
             return "❌ Error en la base de datos: " . $e->getMessage();
+        } catch (Exception $e) {
+            return "❌ Error general: " . $e->getMessage();
         }
     }
 }
