@@ -1,17 +1,18 @@
 <?php
+// update_bcv.php
 
 class update_bcv
 {
     public static function getWidget($data)
     {
-        global $config, $ui, $timezone;
+        global $db_host, $db_user, $db_pass, $db_name, $ui, $timezone;
 
         try {
             // 🔹 Conexión PDO a MySQL vía TCP
             $dbh = new PDO(
-                "mysql:host=127.0.0.1;dbname={$config['db_name']};charset=utf8mb4",
-                $config['db_user'],
-                $config['db_pass'],
+                "mysql:host=127.0.0.1;dbname={$db_name};charset=utf8mb4",
+                $db_user,
+                $db_pass,
                 [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
             );
 
@@ -30,6 +31,7 @@ class update_bcv
                         updated_at = IF(rate <> VALUES(rate), NOW(), updated_at)
                 ");
                 $stmt->execute([$rate, $today]);
+
                 $message = $stmt->rowCount() > 0
                     ? "✅ Tasa BCV actualizada: {$rate} Bs"
                     : "ℹ️ La tasa BCV de hoy ya estaba registrada ({$rate} Bs)";
@@ -37,7 +39,7 @@ class update_bcv
                 $message = "❌ No se pudo obtener la tasa de la API";
             }
 
-            // 🔹 Asignar datos al template
+            // 🔹 Asignar variables al template
             $ui->assign('bcv_rate', $rate);
             $ui->assign('bcv_message', $message);
             $ui->assign('timezone', $timezone);
@@ -48,6 +50,7 @@ class update_bcv
             $history = $stmtHist->fetchAll(PDO::FETCH_ASSOC);
             $ui->assign('bcv_history', $history);
 
+            // 🔹 Renderizar template
             return $ui->fetch('widget/bcv_rate.tpl');
 
         } catch (PDOException $e) {
