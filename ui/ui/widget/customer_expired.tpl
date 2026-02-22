@@ -120,6 +120,10 @@
 </style>
 
 <script>
+// Traducciones del sistema (Smarty las reemplaza)
+var langAgo = "{Lang::T('ago')}";
+var langIn  = "{Lang::T('in')}";
+
 function formatTime(seconds) {
 
     var d = Math.floor(seconds / 86400);
@@ -140,6 +144,7 @@ function updateDashboard() {
 
     var now = Math.floor(Date.now() / 1000);
 
+    // Actualizar barras
     document.querySelectorAll('.live-progress').forEach(function(bar){
 
         var start = parseInt(bar.dataset.start);
@@ -164,28 +169,37 @@ function updateDashboard() {
         else bar.classList.add('bg-danger');
     });
 
+    // Actualizar estado
     document.querySelectorAll('.status-cell').forEach(function(cell){
         var exp = parseInt(cell.dataset.exp);
         if (now >= exp) {
-            cell.innerHTML = "❌ Expired";
+            cell.innerHTML = "❌ " + "{Lang::T('Expired')}";
         }
     });
 
+    // Activated (count up)
     document.querySelectorAll('.live-start').forEach(function(el){
         var start = parseInt(el.dataset.start);
         var diff = now - start;
-        if (diff >= 0) el.textContent = formatTime(diff) + " ago";
+        if (diff >= 0) {
+            el.textContent = formatTime(diff) + " " + langAgo;
+        }
     });
 
+    // Expired (count down / up)
     document.querySelectorAll('.live-exp').forEach(function(el){
         var exp = parseInt(el.dataset.exp);
         var diff = exp - now;
-        if (diff > 0) el.textContent = "in " + formatTime(diff);
-        else el.textContent = formatTime(Math.abs(diff)) + " ago";
+
+        if (diff > 0) {
+            el.textContent = langIn + " " + formatTime(diff);
+        } else {
+            el.textContent = formatTime(Math.abs(diff)) + " " + langAgo;
+        }
     });
 }
 
-// 🔁 Actualiza cada 1 segundo
+// 🔁 Actualiza cada segundo
 setInterval(updateDashboard, 1000);
 updateDashboard();
 
