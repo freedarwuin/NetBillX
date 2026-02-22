@@ -56,7 +56,7 @@
                                         {elseif $day.change == 'down'}
                                             <span class="label label-danger">⬇ Bajó</span>
                                         {elseif $day.change == 'same'}
-                                            <span class="label label-default">— Igual</span>
+                                            <span class="label label-default">Fecha Valor: Lunes</span>
                                         {else}
                                             <span class="label label-default">—</span>
                                         {/if}
