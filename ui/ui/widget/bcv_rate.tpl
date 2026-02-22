@@ -65,7 +65,7 @@
 
                                 <!-- Logo del Banco Central de Venezuela -->
                                 <div style="margin-left:12px; text-align:center;">
-                                    <img src="system/upload/banco-central-de-venezuela-logo-png_seeklogo-622560.png"
+                                    <img src="system/uploads/banco-central-de-venezuela-logo-png_seeklogo-622560.png"
                                          alt="Logo Banco Central de Venezuela"
                                          style="max-width:60px; height:auto;">
                                 </div>
