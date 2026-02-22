@@ -1,12 +1,8 @@
 <div class="panel panel-info panel-hovered mb20 activities">
-    <div class="panel-heading">💱 Tasa BCV</div>
+    <div class="panel-heading">💱 Tasa BCV del día: {$bcv_rate} Bs/USD</div>
     <div class="panel-body">
 
         {if $bcv_rate}
-
-            <div class="alert alert-info text-center" style="font-size:18px; font-weight:bold;">
-                💱 Tasa BCV del día: {$bcv_rate} Bs/USD
-            </div>
 
             {if $bcv_history|@count > 0}
                 <div class="row">
