@@ -1,11 +1,22 @@
 <div class="panel panel-info panel-hovered mb20 activities">
-    <div class="panel-heading">💰 Binance P2P USDT/VES (BUY) Promedio Actual: {$last_row.avg_rate} Bs/USDT</div>
+
+    {if $binance_history|@count > 0}
+        {assign var="last_row" value=$binance_history[0]}
+        {assign var="last_time" value=strtotime($last_row.rate_date)}
+    {/if}
+
+    <div class="panel-heading">
+        💰 Binance P2P USDT/VES (BUY) Promedio Actual:
+        {if isset($last_row.avg_rate)}
+            {$last_row.avg_rate} Bs/USDT
+        {else}
+            --
+        {/if}
+    </div>
+
     <div class="panel-body">
 
         {if $binance_history|@count > 0}
-
-            {assign var="last_row" value=$binance_history[0]}
-            {assign var="last_time" value=strtotime($last_row.rate_date)}
 
             <table class="table table-bordered table-sm">
                 <thead>
@@ -84,7 +95,6 @@ function updateBinanceTimer() {
     });
 }
 
-// EXACTAMENTE igual patrón que tu widget que sí funciona
 setInterval(updateBinanceTimer, 1000);
 updateBinanceTimer();
 </script>
