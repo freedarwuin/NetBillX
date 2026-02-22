@@ -1,4 +1,4 @@
-<div class="panel panel-success panel-hovered mb20" id="binance-widget">
+<div class="panel panel-success panel-hovered mb20">
     <div class="panel-heading">
         💰 Binance P2P USDT/VES (BUY)
     </div>
@@ -44,6 +44,15 @@
                 </tbody>
             </table>
 
+            <!-- Contador en vivo -->
+            <div class="text-right" style="font-size:12px; color:#666;">
+                Última actualización:
+                <span id="binance-live-time"
+                      data-time="{$binance_history[0].rate_date|strtotime}">
+                      {$binance_history[0].rate_date}
+                </span>
+            </div>
+
         {else}
             <div class="alert alert-warning text-center">
                 No hay datos aún.
@@ -53,22 +62,39 @@
     </div>
 </div>
 
-<script>
-function refrescarBinance() {
-    fetch("index.php?_route=widget/update_binance")
-        .then(response => response.text())
-        .then(html => {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, "text/html");
-            const nuevoWidget = doc.querySelector("#binance-widget");
+<style>
+#binance-live-time {
+    font-weight: bold;
+}
+</style>
 
-            if (nuevoWidget) {
-                document.querySelector("#binance-widget").innerHTML = nuevoWidget.innerHTML;
-            }
-        })
-        .catch(err => console.log("Error:", err));
+<script>
+function actualizarTiempoBinance() {
+
+    var el = document.getElementById("binance-live-time");
+    if (!el) return;
+
+    var serverTime = parseInt(el.dataset.time);
+    var now = Math.floor(Date.now() / 1000);
+
+    var diff = now - serverTime;
+    if (diff < 0) diff = 0;
+
+    var m = Math.floor(diff / 60);
+    var s = diff % 60;
+
+    var texto = "";
+
+    if (m > 0) {
+        texto = m + "m " + s + "s atrás";
+    } else {
+        texto = s + "s atrás";
+    }
+
+    el.innerHTML = texto;
 }
 
-// Refresca cada 1 segundo
-setInterval(refrescarBinance, 1000);
+// Actualiza cada segundo
+setInterval(actualizarTiempoBinance, 1000);
+actualizarTiempoBinance();
 </script>
