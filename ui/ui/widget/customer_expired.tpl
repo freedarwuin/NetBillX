@@ -6,10 +6,10 @@
                 <tr>
                     <th>
                         <select class="form-control form-control-sm" onchange="changeExpiredDefault(this)">
-                            <option value="username" {if $cookie['expdef'] == 'username'}selected{/if}>{Lang::T('Username')}</option>
-                            <option value="fullname" {if $cookie['expdef'] == 'fullname'}selected{/if}>{Lang::T('Full Name')}</option>
-                            <option value="phone" {if $cookie['expdef'] == 'phone'}selected{/if}>{Lang::T('Phone')}</option>
-                            <option value="email" {if $cookie['expdef'] == 'email'}selected{/if}>{Lang::T('Email')}</option>
+                            <option value="username" {if $cookie.expdef == 'username'}selected{/if}>{Lang::T('Username')}</option>
+                            <option value="fullname" {if $cookie.expdef == 'fullname'}selected{/if}>{Lang::T('Full Name')}</option>
+                            <option value="phone" {if $cookie.expdef == 'phone'}selected{/if}>{Lang::T('Phone')}</option>
+                            <option value="email" {if $cookie.expdef == 'email'}selected{/if}>{Lang::T('Email')}</option>
                         </select>
                     </th>
                     <th>{Lang::T('Activated / Expired')}</th>
@@ -21,45 +21,45 @@
             </thead>
             <tbody>
                 {foreach $expire as $expired}
-                    {assign var="rem_exp" value="{$expired['expiration']} {$expired['time']}"}
-                    {assign var="rem_started" value="{$expired['recharged_on']} {$expired['recharged_time']}"}
-                    {assign var="exp_time" value=strtotime($expired['expiration'].' '.$expired['time'])}
-                    {assign var="start_time" value=strtotime($expired['recharged_on'].' '.$expired['recharged_time'])}
+                    {assign var="exp_time" value=strtotime($expired.expiration|cat:" "|cat:$expired.time)}
+                    {assign var="start_time" value=strtotime($expired.recharged_on|cat:" "|cat:$expired.recharged_time)}
                     {assign var="now_time" value=time()}
                     {assign var="progress" value=round((($now_time-$start_time)/($exp_time-$start_time))*100)}
                     <tr class="{if $exp_time < $now_time}table-danger{elseif $exp_time - $now_time <= 86400}table-info{/if}">
-                        <td><a href="{Text::url('customers/view/',$expired['id'])}">
-                            {if $cookie['expdef'] == 'fullname'}
-                                {$expired['fullname']}
-                            {elseif $cookie['expdef'] == 'phone'}
-                                {$expired['phonenumber']}
-                            {elseif $cookie['expdef'] == 'email'}
-                                {$expired['email']}
-                            {else}
-                                {$expired['username']}
-                            {/if}
-                        </a></td>
+                        <td>
+                            <a href="{Text::url('customers/view/',$expired.id)}">
+                                {if $cookie.expdef == 'fullname'}
+                                    {$expired.fullname}
+                                {elseif $cookie.expdef == 'phone'}
+                                    {$expired.phonenumber}
+                                {elseif $cookie.expdef == 'email'}
+                                    {$expired.email}
+                                {else}
+                                    {$expired.username}
+                                {/if}
+                            </a>
+                        </td>
                         <td>
                             <small data-toggle="tooltip" data-placement="top"
-                                title="{Lang::dateAndTimeFormat($expired['recharged_on'],$expired['recharged_time'])}">
-                                {Lang::timeElapsed($rem_started)}
+                                title="{Lang::dateAndTimeFormat($expired.recharged_on,$expired.recharged_time)}">
+                                {Lang::timeElapsed($expired.recharged_on|cat:" "|cat:$expired.recharged_time)}
                             </small>
                             /
                             <span data-toggle="tooltip" data-placement="top"
-                                title="{Lang::dateAndTimeFormat($expired['expiration'],$expired['time'])}">
-                                {Lang::timeElapsed($rem_exp)}
+                                title="{Lang::dateAndTimeFormat($expired.expiration,$expired.time)}">
+                                {Lang::timeElapsed($expired.expiration|cat:" "|cat:$expired.time)}
                             </span>
                         </td>
                         <td>
-                            {if $expired['namebp'] == 'Basic'}
-                                <i class="fa fa-wifi text-primary"></i> {$expired['namebp']}
-                            {elseif $expired['namebp'] == 'Premium'}
-                                <i class="fa fa-rocket text-success"></i> {$expired['namebp']}
+                            {if $expired.namebp == 'Basic'}
+                                <i class="fa fa-wifi text-primary"></i> {$expired.namebp}
+                            {elseif $expired.namebp == 'Premium'}
+                                <i class="fa fa-rocket text-success"></i> {$expired.namebp}
                             {else}
-                                <i class="fa fa-network-wired text-warning"></i> {$expired['namebp']}
+                                <i class="fa fa-network-wired text-warning"></i> {$expired.namebp}
                             {/if}
                         </td>
-                        <td>{$expired['routers']}</td>
+                        <td>{$expired.routers}</td>
                         <td>
                             {if $exp_time < $now_time}
                                 ❌ Expired
@@ -94,8 +94,6 @@
 <script>
     function changeExpiredDefault(fl) {
         setCookie('expdef', fl.value, 365);
-        setTimeout(() => {
-            location.reload();
-        }, 500);
+        setTimeout(() => { location.reload(); }, 500);
     }
 </script>
