@@ -24,12 +24,12 @@
             <tbody>
                 {foreach $expire as $expired}
 
-                    {* ===== CALCULAR FECHAS ===== *}
+                    {* ==== CALCULAR FECHAS ==== *}
                     {assign var="exp_time" value=strtotime($expired.expiration|cat:" "|cat:$expired.time)}
                     {assign var="start_time" value=strtotime($expired.recharged_on|cat:" "|cat:$expired.recharged_time)}
                     {assign var="now_time" value=time()}
 
-                    {* ===== CALCULAR PROGRESO SEGURO ===== *}
+                    {* ==== CALCULAR PROGRESO SEGURO ==== *}
                     {assign var="duration" value=$exp_time-$start_time}
                     {assign var="elapsed" value=$now_time-$start_time}
 
@@ -47,19 +47,14 @@
                         {/if}
                     {/if}
 
-                    {* ===== COLOR DINÁMICO ISP ===== *}
+                    {* ==== COLOR INICIAL DE FILA ==== *}
                     {if $exp_time < $now_time}
-                        {assign var="bar_class" value="bg-danger"}
-                        {assign var="progress" value=100}
                         {assign var="row_class" value="table-danger"}
                     {elseif $progress >= 80}
-                        {assign var="bar_class" value="bg-warning"}
                         {assign var="row_class" value="table-warning"}
                     {elseif $progress >= 50}
-                        {assign var="bar_class" value="bg-info"}
                         {assign var="row_class" value="table-info"}
                     {else}
-                        {assign var="bar_class" value="bg-success"}
                         {assign var="row_class" value=""}
                     {/if}
 
@@ -103,7 +98,8 @@
 
                         <td>{$expired.routers}</td>
 
-                        <td>
+                        <td class="status-cell"
+                            data-exp="{$exp_time}">
                             {if $exp_time < $now_time}
                                 ❌ {Lang::T('Expired')}
                             {elseif $progress >= 80}
@@ -115,14 +111,13 @@
 
                         <td>
                             <div class="progress" style="height:18px;">
-                                <div class="progress-bar {$bar_class}"
+                                <div class="progress-bar live-progress"
+                                     data-start="{$start_time}"
+                                     data-exp="{$exp_time}"
                                      role="progressbar"
                                      style="width: {$progress}%"
-                                     aria-valuenow="{$progress}"
                                      aria-valuemin="0"
-                                     aria-valuemax="100"
-                                     data-toggle="tooltip"
-                                     title="{$progress}% elapsed">
+                                     aria-valuemax="100">
                                      {$progress}%
                                 </div>
                             </div>
@@ -137,6 +132,69 @@
 
     &nbsp; {include file="pagination.tpl"}
 </div>
+
+<style>
+.live-progress {
+    transition: width 0.8s ease, background-color 0.8s ease;
+}
+</style>
+
+<script>
+function updateProgressBars() {
+
+    var now = Math.floor(Date.now() / 1000);
+
+    document.querySelectorAll('.live-progress').forEach(function(bar){
+
+        var start = parseInt(bar.dataset.start);
+        var exp   = parseInt(bar.dataset.exp);
+
+        var duration = exp - start;
+        var elapsed  = now - start;
+
+        var percent = 0;
+
+        if (duration <= 0) {
+            percent = 100;
+        } else {
+            percent = Math.round((elapsed / duration) * 100);
+        }
+
+        if (percent < 0) percent = 0;
+        if (percent > 100) percent = 100;
+
+        bar.style.width = percent + "%";
+        bar.textContent = percent + "%";
+
+        bar.classList.remove('bg-success','bg-info','bg-warning','bg-danger');
+
+        if (percent < 50) {
+            bar.classList.add('bg-success');
+        } else if (percent < 80) {
+            bar.classList.add('bg-info');
+        } else if (percent < 100) {
+            bar.classList.add('bg-warning');
+        } else {
+            bar.classList.add('bg-danger');
+        }
+    });
+
+    // Update status column live
+    document.querySelectorAll('.status-cell').forEach(function(cell){
+        var exp = parseInt(cell.dataset.exp);
+
+        if (now >= exp) {
+            cell.innerHTML = "❌ Expired";
+        }
+    });
+}
+
+// Update every 10 seconds
+setInterval(updateProgressBars, 10000);
+
+// Initial run
+updateProgressBars();
+</script>
 
 <script>
 function changeExpiredDefault(fl) {
