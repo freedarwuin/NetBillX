@@ -4,19 +4,19 @@ include "../init.php";
 $lockFile = "$CACHE_PATH/router_monitor.lock";
 
 if (!is_dir($CACHE_PATH)) {
-    echo "Directory '$CACHE_PATH' does not exist. Exiting...\n";
+    echo "El directorio '$CACHE_PATH' no existe. Saliendo...\n";
     exit;
 }
 
 $lock = fopen($lockFile, 'c');
 
 if ($lock === false) {
-    echo "Failed to open lock file. Exiting...\n";
+    echo "No se pudo abrir el archivo de bloqueo. Saliendo...\n";
     exit;
 }
 
 if (!flock($lock, LOCK_EX | LOCK_NB)) {
-    echo "Script is already running. Exiting...\n";
+    echo "El script ya se está ejecutando. Saliendo...\n";
     fclose($lock);
     exit;
 }
@@ -56,7 +56,7 @@ foreach ($d as $ds) {
             // Fetch user recharge details
             $u = ORM::for_table('tbl_user_recharges')->where('id', $ds['id'])->find_one();
             if (!$u) {
-                throw new Exception("User recharge record not found for ID: " . $ds['id']);
+                throw new Exception("No se encontró el registro de recarga del usuario para el ID: " . $ds['id']);
             }
 
             // Fetch customer details
@@ -68,7 +68,7 @@ foreach ($d as $ds) {
             // Fetch plan details
             $p = ORM::for_table('tbl_plans')->where('id', $u['plan_id'])->find_one();
             if (!$p) {
-                throw new Exception("Plan not found for ID: " . $u['plan_id']);
+                throw new Exception("Plan no encontrado para ID: " . $u['plan_id']);
             }
 
             $dvc = Package::getDevice($p);
@@ -77,11 +77,11 @@ foreach ($d as $ds) {
                     require_once $dvc;
                     (new $p['device'])->remove_customer($c, $p);
                 } else {
-                    throw new Exception("Cron error: Devices " . $p['device'] . "not found, cannot disconnect ".$c['username']."\n");
+                    throw new Exception("Error de cron: Dispositivos " . $p['device'] . "no encontrados, no se puede desconectar ".$c['username']."\n");
                 }
             }
 
-            // Send notification and update user status
+            // Enviar notificación y actualizar el estado del usuario
             try {
                 echo Message::sendPackageNotification(
                     $c,
@@ -98,7 +98,7 @@ foreach ($d as $ds) {
                 echo "Error: " . $e->getMessage() . "\n";
             }
 
-            // Auto-renewal from deposit
+            // Renovación automática a partir del depósito
             if ($config['enable_balance'] == 'yes' && $c['auto_renewal']) {
                 [$bills, $add_cost] = User::getBills($ds['customer_id']);
                 if ($add_cost != 0) {
@@ -108,33 +108,33 @@ foreach ($d as $ds) {
                 if ($p && $c['balance'] >= $p['price']) {
                     if (Package::rechargeUser($ds['customer_id'], $ds['routers'], $p['id'], 'Customer', 'Balance')) {
                         Balance::min($ds['customer_id'], $p['price']);
-                        echo "plan enabled: " . (string) $p['enabled'] . " | User balance: " . (string) $c['balance'] . " | price " . (string) $p['price'] . "\n";
+                        echo "plan habilitado: " . (string) $p['enabled'] . " | Saldo del usuario: " . (string) $c['balance'] . " | price " . (string) $p['price'] . "\n";
                         echo "auto renewal Success\n";
                     } else {
-                        echo "plan enabled: " . $p['enabled'] . " | User balance: " . $c['balance'] . " | price " . $p['price'] . "\n";
+                        echo "plan habilitado: " . $p['enabled'] . " | Saldo del usuario: " . $c['balance'] . " | price " . $p['price'] . "\n";
                         echo "auto renewal Failed\n";
-                        Message::sendTelegram("FAILED RENEWAL #cron\n\n#u." . $c['username'] . " #buy #Hotspot \n" . $p['name_plan'] .
+                        Message::sendTelegram("RENOVACIÓN FALLIDA #cron\n\n#u." . $c['username'] . " #buy #Hotspot \n" . $p['name_plan'] .
                             "\nRouter: " . $p['routers'] .
                             "\nPrice: " . $p['price']);
                     }
                 } else {
-                    echo "no renewal | plan enabled: " . (string) $p['enabled'] . " | User balance: " . (string) $c['balance'] . " | price " . (string) $p['price'] . "\n";
+                    echo "Sin renovación | Plan habilitado: " . (string) $p['enabled'] . " | Saldo del usuario: " . (string) $c['balance'] . " | Precio " . (string) $p['price'] . "\n";
                 }
             } else {
-                echo "no renewal | balance" . $config['enable_balance'] . " auto_renewal " . $c['auto_renewal'] . "\n";
+                echo "sin renovación | saldo" . $config['enable_balance'] . " renovación_automática " . $c['renovación_automática'] . "\n";
             }
         } else {
             echo " : ACTIVE \r\n";
         }
     } catch (Throwable $e) {
-        // Catch any unexpected errors
+        // Detecta cualquier error inesperado
         _log($e->getMessage());
         sendTelegram($e->getMessage());
-        echo "Unexpected Error: " . $e->getMessage() . "\n";
+        echo "Error inesperado: " . $e->getMessage() . "\n";
     }
 }
 
-//Cek interim-update radiusrest
+//Consulte la actualización provisional de radiusrest
 if ($config['frrest_interim_update'] != 0) {
 
     $r_a = ORM::for_table('rad_acct')
@@ -153,7 +153,7 @@ if ($config['frrest_interim_update'] != 0) {
 }
 
 if ($config['router_check']) {
-    echo "Checking router status...\n";
+    echo "Comprobando el estado del router...\n";
     $routers = ORM::for_table('tbl_routers')->where('enabled', '1')->find_many();
     if (!$routers) {
         echo "No active routers found in the database.\n";
@@ -184,7 +184,7 @@ if ($config['router_check']) {
                     fclose($fsock);
                     $isOnline = true;
                 } else {
-                    throw new Exception("Unable to connect to $ip on port $port using fsockopen: $errstr ($errno)");
+                    throw new Exception("No se puede conectar a $ip en el puerto $port usando fsockopen: $errstr ($errno)");
                 }
             } elseif (is_callable('stream_socket_client') && false === stripos(ini_get('disable_functions'), 'stream_socket_client')) {
                 $connection = @stream_socket_client("$ip:$port", $errno, $errstr, $timeout);
@@ -192,14 +192,14 @@ if ($config['router_check']) {
                     fclose($connection);
                     $isOnline = true;
                 } else {
-                    throw new Exception("Unable to connect to $ip on port $port using stream_socket_client: $errstr ($errno)");
+                    throw new Exception("No se puede conectar a $ip en el puerto $port usando stream_socket_client: $errstr ($errno)");
                 }
             } else {
-                throw new Exception("Neither fsockopen nor stream_socket_client are enabled on the server.");
+                throw new Exception("Ni fsockopen ni stream_socket_client están habilitados en el servidor.");
             }
         } catch (Exception $e) {
             _log($e->getMessage());
-            $errors[] = "Error with router $ip: " . $e->getMessage();
+            $errors[] = "Error con el enrutador $ip: " . $e->getMessage();
         }
 
         if ($isOnline) {
@@ -214,31 +214,31 @@ if ($config['router_check']) {
     }
 
     if (!empty($offlineRouters)) {
-        $message = "Dear Administrator,\n";
-        $message .= "The following routers are offline:\n";
+        $message = "Estimado administrador,\n";
+        $message .= "Los siguientes enrutadores están fuera de línea:\n";
         foreach ($offlineRouters as $router) {
-            $message .= "Name: {$router->name}, IP: {$router->ip_address}, Last Seen: {$router->last_seen}\n";
+            $message .= "Nombre: {$router->name}, IP: {$router->ip_address}, Última conexión: {$router->last_seen}\n";
         }
-        $message .= "\nPlease check the router's status and take appropriate action.\n\nBest regards,\nRouter Monitoring System";
+        $message .= "\nVerifique el estado del enrutador y tome las medidas adecuadas.\n\nSaludos cordiales,\nSistema de monitoreo de enrutadores";
 
         $adminEmail = $config['mail_from'];
-        $subject = "Router Offline Alert";
+        $subject = "Alerta de enrutador fuera de línea";
         Message::SendEmail($adminEmail, $subject, $message);
         sendTelegram($message);
     }
 
     if (!empty($errors)) {
-        $message = "The following errors occurred during router monitoring:\n";
+        $message = "Los siguientes errores ocurrieron durante la supervisión del enrutador:\n";
         foreach ($errors as $error) {
             $message .= "$error\n";
         }
 
         $adminEmail = $config['mail_from'];
-        $subject = "Router Monitoring Error Alert";
+        $subject = "Alerta de error de monitoreo del enrutador";
         Message::SendEmail($adminEmail, $subject, $message);
         sendTelegram($message);
     }
-    echo "Router monitoring finished checking.\n";
+    echo "Se terminó de verificar el monitoreo del enrutador.\n";
 }
 
 flock($lock, LOCK_UN);
@@ -249,4 +249,4 @@ $timestampFile = "$UPLOAD_PATH/cron_last_run.txt";
 file_put_contents($timestampFile, time());
 
 run_hook('cronjob_end'); #HOOK
-echo "Cron job finished and completed successfully.\n";
+echo "Trabajo cron finalizado y completado exitosamente.\n";
