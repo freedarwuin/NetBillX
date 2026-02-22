@@ -405,7 +405,7 @@ COMMIT;
 
 INSERT INTO
     `tbl_appconfig` (`id`, `setting`, `value`)
-VALUES (1, 'CompanyName', 'NetBillX'), (2, 'currency_code', '$'), (3, 'language', 'spanish'), (4, 'show-logo', '1'), (5, 'nstyle', 'blue'), (6, 'timezone', 'America/Caracas'), (7, 'dec_point', ','), (8, 'thousands_sep', '.'), (9, 'rtl', '0'), (10, 'address', ''), (11, 'phone', ''), (12, 'date_format', 'd M Y'), (13, 'note', 'Gracias...');
+VALUES (1, 'CompanyName', 'NetBillX'), (2, 'currency_code', '$'), (3, 'language', 'spanish'), (4, 'show-logo', '1'), (5, 'nstyle', 'blue'), (6, 'timezone', 'America/Caracas'), (7, 'dec_point', ','), (8, 'thousands_sep', '.'), (9, 'rtl', '0'), (10, 'address', ''), (11, 'phone', ''), (12, 'date_format', 'd M Y'), (13, 'note', 'Gracias por preferirnos...');
 
 
 INSERT INTO
