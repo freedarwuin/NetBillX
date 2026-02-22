@@ -69,32 +69,30 @@
 </style>
 
 <script>
-function actualizarTiempoBinance() {
+(function(){
 
-    var el = document.getElementById("binance-live-time");
-    if (!el) return;
+    function actualizarTiempoBinance() {
 
-    var serverTime = parseInt(el.dataset.time);
-    var now = Math.floor(Date.now() / 1000);
+        var el = document.getElementById("binance-live-time");
+        if (!el) return;
 
-    var diff = now - serverTime;
-    if (diff < 0) diff = 0;
+        var serverTime = parseInt(el.getAttribute("data-time"));
+        var now = Math.floor(Date.now() / 1000);
 
-    var m = Math.floor(diff / 60);
-    var s = diff % 60;
+        var diff = now - serverTime;
+        if (diff < 0) diff = 0;
 
-    var texto = "";
+        var m = Math.floor(diff / 60);
+        var s = diff % 60;
 
-    if (m > 0) {
-        texto = m + "m " + s + "s atrás";
-    } else {
-        texto = s + "s atrás";
+        el.innerHTML = (m > 0 ? m + "m " : "") + s + "s atrás";
     }
 
-    el.innerHTML = texto;
-}
+    // Ejecutar cuando el DOM esté listo
+    document.addEventListener("DOMContentLoaded", function() {
+        actualizarTiempoBinance();
+        setInterval(actualizarTiempoBinance, 1000);
+    });
 
-// Actualiza cada segundo
-setInterval(actualizarTiempoBinance, 1000);
-actualizarTiempoBinance();
+})();
 </script>
