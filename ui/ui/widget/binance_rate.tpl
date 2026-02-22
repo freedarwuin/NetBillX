@@ -71,28 +71,36 @@
 <script>
 (function(){
 
-    function actualizarTiempoBinance() {
+    function iniciarContador() {
 
         var el = document.getElementById("binance-live-time");
-        if (!el) return;
 
-        var serverTime = parseInt(el.getAttribute("data-time"));
-        var now = Math.floor(Date.now() / 1000);
+        // Si el elemento aún no existe, intentar otra vez en 500ms
+        if (!el) {
+            setTimeout(iniciarContador, 500);
+            return;
+        }
 
-        var diff = now - serverTime;
-        if (diff < 0) diff = 0;
+        function actualizarTiempoBinance() {
 
-        var m = Math.floor(diff / 60);
-        var s = diff % 60;
+            var serverTime = parseInt(el.getAttribute("data-time"));
+            if (!serverTime) return;
 
-        el.innerHTML = (m > 0 ? m + "m " : "") + s + "s atrás";
-    }
+            var now = Math.floor(Date.now() / 1000);
+            var diff = now - serverTime;
+            if (diff < 0) diff = 0;
 
-    // Ejecutar cuando el DOM esté listo
-    document.addEventListener("DOMContentLoaded", function() {
+            var m = Math.floor(diff / 60);
+            var s = diff % 60;
+
+            el.innerHTML = (m > 0 ? m + "m " : "") + s + "s atrás";
+        }
+
         actualizarTiempoBinance();
         setInterval(actualizarTiempoBinance, 1000);
-    });
+    }
+
+    iniciarContador();
 
 })();
 </script>
