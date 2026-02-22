@@ -1,15 +1,11 @@
 <div class="panel panel-info panel-hovered mb20 activities">
-    <div class="panel-heading">💱 Tasa BCV del día: {$bcv_rate} Bs/USD</div>
+    <div class="panel-heading">💰 Binance P2P USDT/VES (BUY) Promedio Actual: {$last_row.avg_rate} Bs/USDT</div>
     <div class="panel-body">
 
         {if $binance_history|@count > 0}
 
             {assign var="last_row" value=$binance_history[0]}
             {assign var="last_time" value=strtotime($last_row.rate_date)}
-
-            <div class="alert alert-success text-center" style="font-size:18px; font-weight:bold;">
-                💰 Binance P2P USDT/VES (BUY) Promedio Actual: {$last_row.avg_rate} Bs/USDT
-            </div>
 
             <table class="table table-bordered table-sm">
                 <thead>
