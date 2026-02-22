@@ -422,7 +422,7 @@ INSERT INTO
 VALUES (
         1,
         'admin',
-        'Administrator',
+        'Administrador',
         'd033e22ae348aeb5660fc2140aec35850c4da997',
         'SuperAdmin',
         'Active',
