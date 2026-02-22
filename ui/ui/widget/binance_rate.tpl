@@ -1,6 +1,6 @@
 <div class="panel panel-success panel-hovered mb20">
     <div class="panel-heading">
-        💰 Binance P2P USDT/VES (BUY)
+        💰 Binance P2P USDT/VES (BUY) Promedio Actual: {$last_row.avg_rate} Bs/USDT
     </div>
 
     <div class="panel-body">
@@ -9,10 +9,6 @@
 
             {assign var="last_row" value=$binance_history[0]}
             {assign var="last_time" value=strtotime($last_row.rate_date)}
-
-            <div class="alert alert-success text-center" style="font-size:18px; font-weight:bold;">
-                Promedio Actual: {$last_row.avg_rate} Bs/USDT
-            </div>
 
             <table class="table table-bordered table-sm">
                 <thead>
