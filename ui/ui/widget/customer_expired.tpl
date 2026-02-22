@@ -190,7 +190,7 @@ function updateProgressBars() {
 }
 
 // Update every 10 seconds
-setInterval(updateProgressBars, 10000);
+setInterval(updateProgressBars, 1000);
 
 // Initial run
 updateProgressBars();
