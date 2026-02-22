@@ -20,7 +20,7 @@ class update_bcv
                 SELECT rate_date, rate
                 FROM bcv_rate
                 ORDER BY rate_date DESC
-                LIMIT 9
+                LIMIT 6
             ");
             $stmt->execute();
             $history = $stmt->fetchAll(PDO::FETCH_ASSOC);
