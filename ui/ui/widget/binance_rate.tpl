@@ -1,4 +1,4 @@
-<div class="panel panel-success panel-hovered mb20">
+<div class="panel panel-info panel-hovered mb20 activities">
     <div class="panel-body">
 
         {if $binance_history|@count > 0}
