@@ -24,7 +24,7 @@
                     {assign var="exp_time" value=strtotime($expired.expiration|cat:" "|cat:$expired.time)}
                     {assign var="start_time" value=strtotime($expired.recharged_on|cat:" "|cat:$expired.recharged_time)}
                     {assign var="now_time" value=time()}
-                    {assign var="progress" value=round((($now_time-$start_time)/($exp_time-$start_time))*100)}
+                    {assign var="progress" value=$now_time >= $exp_time ? 100 : max(0, round((($now_time-$start_time)/($exp_time-$start_time))*100))}
                     <tr class="{if $exp_time < $now_time}table-danger{elseif $exp_time - $now_time <= 86400}table-info{/if}">
                         <td>
                             <a href="{Text::url('customers/view/',$expired.id)}">
@@ -73,8 +73,8 @@
                             <div class="progress" style="height: 15px;">
                                 <div class="progress-bar {if $exp_time < $now_time}bg-danger{elseif $exp_time - $now_time <= 86400}bg-info{else}bg-success{/if}"
                                      role="progressbar"
-                                     style="width: {max(0,min($progress,100))}%"
-                                     aria-valuenow="{max(0,min($progress,100))}"
+                                     style="width: {$progress}%"
+                                     aria-valuenow="{$progress}"
                                      aria-valuemin="0"
                                      aria-valuemax="100"
                                      data-toggle="tooltip"
