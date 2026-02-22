@@ -1197,16 +1197,16 @@
     <h4><b>{Lang::T('Settings For Cron Expired')}</b></h4>
     <p>
         # {Lang::T('Expired Cronjob Every 5 Minutes [Recommended]')}<br>
-        */5 * * * * cd {$dir} && {$php} cron.php
+        */5 * * * * cd {$dir} && {$php} -f cron.php
         <br><br>
         # {Lang::T('Expired Cronjob Every 1 Hour')}<br>
-        0 * * * * cd {$dir} && {$php} cron.php
+        0 * * * * cd {$dir} && {$php} -f cron.php
     </p>
     <br>
     <h4><b>{Lang::T('Settings For Cron Reminder')}</b></h4>
     <p>
         # {Lang::T('Reminder Cronjob Every 7 AM')}<br>
-        0 7 * * * cd {$dir} && {$php} cron_reminder.php
+        0 7 * * * cd {$dir} && {$php} -f cron_reminder.php
     </p>
     <h4><b>{Lang::T('Cron configuration for updating BCV and Binance')}</b></h4>
     <p>
