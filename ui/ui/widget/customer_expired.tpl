@@ -24,12 +24,10 @@
             <tbody>
                 {foreach $expire as $expired}
 
-                    {* ==== CALCULAR FECHAS ==== *}
                     {assign var="exp_time" value=strtotime($expired.expiration|cat:" "|cat:$expired.time)}
                     {assign var="start_time" value=strtotime($expired.recharged_on|cat:" "|cat:$expired.recharged_time)}
                     {assign var="now_time" value=time()}
 
-                    {* ==== CALCULAR PROGRESO SEGURO ==== *}
                     {assign var="duration" value=$exp_time-$start_time}
                     {assign var="elapsed" value=$now_time-$start_time}
 
@@ -37,17 +35,10 @@
                         {assign var="progress" value=100}
                     {else}
                         {assign var="progress" value=round(($elapsed/$duration)*100)}
-
-                        {if $progress < 0}
-                            {assign var="progress" value=0}
-                        {/if}
-
-                        {if $progress > 100}
-                            {assign var="progress" value=100}
-                        {/if}
+                        {if $progress < 0}{assign var="progress" value=0}{/if}
+                        {if $progress > 100}{assign var="progress" value=100}{/if}
                     {/if}
 
-                    {* ==== COLOR INICIAL DE FILA ==== *}
                     {if $exp_time < $now_time}
                         {assign var="row_class" value="table-danger"}
                     {elseif $progress >= 80}
@@ -75,31 +66,23 @@
                         </td>
 
                         <td>
-                            <small data-toggle="tooltip"
+                            <small class="live-start"
+                                   data-start="{$start_time}"
                                    title="{Lang::dateAndTimeFormat($expired.recharged_on,$expired.recharged_time)}">
-                                {Lang::timeElapsed($expired.recharged_on|cat:" "|cat:$expired.recharged_time)}
+                                   {Lang::timeElapsed($expired.recharged_on|cat:" "|cat:$expired.recharged_time)}
                             </small>
                             /
-                            <span data-toggle="tooltip"
+                            <span class="live-exp"
+                                  data-exp="{$exp_time}"
                                   title="{Lang::dateAndTimeFormat($expired.expiration,$expired.time)}">
-                                {Lang::timeElapsed($expired.expiration|cat:" "|cat:$expired.time)}
+                                  {Lang::timeElapsed($expired.expiration|cat:" "|cat:$expired.time)}
                             </span>
                         </td>
 
-                        <td>
-                            {if $expired.namebp == 'Basic'}
-                                <i class="fa fa-wifi text-primary"></i> {$expired.namebp}
-                            {elseif $expired.namebp == 'Premium'}
-                                <i class="fa fa-rocket text-success"></i> {$expired.namebp}
-                            {else}
-                                <i class="fa fa-network-wired text-secondary"></i> {$expired.namebp}
-                            {/if}
-                        </td>
-
+                        <td>{$expired.namebp}</td>
                         <td>{$expired.routers}</td>
 
-                        <td class="status-cell"
-                            data-exp="{$exp_time}">
+                        <td class="status-cell" data-exp="{$exp_time}">
                             {if $exp_time < $now_time}
                                 ❌ {Lang::T('Expired')}
                             {elseif $progress >= 80}
@@ -114,10 +97,7 @@
                                 <div class="progress-bar live-progress"
                                      data-start="{$start_time}"
                                      data-exp="{$exp_time}"
-                                     role="progressbar"
-                                     style="width: {$progress}%"
-                                     aria-valuemin="0"
-                                     aria-valuemax="100">
+                                     style="width: {$progress}%">
                                      {$progress}%
                                 </div>
                             </div>
@@ -135,12 +115,28 @@
 
 <style>
 .live-progress {
-    transition: width 0.8s ease, background-color 0.8s ease;
+    transition: width 0.5s linear, background-color 0.5s linear;
 }
 </style>
 
 <script>
-function updateProgressBars() {
+function formatTime(seconds) {
+
+    var d = Math.floor(seconds / 86400);
+    var h = Math.floor((seconds % 86400) / 3600);
+    var m = Math.floor((seconds % 3600) / 60);
+    var s = seconds % 60;
+
+    var result = "";
+    if (d > 0) result += d + "d ";
+    if (h > 0) result += h + "h ";
+    if (m > 0) result += m + "m ";
+    if (d === 0 && h === 0) result += s + "s";
+
+    return result.trim();
+}
+
+function updateDashboard() {
 
     var now = Math.floor(Date.now() / 1000);
 
@@ -152,13 +148,7 @@ function updateProgressBars() {
         var duration = exp - start;
         var elapsed  = now - start;
 
-        var percent = 0;
-
-        if (duration <= 0) {
-            percent = 100;
-        } else {
-            percent = Math.round((elapsed / duration) * 100);
-        }
+        var percent = duration > 0 ? Math.round((elapsed / duration) * 100) : 100;
 
         if (percent < 0) percent = 0;
         if (percent > 100) percent = 100;
@@ -168,35 +158,37 @@ function updateProgressBars() {
 
         bar.classList.remove('bg-success','bg-info','bg-warning','bg-danger');
 
-        if (percent < 50) {
-            bar.classList.add('bg-success');
-        } else if (percent < 80) {
-            bar.classList.add('bg-info');
-        } else if (percent < 100) {
-            bar.classList.add('bg-warning');
-        } else {
-            bar.classList.add('bg-danger');
-        }
+        if (percent < 50) bar.classList.add('bg-success');
+        else if (percent < 80) bar.classList.add('bg-info');
+        else if (percent < 100) bar.classList.add('bg-warning');
+        else bar.classList.add('bg-danger');
     });
 
-    // Update status column live
     document.querySelectorAll('.status-cell').forEach(function(cell){
         var exp = parseInt(cell.dataset.exp);
-
         if (now >= exp) {
             cell.innerHTML = "❌ Expired";
         }
     });
+
+    document.querySelectorAll('.live-start').forEach(function(el){
+        var start = parseInt(el.dataset.start);
+        var diff = now - start;
+        if (diff >= 0) el.textContent = formatTime(diff) + " ago";
+    });
+
+    document.querySelectorAll('.live-exp').forEach(function(el){
+        var exp = parseInt(el.dataset.exp);
+        var diff = exp - now;
+        if (diff > 0) el.textContent = "in " + formatTime(diff);
+        else el.textContent = formatTime(Math.abs(diff)) + " ago";
+    });
 }
 
-// Update every 10 seconds
-setInterval(updateProgressBars, 1000);
+// 🔁 Actualiza cada 1 segundo
+setInterval(updateDashboard, 1000);
+updateDashboard();
 
-// Initial run
-updateProgressBars();
-</script>
-
-<script>
 function changeExpiredDefault(fl) {
     setCookie('expdef', fl.value, 365);
     setTimeout(function(){ location.reload(); }, 500);
