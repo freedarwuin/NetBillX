@@ -22,13 +22,13 @@
                                     </h5>
 
                                     {if $day.change == 'up'}
-                                        <span class="badge bg-primary">⬆ Subió</span>
+                                        <span class="label label-primary">⬆ Subió</span>
                                     {elseif $day.change == 'down'}
-                                        <span class="badge bg-danger">⬇ Bajó</span>
+                                        <span class="label label-danger">⬇ Bajó</span>
                                     {elseif $day.change == 'same'}
-                                        <span class="badge bg-secondary">— Igual</span>
+                                        <span class="label label-default">— Igual</span>
                                     {else}
-                                        <span class="badge bg-secondary">—</span>
+                                        <span class="label label-default">—</span>
                                     {/if}
 
                                 </div>
