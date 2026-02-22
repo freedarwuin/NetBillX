@@ -1193,6 +1193,17 @@
         add dst-host={$_domain} <br>
         add dst-host=*.{$_domain}
     </p>
+    <form method="post">
+        <button type="submit" name="install_cron" class="btn btn-success">
+            Instalar / Actualizar Cron
+        </button>
+    </form>
+
+    <form method="post">
+        <button type="submit" name="remove_cron" class="btn btn-danger">
+            Eliminar Cron
+        </button>
+    </form>
     <br>
     <h4><b>{Lang::T('Settings For Cron Expired')}</b></h4>
     <p>
