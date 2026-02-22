@@ -1211,7 +1211,7 @@
     <h4><b>{Lang::T('Settings For Cron Reminder')}</b></h4>
     <p>
         # {Lang::T('BCV and Binance Rate Updater')}<br>
-        * * * * * cd {$dir} && {$php} -f cron_binance_rate.php
+        * * * * * cd {$dir} && {$php} -f cron_binance_rate.php<br>
         * * * * * cd {$dir} && {$php} -f cron_bcv.php
     </p>
 </div>
