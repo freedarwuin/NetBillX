@@ -64,7 +64,7 @@
                             {if $exp_time < $now_time}
                                 ❌ {Lang::T('Expired')}
                             {elseif $exp_time - $now_time <= 86400}
-                                ⚠️ Expires Soon
+                                ⚠️ {Lang::T('Expires Soon')}
                             {else}
                                 ✅ {Lang::T('Active')}
                             {/if}
