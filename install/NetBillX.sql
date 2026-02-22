@@ -431,18 +431,18 @@ VALUES (
     );
 
 INSERT INTO `tbl_widgets` (`id`, `orders`, `position`, `user`, `enabled`, `title`, `widget`, `content`) VALUES
-(1, 1, 2, 'Admin', 1, 'Update Bcv', 'update_bcv', ''),
-(2, 1, 1, 'Admin', 1, 'Top Widget', 'top_widget', ''),
-(3, 2, 1, 'Admin', 1, 'Default Info', 'default_info_row', ''),
-(4, 2, 2, 'Admin', 1, 'Graph Monthly Registered Customers', 'graph_monthly_registered_customers', ''),
-(5, 3, 2, 'Admin', 1, 'Graph Monthly Sales', 'graph_monthly_sales', ''),
-(6, 4, 2, 'Admin', 1, 'Voucher Stocks', 'voucher_stocks', ''),
-(7, 5, 2, 'Admin', 1, 'Customer Expired', 'customer_expired', ''),
-(8, 1, 3, 'Admin', 1, 'Cron Monitor', 'cron_monitor', ''),
-(9, 2, 3, 'Admin', 1, 'Mikrotik Cron Monitor', 'mikrotik_cron_monitor', ''),
-(10, 3, 3, 'Admin', 1, 'Info Payment Gateway', 'info_payment_gateway', ''),
-(11, 4, 3, 'Admin', 1, 'Graph Customers Insight', 'graph_customers_insight', ''),
-(12, 6, 3, 'Admin', 1, 'Activity Log', 'activity_log', ''),
+(1, 1, 1, 'Admin', 1, 'Top Widget', 'top_widget', ''),
+(2, 2, 1, 'Admin', 1, 'Default Info', 'default_info_row', ''),
+(3, 2, 2, 'Admin', 1, 'Graph Monthly Registered Customers', 'graph_monthly_registered_customers', ''),
+(4, 3, 2, 'Admin', 1, 'Graph Monthly Sales', 'graph_monthly_sales', ''),
+(5, 4, 2, 'Admin', 1, 'Voucher Stocks', 'voucher_stocks', ''),
+(6, 5, 2, 'Admin', 1, 'Customer Expired', 'customer_expired', ''),
+(7, 1, 3, 'Admin', 1, 'Cron Monitor', 'cron_monitor', ''),
+(8, 2, 3, 'Admin', 1, 'Mikrotik Cron Monitor', 'mikrotik_cron_monitor', ''),
+(9, 3, 3, 'Admin', 1, 'Info Payment Gateway', 'info_payment_gateway', ''),
+(10, 4, 3, 'Admin', 1, 'Graph Customers Insight', 'graph_customers_insight', ''),
+(11, 6, 3, 'Admin', 1, 'Activity Log', 'activity_log', ''),
+(12, 5, 3, 'Admin', 1, 'Update Bcv', 'update_bcv', ''),
 
 (13, 1, 1, 'Agent', 1, 'Top Widget', 'top_widget', ''),
 (14, 2, 1, 'Agent', 1, 'Default Info', 'default_info_row', ''),
@@ -474,4 +474,5 @@ INSERT INTO `tbl_widgets` (`id`, `orders`, `position`, `user`, `enabled`, `title
 (38, 1, 1, 'Customer', 1, 'Unpaid Order', 'unpaid_order', ''),
 (39, 2, 1, 'Customer', 1, 'Announcement', 'announcement', ''),
 (40, 5, 1, 'Customer', 1, 'Recharge A Friend', 'recharge_a_friend', ''),
-(41, 2, 2, 'Customer', 1, 'Voucher Activation', 'voucher_activation', '');
+(41, 2, 2, 'Customer', 1, 'Voucher Activation', 'voucher_activation', ''),
+(42, 3, 2, 'Customer', 1, 'Update Bcv', 'update_bcv', '');
