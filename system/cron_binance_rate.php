@@ -2,12 +2,20 @@
 include "../config.php";
 
 try {
+
     $dbh = new PDO(
         "mysql:host=127.0.0.1;dbname={$db_name};charset=utf8mb4",
         $db_user,
         $db_pass,
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+        ]
     );
+
+    // ===============================
+    // 1️⃣ Consulta a Binance P2P
+    // ===============================
 
     $url = "https://p2p.binance.com/bapi/c2c/v2/friendly/c2c/adv/search";
 
@@ -29,10 +37,11 @@ try {
         "origin: https://p2p.binance.com",
         "referer: https://p2p.binance.com/",
         "clienttype: web",
-        "user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
+        "user-agent: Mozilla/5.0"
     ];
 
     $ch = curl_init($url);
+
     curl_setopt_array($ch, [
         CURLOPT_POST => true,
         CURLOPT_POSTFIELDS => json_encode($payload),
@@ -45,7 +54,7 @@ try {
     $response = curl_exec($ch);
 
     if (curl_errno($ch)) {
-        die("CURL Error: " . curl_error($ch));
+        throw new Exception("CURL Error: " . curl_error($ch));
     }
 
     curl_close($ch);
@@ -53,11 +62,15 @@ try {
     $data = json_decode($response, true);
 
     if (!isset($data['data']) || empty($data['data'])) {
-        die("Sin datos Binance");
+        throw new Exception("Binance no devolvió datos válidos.");
     }
 
-    $prices = array_map(function ($o) {
-        return floatval($o['adv']['price']);
+    // ===============================
+    // 2️⃣ Procesar precios
+    // ===============================
+
+    $prices = array_map(function ($offer) {
+        return floatval($offer['adv']['price']);
     }, $data['data']);
 
     $min = min($prices);
@@ -65,10 +78,19 @@ try {
     $avg = array_sum($prices) / count($prices);
     $offers = count($prices);
 
-    // Insertar en BD
+    // ===============================
+    // 3️⃣ Insertar 1 registro por minuto
+    // ===============================
+
     $stmt = $dbh->prepare("
         INSERT INTO binance_rate (rate_date, avg_rate, min_rate, max_rate, offers)
-        VALUES (NOW(), ?, ?, ?, ?)
+        VALUES (DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:00'), ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+            avg_rate = VALUES(avg_rate),
+            min_rate = VALUES(min_rate),
+            max_rate = VALUES(max_rate),
+            offers = VALUES(offers),
+            created_at = CURRENT_TIMESTAMP
     ");
 
     $stmt->execute([
@@ -78,8 +100,18 @@ try {
         $offers
     ]);
 
+    // ===============================
+    // 4️⃣ Limpiar histórico mayor a 30 días
+    // ===============================
+
+    $dbh->exec("
+        DELETE FROM binance_rate
+        WHERE rate_date < NOW() - INTERVAL 30 DAY
+    ");
+
     echo "Binance actualizado correctamente\n";
 
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage();
+
+    echo "Error: " . $e->getMessage() . "\n";
 }
