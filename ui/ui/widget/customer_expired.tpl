@@ -62,11 +62,11 @@
                         <td>{$expired.routers}</td>
                         <td>
                             {if $exp_time < $now_time}
-                                ❌ Expired
+                                ❌ {Lang::T('Expired')}
                             {elseif $exp_time - $now_time <= 86400}
                                 ⚠️ Expires Soon
                             {else}
-                                ✅ Active
+                                ✅ {Lang::T('Active')}
                             {/if}
                         </td>
                         <td>
