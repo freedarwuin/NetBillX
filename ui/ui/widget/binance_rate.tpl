@@ -1,4 +1,4 @@
-<div class="panel panel-success panel-hovered mb20">
+<div class="panel panel-success panel-hovered mb20" id="binance-widget">
     <div class="panel-heading">
         💰 Binance P2P USDT/VES (BUY)
     </div>
@@ -52,3 +52,23 @@
 
     </div>
 </div>
+
+<script>
+function refrescarBinance() {
+    fetch("index.php?_route=widget/update_binance")
+        .then(response => response.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+            const nuevoWidget = doc.querySelector("#binance-widget");
+
+            if (nuevoWidget) {
+                document.querySelector("#binance-widget").innerHTML = nuevoWidget.innerHTML;
+            }
+        })
+        .catch(err => console.log("Error:", err));
+}
+
+// Refresca cada 1 segundo
+setInterval(refrescarBinance, 1000);
+</script>
