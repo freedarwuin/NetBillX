@@ -8,7 +8,6 @@ class update_bcv
         global $db_host, $db_user, $db_pass, $db_name, $ui, $timezone;
 
         try {
-            // Conexión PDO
             $dbh = new PDO(
                 "mysql:host=127.0.0.1;dbname={$db_name};charset=utf8mb4",
                 $db_user,
@@ -16,38 +15,54 @@ class update_bcv
                 [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
             );
 
-            // Obtener tasa actual desde API (solo lectura)
-            $json = @file_get_contents("https://ve.dolarapi.com/v1/dolares/oficial");
-            $apiData = $json ? json_decode($json, true) : null;
-            $rate = $apiData['promedio'] ?? $apiData['valor'] ?? null;
-
-            $message = $rate
-                ? "Tasa actual API: {$rate} Bs"
-                : "No se pudo obtener la tasa desde la API";
-
-            // Asignar variables al template
-            $ui->assign('bcv_rate', $rate);
-            $ui->assign('bcv_message', $message);
-            $ui->assign('timezone', $timezone);
-
-            // Obtener últimos registros guardados (insertados por el cron)
-            $stmtHist = $dbh->prepare("
+            // Obtener últimos 9 registros ordenados DESC
+            $stmt = $dbh->prepare("
                 SELECT rate_date, rate
                 FROM bcv_rate
                 ORDER BY rate_date DESC
                 LIMIT 9
             ");
-            $stmtHist->execute();
-            $history = $stmtHist->fetchAll(PDO::FETCH_ASSOC);
+            $stmt->execute();
+            $history = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+            if (!$history) {
+                $ui->assign('bcv_rate', null);
+                $ui->assign('bcv_history', []);
+                return $ui->fetch('widget/bcv_rate.tpl');
+            }
+
+            // La tasa actual es el primer registro
+            $currentRate = $history[0]['rate'];
+
+            // Calcular variaciones comparando contra el día anterior
+            for ($i = 0; $i < count($history); $i++) {
+
+                if (isset($history[$i + 1])) {
+
+                    $todayRate = (float)$history[$i]['rate'];
+                    $yesterdayRate = (float)$history[$i + 1]['rate'];
+
+                    if ($todayRate > $yesterdayRate) {
+                        $history[$i]['change'] = 'up';
+                    } elseif ($todayRate < $yesterdayRate) {
+                        $history[$i]['change'] = 'down';
+                    } else {
+                        $history[$i]['change'] = 'same';
+                    }
+
+                } else {
+                    $history[$i]['change'] = 'none';
+                }
+            }
+
+            $ui->assign('bcv_rate', $currentRate);
             $ui->assign('bcv_history', $history);
+            $ui->assign('timezone', $timezone);
 
             return $ui->fetch('widget/bcv_rate.tpl');
 
         } catch (PDOException $e) {
             return "Error en la base de datos: " . $e->getMessage();
-        } catch (Exception $e) {
-            return "Error general: " . $e->getMessage();
         }
     }
 }
