@@ -67,40 +67,32 @@
     font-weight: bold;
 }
 </style>
-
 <script>
-(function(){
+function updateBinanceTimer() {
 
-    function iniciarContador() {
+    var now = Math.floor(Date.now() / 1000);
 
-        var el = document.getElementById("binance-live-time");
+    document.querySelectorAll('#binance-live-time').forEach(function(el){
 
-        // Si el elemento aún no existe, intentar otra vez en 500ms
-        if (!el) {
-            setTimeout(iniciarContador, 500);
-            return;
+        var serverTime = parseInt(el.dataset.time);
+        if (!serverTime) return;
+
+        var diff = now - serverTime;
+        if (diff < 0) diff = 0;
+
+        var m = Math.floor(diff / 60);
+        var s = diff % 60;
+
+        if (m > 0) {
+            el.textContent = m + "m " + s + "s atrás";
+        } else {
+            el.textContent = s + "s atrás";
         }
 
-        function actualizarTiempoBinance() {
+    });
+}
 
-            var serverTime = parseInt(el.getAttribute("data-time"));
-            if (!serverTime) return;
-
-            var now = Math.floor(Date.now() / 1000);
-            var diff = now - serverTime;
-            if (diff < 0) diff = 0;
-
-            var m = Math.floor(diff / 60);
-            var s = diff % 60;
-
-            el.innerHTML = (m > 0 ? m + "m " : "") + s + "s atrás";
-        }
-
-        actualizarTiempoBinance();
-        setInterval(actualizarTiempoBinance, 1000);
-    }
-
-    iniciarContador();
-
-})();
+// 🔁 Igual que tu otro widget
+setInterval(updateBinanceTimer, 1000);
+updateBinanceTimer();
 </script>
