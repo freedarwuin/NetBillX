@@ -58,7 +58,7 @@
         <div class="small-box" style="background: linear-gradient(135deg,#dc3545,#f28b8b); border-radius: 12px; color:#fff;">
             <div class="inner text-center">
                 <h4 style="font-size:1.5rem; font-weight:700;">{$c_all}</h4>
-                <p>{Lang::T('Total number of customers')}</p>
+                <p>{Lang::T('Total number of registered customers')}</p>
             </div>
             <div class="icon" style="top:10px; right:10px; font-size:3rem; opacity:0.2;">
                 <i class="ion ion-ios-people"></i>
