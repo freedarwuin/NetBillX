@@ -14,7 +14,7 @@
                     </th>
                     <th>{Lang::T('Activated / Expired')}</th>
                     <th>{Lang::T('Internet Package')}</th>
-                    <th>{Lang::T('Location / Router')}</th>
+                    <th>{Lang::T('Router')}</th>
                     <th>{Lang::T('Status')}</th>
                     <th>{Lang::T('Expiry Progress')}</th>
                 </tr>
