@@ -1,8 +1,5 @@
 <div class="panel panel-success panel-hovered mb20">
-    <div class="panel-heading">
-        💰 Binance P2P USDT/VES (BUY) Promedio Actual: {$last_row.avg_rate} Bs/USDT
-    </div>
-
+<div class="panel-heading">💰 Binance P2P USDT/VES (BUY) Promedio Actual: {$last_row.avg_rate} Bs/USDT</div>
     <div class="panel-body">
 
         {if $binance_history|@count > 0}
