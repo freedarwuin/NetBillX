@@ -44,11 +44,12 @@
                 </tbody>
             </table>
 
-            <!-- Contador en vivo -->
+            {assign var="unix_time" value=strtotime($binance_history[0].rate_date)}
+
             <div class="text-right" style="font-size:12px; color:#666;">
                 Última actualización:
-                <span id="binance-live-time"
-                      data-time="{$binance_history[0].rate_date|strtotime}">
+                <span class="binance-live-time"
+                      data-time="{$unix_time}">
                       {$binance_history[0].rate_date}
                 </span>
             </div>
@@ -63,16 +64,17 @@
 </div>
 
 <style>
-#binance-live-time {
+.binance-live-time {
     font-weight: bold;
 }
 </style>
+
 <script>
 function updateBinanceTimer() {
 
     var now = Math.floor(Date.now() / 1000);
 
-    document.querySelectorAll('#binance-live-time').forEach(function(el){
+    document.querySelectorAll('.binance-live-time').forEach(function(el){
 
         var serverTime = parseInt(el.dataset.time);
         if (!serverTime) return;
@@ -92,7 +94,7 @@ function updateBinanceTimer() {
     });
 }
 
-// 🔁 Igual que tu otro widget
+// 🔁 Igual que tu widget de expiraciones
 setInterval(updateBinanceTimer, 1000);
 updateBinanceTimer();
 </script>
