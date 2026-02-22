@@ -1,66 +1,71 @@
+<div class="box box-solid ">
+    <div class="box-header">
+        <i class="fa fa-th"></i>
+
+        <h3 class="box-title">{Lang::T('Monthly Registered Customers')}</h3>
+
+        <div class="box-tools pull-right">
+            <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+            <a href="{Text::url('dashboard&refresh')}" class="btn bg-teal btn-sm"><i class="fa fa-refresh"></i>
+            </a>
+        </div>
+    </div>
+    <div class="box-body border-radius-none">
+        <canvas class="chart" id="chart" style="height: 250px;"></canvas>
+    </div>
+</div>
+
+
 <script type="text/javascript">
-{literal}
-document.addEventListener("DOMContentLoaded", function() {
-    var counts = JSON.parse('{/literal}{$monthlyRegistered|json_encode}{literal}');
+    {literal}
+        document.addEventListener("DOMContentLoaded", function() {
+            var counts = JSON.parse('{/literal}{$monthlyRegistered|json_encode}{literal}');
 
-    var monthNames = [
-        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-    ];
+            var monthNames = [
+                'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+            ];
 
-    var labels = [];
-    var data = [];
-    var colors = [];
+            var labels = [];
+            var data = [];
 
-    for (var i = 1; i <= 12; i++) {
-        var month = counts.find(count => count.date === i);
-        var count = month ? month.count : 0;
-        labels.push(month ? monthNames[i - 1] : monthNames[i - 1].substring(0, 3));
-        data.push(count);
-        // Color: rojo si > 50, azul de lo contrario
-        colors.push(count > 50 ? 'rgba(255,0,0,0.6)' : 'rgba(0,123,255,0.6)');
-    }
+            for (var i = 1; i <= 12; i++) {
+                var month = counts.find(count => count.date === i);
+                labels.push(month ? monthNames[i - 1] : monthNames[i - 1].substring(0, 3));
+                data.push(month ? month.count : 0);
+            }
 
-    var ctx = document.getElementById('chart').getContext('2d');
-    var chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Miembros registrados',
-                data: data,
-                backgroundColor: colors,
-                borderColor: colors.map(c => c.replace('0.6','0.9')),
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return context.dataset.label + ': ' + context.parsed.y + ' registros';
+            var ctx = document.getElementById('chart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Miembros registrados',
+                        data: data,
+                        backgroundColor: 'rgba(0, 0, 255, 0.5)',
+                        borderColor: 'rgba(0, 0, 255, 0.7)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            }
                         }
                     }
                 }
-            },
-            scales: {
-                x: {
-                    grid: {
-                        display: false
-                    }
-                },
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: 'rgba(0,0,0,0.05)',
-                        borderDash: [3,3]
-                    }
-                }
-            }
-        }
-    });
-});
-{/literal}
+            });
+        });
+    {/literal}
 </script>
