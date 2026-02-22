@@ -5,10 +5,13 @@
 
     <div class="panel-body">
 
-        {if $binance_rate}
+        {if $binance_history|@count > 0}
+
+            {assign var="last_row" value=$binance_history[0]}
+            {assign var="last_time" value=strtotime($last_row.rate_date)}
 
             <div class="alert alert-success text-center" style="font-size:18px; font-weight:bold;">
-                Promedio Actual: {$binance_rate} Bs/USDT
+                Promedio Actual: {$last_row.avg_rate} Bs/USDT
             </div>
 
             <table class="table table-bordered table-sm">
@@ -44,13 +47,11 @@
                 </tbody>
             </table>
 
-            {assign var="unix_time" value=strtotime($binance_history[0].rate_date)}
-
             <div class="text-right" style="font-size:12px; color:#666;">
                 Última actualización:
                 <span class="binance-live-time"
-                      data-time="{$unix_time}">
-                      {$binance_history[0].rate_date}
+                      data-time="{$last_time}">
+                      {$last_row.rate_date}
                 </span>
             </div>
 
@@ -77,7 +78,8 @@ function updateBinanceTimer() {
     document.querySelectorAll('.binance-live-time').forEach(function(el){
 
         var serverTime = parseInt(el.dataset.time);
-        if (!serverTime) return;
+
+        if (!serverTime || isNaN(serverTime)) return;
 
         var diff = now - serverTime;
         if (diff < 0) diff = 0;
@@ -85,16 +87,11 @@ function updateBinanceTimer() {
         var m = Math.floor(diff / 60);
         var s = diff % 60;
 
-        if (m > 0) {
-            el.textContent = m + "m " + s + "s atrás";
-        } else {
-            el.textContent = s + "s atrás";
-        }
-
+        el.textContent = (m > 0 ? m + "m " : "") + s + "s atrás";
     });
 }
 
-// 🔁 Igual que tu widget de expiraciones
+// EXACTAMENTE igual patrón que tu widget que sí funciona
 setInterval(updateBinanceTimer, 1000);
 updateBinanceTimer();
 </script>
