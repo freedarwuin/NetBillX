@@ -101,12 +101,12 @@ try {
     ]);
 
     // ===============================
-    // 4️⃣ Limpiar histórico mayor a 30 días
+    // 4️⃣ Limpiar histórico mayor a 1 días
     // ===============================
 
     $dbh->exec("
         DELETE FROM binance_rate
-        WHERE rate_date < NOW() - INTERVAL 30 DAY
+        WHERE rate_date < NOW() - INTERVAL 1 DAY
     ");
 
     echo "Binance actualizado correctamente\n";
