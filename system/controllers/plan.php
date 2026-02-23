@@ -248,7 +248,7 @@ switch ($action) {
                 App::setVoucher($svoucher, $cust['username']);
                 $ui->display('admin/plan/invoice.tpl');
                 _log('[' . $admin['username'] . ']: ' .
-                     Lang::T('Recharge') . ' ' .
+                     Lang::T('Surcharge') . ' ' .
                      $cust['username'] .
                      ' [' . $in['plan_name'] . '][' .
                      Lang::moneyFormat($in['price']) . ']',
