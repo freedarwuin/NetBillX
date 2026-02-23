@@ -365,7 +365,7 @@ switch ($action) {
                 }
             }
             $d->delete();
-            _log('[' . $admin['username'] . ']: ' . 'Delete Plan for Customer ' . $c['username'] . '  [' . $in['plan_name'] . '][' . Lang::moneyFormat($in['price']) . ']', $admin['user_type'], $admin['id']);
+            _log('[' . $admin['username'] . ']: ' . Lang::T('Delete Plan for Customer') . ' ' . $c['username'] . ' [' . $in['plan_name'] . '][' . Lang::moneyFormat($in['price']) . ']', $admin['user_type'], $admin['id']);
             r2(getUrl('plan/list'), 's', Lang::T('Data Deleted Successfully'));
         }
         break;
@@ -1082,11 +1082,24 @@ switch ($action) {
             } else {
                 r2(getUrl('plan'), 's', "Customer not found");
             }
-            Message::sendTelegram("#u$tur[username] #id$tur[customer_id]  #extend by $admin[fullname] #" . $p['type'] . " \n" . $p['name_plan'] .
-                "\nLocation: " . $p['routers'] .
-                "\nCustomer: " . $c['fullname'] .
-                "\nNew Expired: " . Lang::dateAndTimeFormat($expiration, $tur['time']));
-            _log("$admin[fullname] extend Customer $tur[customer_id] $tur[username] #$tur[customer_id] for $days days", $admin['user_type'], $admin['id']);
+            //Message::sendTelegram("#u$tur[username] #id$tur[customer_id]  #extend by $admin[fullname] #" . $p['type'] . " \n" . $p['name_plan'] .
+            //    "\nLocation: " . $p['routers'] .
+            //    "\nCustomer: " . $c['fullname'] .
+            //    "\nNew Expired: " . Lang::dateAndTimeFormat($expiration, $tur['time']));
+            Message::sendTelegram(
+                '#u' . $tur['username'] .
+                ' #id' . $tur['customer_id'] . ' ' .
+                '#' . Lang::T('extend') . ' ' .
+                Lang::T('by') . ' ' .
+                $admin['fullname'] . ' #' .
+                $p['type'] . "\n" .
+                $p['name_plan'] . "\n" .
+                Lang::T('Location') . ': ' . $p['routers'] . "\n" .
+                Lang::T('Customer') . ': ' . $c['fullname'] . "\n" .
+                Lang::T('New Expired') . ': ' .
+                Lang::dateAndTimeFormat($expiration, $tur['time'])
+            );
+                _log($admin['fullname'] . ' ' . Lang::T('Extend Customer') . ' ' . $tur['customer_id'] . ' ' . $tur['username'] . ' #' . $tur['customer_id'] . ' ' . Lang::T('for') . ' ' . $days . ' ' . Lang::T('days'), $admin['user_type'], $admin['id']);
             r2(getUrl('plan'), 's', "Extend until $expiration");
         } else {
             r2(getUrl('plan'), 's', "Customer is not expired yet");
