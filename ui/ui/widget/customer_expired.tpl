@@ -22,90 +22,96 @@
             </thead>
 
             <tbody>
-                {foreach $expire as $expired}
+                {if $expire|@count > 0}
+                    {foreach $expire as $expired}
 
-                    {assign var="exp_time" value=strtotime($expired.expiration|cat:" "|cat:$expired.time)}
-                    {assign var="start_time" value=strtotime($expired.recharged_on|cat:" "|cat:$expired.recharged_time)}
-                    {assign var="now_time" value=time()}
+                        {assign var="exp_time" value=strtotime($expired.expiration|cat:" "|cat:$expired.time)}
+                        {assign var="start_time" value=strtotime($expired.recharged_on|cat:" "|cat:$expired.recharged_time)}
+                        {assign var="now_time" value=time()}
 
-                    {assign var="duration" value=$exp_time-$start_time}
-                    {assign var="elapsed" value=$now_time-$start_time}
+                        {assign var="duration" value=$exp_time-$start_time}
+                        {assign var="elapsed" value=$now_time-$start_time}
 
-                    {if $duration <= 0}
-                        {assign var="progress" value=100}
-                    {else}
-                        {assign var="progress" value=round(($elapsed/$duration)*100)}
-                        {if $progress < 0}{assign var="progress" value=0}{/if}
-                        {if $progress > 100}{assign var="progress" value=100}{/if}
-                    {/if}
+                        {if $duration <= 0}
+                            {assign var="progress" value=100}
+                        {else}
+                            {assign var="progress" value=round(($elapsed/$duration)*100)}
+                            {if $progress < 0}{assign var="progress" value=0}{/if}
+                            {if $progress > 100}{assign var="progress" value=100}{/if}
+                        {/if}
 
-                    {if $exp_time < $now_time}
-                        {assign var="row_class" value="table-danger"}
-                    {elseif $progress >= 80}
-                        {assign var="row_class" value="table-warning"}
-                    {elseif $progress >= 50}
-                        {assign var="row_class" value="table-info"}
-                    {else}
-                        {assign var="row_class" value=""}
-                    {/if}
+                        {if $exp_time < $now_time}
+                            {assign var="row_class" value="table-danger"}
+                        {elseif $progress >= 80}
+                            {assign var="row_class" value="table-warning"}
+                        {elseif $progress >= 50}
+                            {assign var="row_class" value="table-info"}
+                        {else}
+                            {assign var="row_class" value=""}
+                        {/if}
 
-                    <tr class="{$row_class}">
+                        <tr class="{$row_class}">
+                            <td>
+                                <a href="{Text::url('customers/view/',$expired.id)}">
+                                    {if $cookie.expdef == 'fullname'}
+                                        {$expired.fullname}
+                                    {elseif $cookie.expdef == 'phone'}
+                                        {$expired.phonenumber}
+                                    {elseif $cookie.expdef == 'email'}
+                                        {$expired.email}
+                                    {else}
+                                        {$expired.username}
+                                    {/if}
+                                </a>
+                            </td>
 
-                        <td>
-                            <a href="{Text::url('customers/view/',$expired.id)}">
-                                {if $cookie.expdef == 'fullname'}
-                                    {$expired.fullname}
-                                {elseif $cookie.expdef == 'phone'}
-                                    {$expired.phonenumber}
-                                {elseif $cookie.expdef == 'email'}
-                                    {$expired.email}
+                            <td>
+                                <small class="live-start"
+                                       data-start="{$start_time}"
+                                       title="{Lang::dateAndTimeFormat($expired.recharged_on,$expired.recharged_time)}">
+                                       {Lang::timeElapsed($expired.recharged_on|cat:" "|cat:$expired.recharged_time)}
+                                </small>
+                                /
+                                <span class="live-exp"
+                                      data-exp="{$exp_time}"
+                                      title="{Lang::dateAndTimeFormat($expired.expiration,$expired.time)}">
+                                      {Lang::timeElapsed($expired.expiration|cat:" "|cat:$expired.time)}
+                                </span>
+                            </td>
+
+                            <td>{$expired.namebp}</td>
+                            <td>{$expired.routers}</td>
+
+                            <td class="status-cell" data-exp="{$exp_time}">
+                                {if $exp_time < $now_time}
+                                    ❌ {Lang::T('Expired')}
+                                {elseif $progress >= 80}
+                                    ⚠️ {Lang::T('Expiring Soon')}
                                 {else}
-                                    {$expired.username}
+                                    ✅ {Lang::T('Active')}
                                 {/if}
-                            </a>
-                        </td>
+                            </td>
 
-                        <td>
-                            <small class="live-start"
-                                   data-start="{$start_time}"
-                                   title="{Lang::dateAndTimeFormat($expired.recharged_on,$expired.recharged_time)}">
-                                   {Lang::timeElapsed($expired.recharged_on|cat:" "|cat:$expired.recharged_time)}
-                            </small>
-                            /
-                            <span class="live-exp"
-                                  data-exp="{$exp_time}"
-                                  title="{Lang::dateAndTimeFormat($expired.expiration,$expired.time)}">
-                                  {Lang::timeElapsed($expired.expiration|cat:" "|cat:$expired.time)}
-                            </span>
-                        </td>
-
-                        <td>{$expired.namebp}</td>
-                        <td>{$expired.routers}</td>
-
-                        <td class="status-cell" data-exp="{$exp_time}">
-                            {if $exp_time < $now_time}
-                                ❌ {Lang::T('Expired')}
-                            {elseif $progress >= 80}
-                                ⚠️ {Lang::T('Expiring Soon')}
-                            {else}
-                                ✅ {Lang::T('Active')}
-                            {/if}
-                        </td>
-
-                        <td>
-                            <div class="progress" style="height:18px;">
-                                <div class="progress-bar live-progress"
-                                     data-start="{$start_time}"
-                                     data-exp="{$exp_time}"
-                                     style="width: {$progress}%">
-                                     {$progress}%
+                            <td>
+                                <div class="progress" style="height:18px;">
+                                    <div class="progress-bar live-progress"
+                                         data-start="{$start_time}"
+                                         data-exp="{$exp_time}"
+                                         style="width: {$progress}%">
+                                         {$progress}%
+                                    </div>
                                 </div>
-                            </div>
+                            </td>
+                        </tr>
+
+                    {/foreach}
+                {else}
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            {Lang::T('No expired accounts today')}
                         </td>
-
                     </tr>
-
-                {/foreach}
+                {/if}
             </tbody>
         </table>
     </div>
