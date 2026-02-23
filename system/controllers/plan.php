@@ -247,7 +247,7 @@ switch ($action) {
                 Package::createInvoice($in);
                 App::setVoucher($svoucher, $cust['username']);
                 $ui->display('admin/plan/invoice.tpl');
-                _log('[' . $admin['username'] . ']: ' . Lang::T('Recharge ') . $cust['username'] . ' [' . $in['plan_name'] . '][' . Lang::moneyFormat($in['price']) . ']', $admin['user_type'], $admin['id']);
+                _log('[' . $admin['username'] . ']: ' . Lang::T('Recharge' ) . $cust['username'] . ' [' . $in['plan_name'] . '][' . Lang::moneyFormat($in['price']) . ']', $admin['user_type'], $admin['id']);
             } else {
                 r2(getUrl('plan/recharge'), 'e', "Failed to recharge account");
             }
