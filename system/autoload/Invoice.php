@@ -56,8 +56,10 @@ class Invoice
             return $filename;
 
         } catch (\Exception $e) {
-            _log("Invoice generation failed: " . $e->getMessage());
-            sendTelegram("Invoice generation failed: " . $e->getMessage());
+            _log(Lang::T('Invoice generation failed') . ': ' . $e->getMessage());
+            //_log("Invoice generation failed: " . $e->getMessage());
+            sendTelegram(Lang::T('Invoice generation failed') . ': ' . $e->getMessage());
+            //sendTelegram("Invoice generation failed: " . $e->getMessage());
             return false;
         }
     }
@@ -67,7 +69,8 @@ class Invoice
         return preg_replace_callback('/\[\[(\w+)\]\]/', function ($matches) use ($invoiceData) {
             $key = $matches[1];
             if (!isset($invoiceData[$key])) {
-                _log("Missing invoice key: $key");
+                _log(Lang::T('Missing invoice key') . ': ' . $key);
+                //_log("Missing invoice key: $key");
                 return '';
             }
 
@@ -99,16 +102,20 @@ class Invoice
         $account = ORM::for_table('tbl_customers')->find_one($userId);
 
         if (!$account) {
-            _log("Failed to send invoice: User not found");
-            sendTelegram("Failed to send invoice: User not found");
+            _log(Lang::T('Failed to send invoice: User not found'));
+            //_log("Failed to send invoice: User not found");
+            sendTelegram(Lang::T('Failed to send invoice: User not found'));
+            //sendTelegram("Failed to send invoice: User not found");
             return false;
         }
 
         $invoice = ORM::for_table("tbl_transactions")->where("username", $account->username)->find_one();
 
         if (!$invoice) {
-            _log("Failed to send invoice: Transaction not found");
-            sendTelegram("Failed to send invoice: Transaction not found");
+            _log(Lang::T('Failed to send invoice: Transaction not found'));
+            //_log("Failed to send invoice: Transaction not found");
+            sendTelegram(Lang::T('Failed to send invoice: Transaction not found'));
+            //sendTelegram("Failed to send invoice: Transaction not found");
             return false;
         }
 
@@ -133,7 +140,8 @@ class Invoice
                     ];
                     $subtotal += (float) $amount;
                 } else {
-                    _log("Invalid bill amount for {$description}: {$amount}");
+                    _log(Lang::T('Invalid bill amount for') . ' ' . $description . ': ' . $amount);
+                    //_log("Invalid bill amount for {$description}: {$amount}");
                 }
             }
         }
@@ -183,7 +191,8 @@ class Invoice
         ];
 
         if (!isset($invoiceData['bill_rows']) || empty($invoiceData['bill_rows'])) {
-            _log("Invoice Error: Bill rows data is empty.");
+            //_log("Invoice Error: Bill rows data is empty.");
+            _log(Lang::T('Invoice Error: Bill rows data is empty.'));
         }
 
         $filename = self::generateInvoice($invoiceData);
@@ -200,8 +209,10 @@ class Invoice
                 );
                 return true;
             } catch (\Exception $e) {
-                _log("Failed to send invoice email: " . $e->getMessage());
-                sendTelegram("Failed to send invoice email: " . $e->getMessage());
+                _log(Lang::T('Failed to send invoice email') . ': ' . $e->getMessage());
+                //_log("Failed to send invoice email: " . $e->getMessage());
+                sendTelegram(Lang::T('Failed to send invoice email') . ': ' . $e->getMessage());
+                //sendTelegram("Failed to send invoice email: " . $e->getMessage());
                 return false;
             }
         }

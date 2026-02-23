@@ -61,7 +61,8 @@ switch ($action) {
                 $user->save();
                 User::removeCookie();
                 session_destroy();
-                _log('[' . $user['username'] . ']: Password changed successfully', 'User', $user['id']);
+                _log('[' . $user['username'] . ']: ' . Lang::T('Password changed successfully'), Lang::T('User'), $user['id']);
+                //_log('[' . $user['username'] . ']: Password changed successfully', 'User', $user['id']);
                 _alert(Lang::T('Password changed successfully, Please login again'), 'success', "login");
             } else {
                 r2(getUrl('accounts/change-password'), 'e', Lang::T('Incorrect Current Password'));
