@@ -9,7 +9,6 @@
                     {foreach $bcv_history as $day name=loop}
 
                         <div class="col-md-4 mb-3">
-
                             <div style="
                                 border:1px solid #e6e6e6;
                                 border-radius:8px;
@@ -22,61 +21,39 @@
                             ">
 
                                 <div>
-                                    <!-- Fecha -->
-                                    <div style="
-                                        font-weight:bold;
-                                        font-size:13px;
-                                        color:#777;
-                                        margin-bottom:8px;
-                                    ">
+                                    <div style="font-weight:bold;font-size:13px;color:#777;margin-bottom:8px;">
                                         {$day.rate_date|date_format:"%d/%m/%Y"}
                                     </div>
-
-                                    <!-- Valor USD -->
                                     <div style="margin-bottom:6px;">
-                                        <span style="
-                                            font-size:18px;
-                                            {if $day.change == 'up'}
-                                                color:#007bff;
-                                                font-weight:bold;
-                                            {elseif $day.change == 'down'}
-                                                color:#d9534f;
-                                                font-weight:bold;
-                                            {else}
-                                                color:#555;
-                                            {/if}
-                                        ">
+                                        <span style="font-size:18px;
+                                            {if $day.change=='up'}color:#007bff;font-weight:bold;
+                                            {elseif $day.change=='down'}color:#d9534f;font-weight:bold;
+                                            {else}color:#555;{/if}">
                                             {$day.rate} Bs/USD
                                         </span>
                                     </div>
-
-                                    <!-- Indicador de cambio -->
                                     <div>
-                                        {if $day.change == 'up'}
+                                        {if $day.change=='up'}
                                             <span class="label label-primary">⬆ Subió</span>
-                                        {elseif $day.change == 'down'}
+                                        {elseif $day.change=='down'}
                                             <span class="label label-danger">⬇ Bajó</span>
-                                        {elseif $day.change == 'same'}
+                                        {else}
                                             <span class="label label-default">— Sin cambio</span>
                                         {/if}
                                     </div>
                                 </div>
 
-                                <!-- Logo del Banco Central de Venezuela -->
                                 <div style="margin-left:12px; text-align:center;">
                                     <img src="system/uploads/banco-central-de-venezuela-logo-png_seeklogo-622560.png"
-                                         alt="Logo Banco Central de Venezuela"
+                                         alt="Logo BCV"
                                          style="max-width:60px; height:auto;">
                                 </div>
 
                             </div>
-
                         </div>
 
                         {if ($smarty.foreach.loop.iteration % 3) == 0}
-                            <div class="col-md-12">
-                                <hr style="margin:18px 0; border-top:1px solid #eee;">
-                            </div>
+                            <div class="col-md-12"><hr style="margin:18px 0; border-top:1px solid #eee;"></div>
                         {/if}
 
                     {/foreach}
