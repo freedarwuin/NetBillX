@@ -1,6 +1,43 @@
 <div class="panel panel-info panel-hovered mb20 activities">
     <div class="panel-heading">
         💱 Tasa BCV del día: {$bcv_rate} Bs/USD
+
+        {if $dolarvzla_api_expiration}
+            <div style="
+                margin-top:8px;
+                font-size:12px;
+                padding:6px 10px;
+                border-radius:6px;
+                display:inline-block;
+                {if $dolarvzla_api_expired}
+                    background:#f8d7da;
+                    color:#721c24;
+                {elseif $dolarvzla_api_expiring_soon}
+                    background:#fff3cd;
+                    color:#856404;
+                {else}
+                    background:#e9f7ef;
+                    color:#155724;
+                {/if}
+            ">
+                🔑 Expira: <strong>{$dolarvzla_api_expiration}</strong>
+
+                {if $dolarvzla_api_expired}
+                    — VENCIDA
+                {elseif $dolarvzla_api_expiring_soon}
+                    — Por vencer
+                {else}
+                    — Activa
+                {/if}
+
+                <a href="https://www.dolarvzla.com/settings/api"
+                   target="_blank"
+                   style="margin-left:8px; text-decoration:underline;">
+                    Actualizar
+                </a>
+            </div>
+        {/if}
+
     </div>
 
     <div class="panel-body">
@@ -137,7 +174,7 @@
 
 
 {* ==========================
-   SCRIPT GRÁFICO PREMIUM
+   SCRIPT GRÁFICO
 ========================== *}
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -147,6 +184,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const ctx = document.getElementById('bcvChart').getContext('2d');
     const dataValues = {$chart_values nofilter};
+
+    if (!dataValues || dataValues.length === 0) return;
+
     const firstValue = dataValues[0];
     const lastValue = dataValues[dataValues.length - 1];
 

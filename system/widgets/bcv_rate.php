@@ -58,11 +58,47 @@ class bcv_rate
             }
         }
 
+        // ==========================
+        // Estado de expiración API DolarVzla
+        // ==========================
+
+        $dolarvzla_api_expiration = null;
+        $dolarvzla_api_expired = false;
+        $dolarvzla_api_expiring_soon = false;
+
+        $configExp = ORM::for_table('tbl_appconfig')
+            ->where('setting', 'dolarvzla_api_expiration')
+            ->find_one();
+
+        if ($configExp && !empty($configExp->value)) {
+
+            $expirationTime = strtotime($configExp->value);
+
+            if ($expirationTime !== false) {
+
+                // Formatear para mostrar
+                $dolarvzla_api_expiration = date('d/m/Y H:i', $expirationTime);
+
+                // Ya vencida
+                $dolarvzla_api_expired = $expirationTime < time();
+
+                // Vence en los próximos 3 días
+                $dolarvzla_api_expiring_soon =
+                    $expirationTime > time() &&
+                    $expirationTime <= strtotime('+3 days');
+            }
+        }
+
         $ui->assign([
             'bcv_rate'     => $bcv_rate,
             'bcv_history'  => $bcv_history,
             'chart_labels' => json_encode($chart_labels),
-            'chart_values' => json_encode($chart_values)
+            'chart_values' => json_encode($chart_values),
+
+            // Nuevas variables
+            'dolarvzla_api_expiration'    => $dolarvzla_api_expiration,
+            'dolarvzla_api_expired'       => $dolarvzla_api_expired,
+            'dolarvzla_api_expiring_soon' => $dolarvzla_api_expiring_soon
         ]);
 
         return $ui->fetch('widget/bcv_rate.tpl');
