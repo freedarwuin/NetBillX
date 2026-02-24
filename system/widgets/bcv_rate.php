@@ -19,14 +19,7 @@ class bcv_rate
         $ui->assign('bcv_rate', $bcvData['bcv_rate'] ?? null);
         $ui->assign('bcv_history', $bcvData['bcv_history'] ?? []);
 
-        // Mostrar plantilla
+        // Plantilla simple de depuración
         $ui->display('ui/widget/bcv_rate.tpl');
     }
-}
-
-// Permite ejecución directa para depuración (opcional)
-if (php_sapi_name() !== 'cli' && isset($_GET['debug'])) {
-    global $ui;
-    $widget = new bcv_rate();
-    $widget->run_command('debug');
 }
