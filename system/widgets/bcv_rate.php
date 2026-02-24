@@ -36,6 +36,6 @@ class bcv_rate_widget
         ]);
 
         // Retornar el tpl del widget
-        return $ui->fetch('widget/bcv_rate.tpl');
+        return $ui->fetch('ui/widget/bcv_rate.tpl');
     }
 }
