@@ -6,26 +6,19 @@ class bcv_rate_widget
     {
         global $ui;
 
-        // Ruta correcta al JSON
+        // Ruta al JSON generado por cron_bcv.php
         $tmpFile = __DIR__ . '/../bcv_data.json';
 
         $bcv_rate = null;
         $bcv_history = [];
 
-        if (!file_exists($tmpFile)) {
-            echo "JSON no encontrado en $tmpFile\n";
-        } else {
+        if (file_exists($tmpFile)) {
             $json = file_get_contents($tmpFile);
-            if (!$json) {
-                echo "JSON vacío en $tmpFile\n";
-            } else {
-                $data = json_decode($json, true);
-                if (!$data) {
-                    echo "Error al decodificar JSON: " . json_last_error_msg() . "\n";
-                } else {
-                    $bcv_rate = $data['bcv_rate'] ?? null;
-                    $bcv_history = $data['bcv_history'] ?? [];
-                }
+            $data = json_decode($json, true);
+
+            if ($data) {
+                $bcv_rate = $data['bcv_rate'] ?? null;
+                $bcv_history = $data['bcv_history'] ?? [];
             }
         }
 
@@ -35,7 +28,7 @@ class bcv_rate_widget
             'bcv_history' => $bcv_history
         ]);
 
-        // Retornar el tpl del widget
-        return $ui->fetch('ui/widget/bcv_rate.tpl');
+        // Retornar el tpl del widget usando la misma lógica que activity_log
+        return $ui->fetch('widget/bcv_rate.tpl');
     }
 }
