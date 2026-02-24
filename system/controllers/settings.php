@@ -53,6 +53,20 @@ switch ($action) {
         $ui->display('admin/settings/devices.tpl');
         break;
     case 'app':
+    // Generar DolarVzla API Key si no existe
+    if (empty($config['dolarvzla_api_key'])) {
+        $config['dolarvzla_api_key'] = sha1(uniqid(rand(), true));
+        $d = ORM::for_table('tbl_appconfig')->where('setting', 'dolarvzla_api_key')->find_one();
+        if ($d) {
+            $d->value = $config['dolarvzla_api_key'];
+            $d->save();
+        } else {
+            $d = ORM::for_table('tbl_appconfig')->create();
+            $d->setting = 'dolarvzla_api_key';
+            $d->value = $config['dolarvzla_api_key'];
+            $d->save();
+        }
+    }
         if (!in_array($admin['user_type'], ['SuperAdmin', 'Admin'])) {
             _alert(Lang::T('You do not have permission to access this page'), 'danger', "dashboard");
         }
