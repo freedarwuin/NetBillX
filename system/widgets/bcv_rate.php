@@ -8,17 +8,26 @@ class bcv_rate
 {
     public function run_command($param = null)
     {
-        global $ui; // usa la instancia de Smarty ya cargada
+        global $ui; // instancia de Smarty usada por el proyecto
 
-        // Ruta del JSON generado por cron
+        // Ruta correcta al JSON
         $bcvFile = __DIR__ . '/../bcv_data.json';
-        $bcvData = file_exists($bcvFile) ? json_decode(file_get_contents($bcvFile), true) : [];
 
-        // Asignar variables a Smarty
+        if (!file_exists($bcvFile)) {
+            die("Error: JSON no existe en $bcvFile");
+        }
+
+        // Leer y decodificar JSON
+        $bcvData = json_decode(file_get_contents($bcvFile), true);
+        if (!$bcvData) {
+            die("Error: JSON vacío o mal formado");
+        }
+
+        // Asignar a Smarty
         $ui->assign('bcv_rate', $bcvData['bcv_rate'] ?? null);
         $ui->assign('bcv_history', $bcvData['bcv_history'] ?? []);
 
-        // Mostrar plantilla
+        // Mostrar la plantilla
         $ui->display('ui/widget/bcv_rate.tpl');
     }
 }
