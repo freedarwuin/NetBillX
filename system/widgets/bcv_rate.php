@@ -6,18 +6,26 @@ class bcv_rate_widget
     {
         global $ui;
 
-        $tmpFile = __DIR__ . '/../../system/bcv_data.json';
+        // Ruta correcta al JSON
+        $tmpFile = __DIR__ . '/../bcv_data.json';
 
         $bcv_rate = null;
         $bcv_history = [];
 
-        if (file_exists($tmpFile)) {
+        if (!file_exists($tmpFile)) {
+            echo "JSON no encontrado en $tmpFile\n";
+        } else {
             $json = file_get_contents($tmpFile);
-            $data = json_decode($json, true);
-
-            if ($data) {
-                $bcv_rate = $data['bcv_rate'] ?? null;
-                $bcv_history = $data['bcv_history'] ?? [];
+            if (!$json) {
+                echo "JSON vacío en $tmpFile\n";
+            } else {
+                $data = json_decode($json, true);
+                if (!$data) {
+                    echo "Error al decodificar JSON: " . json_last_error_msg() . "\n";
+                } else {
+                    $bcv_rate = $data['bcv_rate'] ?? null;
+                    $bcv_history = $data['bcv_history'] ?? [];
+                }
             }
         }
 
