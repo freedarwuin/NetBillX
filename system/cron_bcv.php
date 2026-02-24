@@ -1,12 +1,14 @@
 <?php
+// ===================================
+// CONFIGURACIÓN
+// ===================================
+$apiKey = "TU_NUEVA_API_KEY_AQUI"; // Reemplaza con tu clave real
+$debug  = true; // Cambiar a false en producción
 
-$apiKey = "TU_NUEVA_API_KEY_AQUI";
-
-/**
- * Llamada segura a API DolarVzla
- */
-function callAPI($url, $apiKey)
-{
+// ===================================
+// FUNCIÓN DE LLAMADA A LA API
+// ===================================
+function callAPI($url, $apiKey) {
     $ch = curl_init();
 
     curl_setopt_array($ch, [
@@ -16,13 +18,17 @@ function callAPI($url, $apiKey)
         CURLOPT_HTTPHEADER => [
             "Accept: application/json",
             "x-dolarvzla-key: $apiKey"
-        ]
+        ],
+        // Solo para depuración si hay problemas SSL, no usar en producción
+        // CURLOPT_SSL_VERIFYPEER => false,
     ]);
 
     $response = curl_exec($ch);
 
     if ($response === false) {
+        $err = curl_error($ch);
         curl_close($ch);
+        if ($GLOBALS['debug']) echo "CURL Error: $err\n";
         return null;
     }
 
@@ -30,42 +36,55 @@ function callAPI($url, $apiKey)
     curl_close($ch);
 
     if ($httpCode !== 200) {
+        if ($GLOBALS['debug']) echo "HTTP Code: $httpCode\nResponse: $response\n";
         return null;
     }
 
-    return json_decode($response, true);
+    $data = json_decode($response, true);
+
+    if ($data === null) {
+        if ($GLOBALS['debug']) echo "Error decodificando JSON: $response\n";
+    }
+
+    return $data;
 }
 
-# ===================================
-# 1️⃣ TASA ACTUAL
-# ===================================
-
+// ===================================
+// 1️⃣ TASA ACTUAL
+// ===================================
 $bcv_rate = null;
 
-$current = callAPI(
-    "https://api.dolarvzla.com/public/bcv/exchange-rate",
-    $apiKey
-);
+$current = callAPI("https://api.dolarvzla.com/public/bcv/exchange-rate", $apiKey);
 
-if (isset($current['current']['usd'])) {
-    $bcv_rate = $current['current']['usd'];
+if ($debug) {
+    echo "<pre>Respuesta tasa actual:\n";
+    var_dump($current);
+    echo "</pre>";
 }
 
-# ===================================
-# 2️⃣ HISTÓRICO (9 días incluyendo hoy)
-# ===================================
+if (isset($current['current']['usd'])) {
+    $bcv_rate = (float) $current['current']['usd'];
+} else {
+    if ($debug) echo "No se encontró la tasa actual USD en la respuesta.\n";
+}
 
+// ===================================
+// 2️⃣ HISTÓRICO (9 días incluyendo hoy)
+// ===================================
 $bcv_history = [];
 
 $today = date('Y-m-d');
 $from  = date('Y-m-d', strtotime('-8 days'));
 
-$list = callAPI(
-    "https://api.dolarvzla.com/public/bcv/exchange-rate/list?from=$from&to=$today",
-    $apiKey
-);
+$list = callAPI("https://api.dolarvzla.com/public/bcv/exchange-rate/list?from=$from&to=$today", $apiKey);
 
-if (isset($list['rates']) && is_array($list['rates'])) {
+if ($debug) {
+    echo "<pre>Respuesta histórico:\n";
+    var_dump($list);
+    echo "</pre>";
+}
+
+if (isset($list['rates']) && is_array($list['rates']) && count($list['rates']) > 0) {
 
     // Ordenar por fecha descendente
     usort($list['rates'], function ($a, $b) {
@@ -76,15 +95,12 @@ if (isset($list['rates']) && is_array($list['rates'])) {
 
     foreach ($list['rates'] as $row) {
 
-        if (!isset($row['usd'], $row['date'])) {
-            continue;
-        }
+        if (!isset($row['usd'], $row['date'])) continue;
 
         $rate = (float) $row['usd'];
         $date = $row['date'];
 
         $change = 'same';
-
         if ($previousRate !== null) {
             if ($rate > $previousRate) {
                 $change = 'up';
@@ -101,11 +117,25 @@ if (isset($list['rates']) && is_array($list['rates'])) {
 
         $previousRate = $rate;
     }
+
+} else {
+    if ($debug) echo "No se encontraron datos históricos de tasas.\n";
 }
 
-# ===================================
-# 3️⃣ Enviar a Smarty
-# ===================================
+// ===================================
+// 3️⃣ ASIGNAR A SMARTY
+// ===================================
+if (isset($smarty)) {
+    $smarty->assign('bcv_rate', $bcv_rate);
+    $smarty->assign('bcv_history', $bcv_history);
+}
 
-$smarty->assign('bcv_rate', $bcv_rate);
-$smarty->assign('bcv_history', $bcv_history);
+// ===================================
+// 4️⃣ OPCIONAL: DEPURACIÓN FINAL
+// ===================================
+if ($debug) {
+    echo "<pre>Tasa actual final: $bcv_rate\n";
+    echo "Histórico:\n";
+    var_dump($bcv_history);
+    echo "</pre>";
+}
