@@ -1,6 +1,6 @@
 <?php
 
-class bcv_rate_widget
+class bcv_rate
 {
     public function getWidget()
     {
