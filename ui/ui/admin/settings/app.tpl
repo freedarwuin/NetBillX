@@ -1039,7 +1039,7 @@
             <h4 class="panel-title">
                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
                     href="#collapseDolarVzlaAPIKey" aria-expanded="false" aria-controls="collapseDolarVzlaAPIKey">
-                    DolarVzla API Key
+                    {Lang::T('DolarVzla API Key')}
                 </a>
             </h4>
         </div>
@@ -1055,6 +1055,7 @@
                     </div>
                     <p class="col-md-4 help-block">
                         {Lang::T('This key will be used to fetch BCV rates from DolarVzla API.')}
+                            <a href="https://www.dolarvzla.com/settings/api" target="_blank">Update your API key here</a>
                     </p>
                 </div>
                 <button class="btn btn-success btn-block" type="submit">
