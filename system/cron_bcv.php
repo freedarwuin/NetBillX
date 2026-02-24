@@ -6,7 +6,7 @@
 
 require '../config.php'; // Configuración de Smarty
 
-$apiKey = "TU_API_KEY_REAL";
+$apiKey = "e87ea1d5447c431f93e6088c963b9f6f01a416edbe5a810dfc8e8d7149bafd0d";
 
 /**
  * Obtener datos BCV
