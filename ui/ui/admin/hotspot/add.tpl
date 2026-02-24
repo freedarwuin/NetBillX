@@ -21,7 +21,7 @@
                         <label class="col-md-2 control-label">{Lang::T('Type')}
                             <a tabindex="0" class="btn btn-link btn-xs" role="button" data-toggle="popover"
                                 data-trigger="focus" data-container="body"
-                                data-content="{Lang::T("Postpaid will have fix expired date")}">?</a>
+                                data-content="{Lang::T("Postpaid will have fix expired date")}"><i class="fa fa-circle-info text-info"></i></a>
                         </label>
                         <div class="col-md-10">
                             <input type="radio" name="prepaid" onclick="prePaid()" value="yes" checked>
@@ -34,7 +34,7 @@
                         <label class="col-md-2 control-label">{Lang::T('Package Type')}
                             <a tabindex="0" class="btn btn-link btn-xs" role="button" data-toggle="popover"
                                 data-trigger="focus" data-container="body"
-                                data-content="{Lang::T("Personal Plan will only show to personal Customer, Business package will only show to Business Customer")}">?</a>
+                                data-content="{Lang::T("Personal Plan will only show to personal Customer, Business package will only show to Business Customer")}"><i class="fa fa-circle-info text-info"></i></a>
                         </label>
                         <div class="col-md-10">
                             <input type="radio" name="plan_type" value="Personal" checked> {Lang::T('Personal')}
@@ -46,7 +46,7 @@
                             <label class="col-md-2 control-label">Radius
                                 <a tabindex="0" class="btn btn-link btn-xs" role="button" data-toggle="popover"
                                     data-trigger="focus" data-container="body"
-                                    data-content="{Lang::T("If you enable Radius, choose device to radius, except if you have custom device.")}">?</a>
+                                    data-content="{Lang::T("If you enable Radius, choose device to radius, except if you have custom device.")}"><i class="fa fa-circle-info text-info"></i></a>
                             </label>
                             <div class="col-md-6">
                                 <label class="radio-inline">
@@ -61,7 +61,7 @@
                         <label class="col-md-2 control-label">{Lang::T('Device')}
                             <a tabindex="0" class="btn btn-link btn-xs" role="button" data-toggle="popover"
                                 data-trigger="focus" data-container="body"
-                                data-content="{Lang::T("This Device are the logic how NetBillX Communicate with Mikrotik or other Devices")}">?</a>
+                                data-content="{Lang::T("This Device are the logic how NetBillX Communicate with Mikrotik or other Devices")}"><i class="fa fa-circle-info text-info"></i></a>
                         </label>
                         <div class="col-md-6">
                             <select class="form-control" id="device" name="device">
@@ -160,7 +160,7 @@
                         <label class="col-md-2 control-label">{Lang::T('Shared Users')}
                             <a tabindex="0" class="btn btn-link btn-xs" role="button" data-toggle="popover"
                                 data-trigger="focus" data-container="body"
-                                data-content="{Lang::T("How many devices can online in one Customer account")}">?</a>
+                                data-content="{Lang::T("How many devices can online in one Customer account")}"><i class="fa fa-circle-info text-info"></i></a>
                         </label>
                         <div class="col-md-6">
                             <input type="text" class="form-control" id="sharedusers" name="sharedusers" value="1">
@@ -182,7 +182,7 @@
                         <label class="col-md-2 control-label">{Lang::T('Expired Date')}
                             <a tabindex="0" class="btn btn-link btn-xs" role="button" data-toggle="popover"
                                 data-trigger="focus" data-container="body"
-                                data-content="{Lang::T("Expired will be this date every month")}">?</a>
+                                data-content="{Lang::T("Expired will be this date every month")}"><i class="fa fa-circle-info text-info"></i></a>
                         </label>
                         <div class="col-md-6">
                             <input type="number" class="form-control" name="expired_date" maxlength="2" value="20"
