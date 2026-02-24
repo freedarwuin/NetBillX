@@ -87,7 +87,7 @@ try {
     // 5️⃣ Histórico últimos 9 días
     // ===============================
     $today = date('Y-m-d');
-    $from  = date('Y-m-d', strtotime('-8 days'));
+    $from  = date('Y-m-d', strtotime('-20 days'));
 
     $list = callAPI(
         "https://api.dolarvzla.com/public/bcv/exchange-rate/list?from=$from&to=$today",
