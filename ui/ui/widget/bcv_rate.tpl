@@ -4,6 +4,15 @@
 
         {if $bcv_rate}
 
+            {* =======================
+               GRÁFICO DE TENDENCIA
+            ======================== *}
+            {if $chart_labels|@count > 0}
+                <div class="mb20">
+                    <canvas id="bcvChart" height="90"></canvas>
+                </div>
+            {/if}
+
             {if $bcv_history|@count > 0}
                 <div class="row">
                     {foreach $bcv_history as $day name=loop}
@@ -35,11 +44,9 @@
                                         <span style="
                                             font-size:18px;
                                             {if $day.change == 'up'}
-                                                color:#007bff;
-                                                font-weight:bold;
+                                                color:#007bff; font-weight:bold;
                                             {elseif $day.change == 'down'}
-                                                color:#d9534f;
-                                                font-weight:bold;
+                                                color:#d9534f; font-weight:bold;
                                             {elseif $day.change == 'same'}
                                                 color:#6c757d;
                                             {/if}
@@ -61,7 +68,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Logo del Banco Central de Venezuela -->
                                 <div style="margin-left:12px; text-align:center;">
                                     <img src="system/uploads/banco-central-de-venezuela-logo-png_seeklogo-622560.png"
                                          alt="Logo Banco Central de Venezuela"
@@ -87,3 +93,55 @@
 
     </div>
 </div>
+
+
+{* =======================
+   SCRIPT DEL GRÁFICO
+======================= *}
+{if $chart_labels|@count > 0}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    const ctx = document.getElementById('bcvChart').getContext('2d');
+
+    const dataValues = {$chart_values nofilter};
+    const firstValue = dataValues[0];
+    const lastValue = dataValues[dataValues.length - 1];
+
+    // Color dinámico según tendencia general
+    const trendColor = lastValue >= firstValue ? '#007bff' : '#d9534f';
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {$chart_labels nofilter},
+            datasets: [{
+                label: 'Tasa BCV (Bs/USD)',
+                data: dataValues,
+                borderColor: trendColor,
+                backgroundColor: trendColor + '20',
+                borderWidth: 2,
+                tension: 0.3,
+                fill: true,
+                pointRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+
+});
+</script>
+{/if}

@@ -6,43 +6,47 @@ class bcv_rate
     {
         global $ui;
 
-        // Ruta al JSON generado por cron_bcv.php
         $tmpFile = __DIR__ . '/../bcv_data.json';
 
         $bcv_rate = null;
         $bcv_history = [];
-
-        // DEBUG: quitar al final
-        // echo "DEBUG BCV\n";
+        $chart_labels = [];
+        $chart_values = [];
 
         if (file_exists($tmpFile)) {
+
             $json = file_get_contents($tmpFile);
             $data = json_decode($json, true);
 
             if ($data) {
+
                 $bcv_rate = $data['bcv_rate'] ?? null;
                 $bcv_history = $data['bcv_history'] ?? [];
 
-                // Tomar solo los últimos 9 registros (más recientes)
+                // Tomar solo los últimos 9 registros
                 $bcv_history = array_slice($bcv_history, 0, 9);
 
-                // DEBUG: quitar al final
-                /*
-                echo "bcv_rate: ";
-                var_dump($bcv_rate);
-                echo "\nbcv_history:\n";
-                var_dump($bcv_history);
-                */
+                // ==========================
+                // Preparar datos para gráfico
+                // ==========================
+
+                // Invertimos para mostrar del más antiguo al más reciente
+                $history_for_chart = array_reverse($bcv_history);
+
+                foreach ($history_for_chart as $day) {
+                    $chart_labels[] = date('d/m', strtotime($day['rate_date']));
+                    $chart_values[] = (float)$day['rate'];
+                }
             }
         }
 
-        // Asignar variables al UI/Smarty
         $ui->assign([
-            'bcv_rate'    => $bcv_rate,
-            'bcv_history' => $bcv_history
+            'bcv_rate'     => $bcv_rate,
+            'bcv_history'  => $bcv_history,
+            'chart_labels' => json_encode($chart_labels),
+            'chart_values' => json_encode($chart_values)
         ]);
 
-        // Retornar el tpl del widget
         return $ui->fetch('widget/bcv_rate.tpl');
     }
 }
