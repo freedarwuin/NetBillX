@@ -1,35 +1,32 @@
 <?php
-// system/widgets/bcv_rate_debug.php
-$bcvFile = __DIR__ . '/../bcv_data.json';
-$bcvData = file_exists($bcvFile) ? json_decode(file_get_contents($bcvFile), true) : [];
-$bcv_rate    = $bcvData['bcv_rate'] ?? null;
-$bcv_history = $bcvData['bcv_history'] ?? [];
+class bcv_rate
+{
+    public function run_command($param = null)
+    {
+        global $ui;
 
-?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>BCV Depuración</title>
-</head>
-<body>
-<h2>💱 Tasa BCV (DEPURACIÓN)</h2>
+        // Ruta al JSON
+        $bcvFile = __DIR__ . '/../bcv_data.json';
 
-<?php if ($bcv_rate !== null): ?>
-    <p><strong>bcv_rate:</strong> <?php echo $bcv_rate; ?></p>
-<?php else: ?>
-    <p style="color:red;">bcv_rate NO está definido</p>
-<?php endif; ?>
+        // Leer JSON
+        if (file_exists($bcvFile)) {
+            $bcvData = json_decode(file_get_contents($bcvFile), true);
+        } else {
+            $bcvData = [];
+        }
 
-<?php if (!empty($bcv_history)): ?>
-    <p><strong>bcv_history (<?php echo count($bcv_history); ?> registros):</strong></p>
-    <ul>
-    <?php foreach ($bcv_history as $day): ?>
-        <li>Fecha: <?php echo $day['rate_date']; ?> — Tasa: <?php echo $day['rate']; ?> — Cambio: <?php echo $day['change']; ?></li>
-    <?php endforeach; ?>
-    </ul>
-<?php else: ?>
-    <p style="color:red;">bcv_history NO tiene registros</p>
-<?php endif; ?>
-</body>
-</html>
+        // Asignar variables a Smarty
+        $ui->assign('bcv_rate', $bcvData['bcv_rate'] ?? null);
+        $ui->assign('bcv_history', $bcvData['bcv_history'] ?? []);
+
+        // Mostrar plantilla
+        $ui->display('ui/widget/bcv_rate.tpl');
+    }
+}
+
+// Permite ejecución directa para depuración (opcional)
+if (php_sapi_name() !== 'cli' && isset($_GET['debug'])) {
+    global $ui;
+    $widget = new bcv_rate();
+    $widget->run_command('debug');
+}
