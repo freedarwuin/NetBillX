@@ -19,6 +19,7 @@ class bcv_rate
         $ui->assign('bcv_history', $bcvData['bcv_history'] ?? []);
 
         // Mostrar plantilla
-        $ui->display('ui/widget/bcv_rate.tpl');
+        //$ui->display('ui/widget/bcv_rate.tpl');
+        $ui->display('ui/widget/bcv_rate_debug.tpl');
     }
 }
