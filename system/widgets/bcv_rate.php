@@ -5,7 +5,7 @@ class bcv_rate
     {
         global $ui;
 
-        // Ruta al JSON
+        // Ruta al JSON generado por cron_bcv.php
         $bcvFile = __DIR__ . '/../bcv_data.json';
 
         // Leer JSON
@@ -15,11 +15,11 @@ class bcv_rate
             $bcvData = [];
         }
 
-        // Asignar variables a Smarty
+        // Asignar variables a Smarty para el tpl
         $ui->assign('bcv_rate', $bcvData['bcv_rate'] ?? null);
         $ui->assign('bcv_history', $bcvData['bcv_history'] ?? []);
 
-        // Plantilla simple de depuración
+        // Mostrar plantilla del widget
         $ui->display('ui/widget/bcv_rate.tpl');
     }
 }

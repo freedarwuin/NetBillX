@@ -1,6 +1,6 @@
 <div class="panel panel-info panel-hovered mb20 activities">
     <div class="panel-heading">
-        💱 Tasa BCV - Depuración
+        💱 Tasa BCV
     </div>
     <div class="panel-body">
 
