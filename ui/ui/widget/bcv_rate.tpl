@@ -22,6 +22,7 @@
                             ">
 
                                 <div>
+                                    <!-- Fecha -->
                                     <div style="
                                         font-weight:bold;
                                         font-size:13px;
@@ -31,6 +32,7 @@
                                         {$day.rate_date|date_format:"%d/%m/%Y"}
                                     </div>
 
+                                    <!-- Valor USD -->
                                     <div style="margin-bottom:6px;">
                                         <span style="
                                             font-size:18px;
@@ -40,21 +42,22 @@
                                             {elseif $day.change == 'down'}
                                                 color:#d9534f;
                                                 font-weight:bold;
+                                            {else}
+                                                color:#555;
                                             {/if}
                                         ">
                                             {$day.rate} Bs/USD
                                         </span>
                                     </div>
 
+                                    <!-- Indicador de cambio -->
                                     <div>
                                         {if $day.change == 'up'}
                                             <span class="label label-primary">⬆ Subió</span>
                                         {elseif $day.change == 'down'}
                                             <span class="label label-danger">⬇ Bajó</span>
                                         {elseif $day.change == 'same'}
-                                            <span class="label label-default">Fecha Valor: Lunes</span>
-                                        {else}
-                                            <span class="label label-default">—</span>
+                                            <span class="label label-default">— Sin cambio</span>
                                         {/if}
                                     </div>
                                 </div>
@@ -77,6 +80,10 @@
                         {/if}
 
                     {/foreach}
+                </div>
+            {else}
+                <div class="text-center text-muted small">
+                    No hay datos históricos disponibles.
                 </div>
             {/if}
 
