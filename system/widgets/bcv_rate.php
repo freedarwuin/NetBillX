@@ -6,29 +6,51 @@ class bcv_rate_widget
     {
         global $ui;
 
-        // Ruta al JSON generado por cron_bcv.php
-        $tmpFile = __DIR__ . '/../bcv_data.json';
+        // ===== Ruta absoluta al JSON =====
+        $tmpFile = realpath(__DIR__ . '/../../system/bcv_data.json');
 
         $bcv_rate = null;
         $bcv_history = [];
 
-        if (file_exists($tmpFile)) {
-            $json = file_get_contents($tmpFile);
-            $data = json_decode($json, true);
+        echo "<pre>DEBUG BCV\n";
 
-            if ($data) {
-                $bcv_rate = $data['bcv_rate'] ?? null;
-                $bcv_history = $data['bcv_history'] ?? [];
+        if ($tmpFile === false) {
+            echo "❌ No se pudo resolver la ruta del JSON.\n";
+        } else {
+            echo "📂 Leyendo archivo JSON en: $tmpFile\n";
+
+            if (!file_exists($tmpFile)) {
+                echo "❌ Archivo no encontrado.\n";
+            } else {
+                $json = file_get_contents($tmpFile);
+                if ($json === false) {
+                    echo "❌ Error al leer el archivo JSON.\n";
+                } else {
+                    $data = json_decode($json, true);
+                    if ($data === null) {
+                        echo "❌ JSON inválido o vacío.\n";
+                    } else {
+                        $bcv_rate = $data['bcv_rate'] ?? null;
+                        $bcv_history = $data['bcv_history'] ?? [];
+
+                        echo "✅ Datos leídos correctamente:\n";
+                        echo "bcv_rate: $bcv_rate\n";
+                        echo "bcv_history:\n";
+                        print_r($bcv_history);
+                    }
+                }
             }
         }
 
-        // Asignar variables al UI/Smarty
+        echo "</pre>\n";
+
+        // ===== Asignar variables al UI/Smarty =====
         $ui->assign([
             'bcv_rate'    => $bcv_rate,
             'bcv_history' => $bcv_history
         ]);
 
-        // Retornar el tpl del widget usando la misma lógica que activity_log
+        // ===== Retornar el tpl del widget =====
         return $ui->fetch('widget/bcv_rate.tpl');
     }
 }
