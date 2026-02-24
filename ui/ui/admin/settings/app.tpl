@@ -1034,36 +1034,33 @@
         </div>
     </div>
 
-    <div class="panel">
-        <div class="panel-heading" role="tab" id="DolarVzlaAPIKey">
-            <h4 class="panel-title">
-                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion"
-                    href="#collapseDolarVzlaAPIKey" aria-expanded="false" aria-controls="collapseDolarVzlaAPIKey">
-                    {Lang::T('DolarVzla API Key')}
-                </a>
-            </h4>
-        </div>
-        <div id="collapseDolarVzlaAPIKey" class="panel-collapse collapse" role="tabpanel">
-            <div class="panel-body">
-                <div class="form-group">
-                    <label class="col-md-3 control-label">{Lang::T('Access Token')}</label>
-                    <div class="col-md-5">
-                        <input type="password" class="form-control" id="dolarvzla_api_key" name="dolarvzla_api_key"
-                            value="{$_c['dolarvzla_api_key']}"
-                            placeholder="{Lang::T('Enter your DolarVzla API Key')}"
-                            onmouseleave="this.type='password'" onmouseenter="this.type='text'">
-                    </div>
-                    <p class="col-md-4 help-block">
-                        {Lang::T('This key will be used to fetch BCV rates from DolarVzla API.')}
-                            <a href="https://www.dolarvzla.com/settings/api" target="_blank">{Lang::T('Update your API key here')}</a>
-                    </p>
+    {if $_c['dolarvzla_api_expiration']}
+
+        {assign var="expiration_ts" value=strtotime($_c['dolarvzla_api_expiration'])}
+        {assign var="now_ts" value=time()}
+        {assign var="days_left" value=($expiration_ts - $now_ts)/86400}
+
+        <div class="col-md-12" style="margin-bottom:15px;">
+            {if $expiration_ts <= $now_ts}
+                <div class="alert alert-danger">
+                    🔴 {Lang::T('API Key Expired')}
                 </div>
-                <button class="btn btn-success btn-block" type="submit">
-                    {Lang::T('Save Changes')}
-                </button>
-            </div>
+            {elseif $days_left <= 3}
+                <div class="alert alert-danger">
+                    ⚠ {Lang::T('API expires in')} {$days_left|intval} {Lang::T('days')}
+                </div>
+            {elseif $days_left <= 7}
+                <div class="alert alert-warning">
+                    ⚠ {Lang::T('API expires soon')} ({$days_left|intval} {Lang::T('days')})
+                </div>
+            {else}
+                <div class="alert alert-success">
+                    🟢 {Lang::T('API Active')} ({$days_left|intval} {Lang::T('days left')})
+                </div>
+            {/if}
         </div>
-    </div>
+
+    {/if}
 
     <div class="panel">
         <div class="panel-heading" role="tab" id="Proxy">
