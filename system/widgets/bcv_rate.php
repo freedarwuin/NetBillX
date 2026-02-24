@@ -13,6 +13,24 @@ class bcv_rate
         $chart_labels = [];
         $chart_values = [];
 
+        // ==========================
+        // Calcular variación porcentual
+        // ==========================
+        $variation_percent = 0;
+
+        if (count($chart_values) > 1) {
+            $first = $chart_values[0];
+            $last  = $chart_values[count($chart_values) - 1];
+
+            if ($first > 0) {
+                $variation_percent = (($last - $first) / $first) * 100;
+            }
+        }
+
+        $ui->assign([
+            'variation_percent' => round($variation_percent, 2)
+        ]);
+
         if (file_exists($tmpFile)) {
 
             $json = file_get_contents($tmpFile);

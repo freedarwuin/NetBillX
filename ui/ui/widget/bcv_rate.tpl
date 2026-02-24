@@ -1,17 +1,65 @@
 <div class="panel panel-info panel-hovered mb20 activities">
-    <div class="panel-heading">💱 Tasa BCV del día: {$bcv_rate} Bs/USD</div>
+    <div class="panel-heading">
+        💱 Tasa BCV del día: {$bcv_rate} Bs/USD
+    </div>
+
     <div class="panel-body">
 
         {if $bcv_rate}
 
-            {* =======================
-               GRÁFICO DE TENDENCIA
-            ======================== *}
-            {if $chart_labels|@count > 0}
-                <div class="mb20">
-                    <canvas id="bcvChart" height="90"></canvas>
+            {* ==========================
+               RESUMEN FINANCIERO
+            =========================== *}
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                margin-bottom:20px;
+                padding:15px;
+                border-radius:10px;
+                background:#f8f9fa;
+            ">
+
+                <div>
+                    <div style="font-size:13px; color:#777;">
+                        Variación últimos 9 días
+                    </div>
+
+                    <div style="
+                        font-size:26px;
+                        font-weight:bold;
+                        {if $variation_percent >= 0}
+                            color:#28a745;
+                        {else}
+                            color:#d9534f;
+                        {/if}
+                    ">
+                        {if $variation_percent >= 0}+{/if}{$variation_percent}%
+                    </div>
                 </div>
-            {/if}
+
+                <div style="font-size:40px;">
+                    {if $variation_percent >= 0}
+                        📈
+                    {else}
+                        📉
+                    {/if}
+                </div>
+
+            </div>
+
+            {* ==========================
+               GRÁFICO
+            =========================== *}
+
+            <div class="mb20">
+                <canvas id="bcvChart" height="90"></canvas>
+            </div>
+
+            {* ==========================
+               HISTORIAL EN TARJETAS
+            =========================== *}
 
             {if $bcv_history|@count > 0}
                 <div class="row">
@@ -35,9 +83,6 @@
                                         margin-bottom:8px;
                                     ">
                                         {$day.rate_date|date_format:"%d/%m/%Y"}
-                                        {if $day.rate_date == $smarty.now|date_format:"%Y-%m-%d"}
-                                            <span style="color:#28a745; font-weight:bold;">(Hoy)</span>
-                                        {/if}
                                     </div>
 
                                     <div style="margin-bottom:6px;">
@@ -47,8 +92,6 @@
                                                 color:#007bff; font-weight:bold;
                                             {elseif $day.change == 'down'}
                                                 color:#d9534f; font-weight:bold;
-                                            {elseif $day.change == 'same'}
-                                                color:#6c757d;
                                             {/if}
                                         ">
                                             {$day.rate} Bs/USD
@@ -60,18 +103,15 @@
                                             <span class="label label-primary">⬆ Subió</span>
                                         {elseif $day.change == 'down'}
                                             <span class="label label-danger">⬇ Bajó</span>
-                                        {elseif $day.change == 'same'}
-                                            <span class="label label-default">— Sin cambio</span>
                                         {else}
                                             <span class="label label-default">—</span>
                                         {/if}
                                     </div>
                                 </div>
 
-                                <div style="margin-left:12px; text-align:center;">
+                                <div style="margin-left:12px;">
                                     <img src="system/uploads/banco-central-de-venezuela-logo-png_seeklogo-622560.png"
-                                         alt="Logo Banco Central de Venezuela"
-                                         style="max-width:60px; height:auto;">
+                                         style="max-width:50px;">
                                 </div>
                             </div>
                         </div>
@@ -81,6 +121,7 @@
                                 <hr style="margin:18px 0; border-top:1px solid #eee;">
                             </div>
                         {/if}
+
                     {/foreach}
                 </div>
             {/if}
@@ -95,22 +136,21 @@
 </div>
 
 
-{* =======================
-   SCRIPT DEL GRÁFICO
-======================= *}
-{if $chart_labels|@count > 0}
+{* ==========================
+   SCRIPT GRÁFICO PREMIUM
+========================== *}
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
     const ctx = document.getElementById('bcvChart').getContext('2d');
-
     const dataValues = {$chart_values nofilter};
     const firstValue = dataValues[0];
     const lastValue = dataValues[dataValues.length - 1];
 
-    // Color dinámico según tendencia general
-    const trendColor = lastValue >= firstValue ? '#007bff' : '#d9534f';
+    const trendColor = lastValue >= firstValue ? '#28a745' : '#d9534f';
 
     new Chart(ctx, {
         type: 'line',
@@ -121,17 +161,18 @@ document.addEventListener("DOMContentLoaded", function() {
                 data: dataValues,
                 borderColor: trendColor,
                 backgroundColor: trendColor + '20',
-                borderWidth: 2,
-                tension: 0.3,
+                borderWidth: 3,
+                tension: 0.35,
                 fill: true,
-                pointRadius: 4
+                pointRadius: 4,
+                pointBackgroundColor: trendColor
             }]
         },
         options: {
             responsive: true,
             plugins: {
                 legend: {
-                    display: true
+                    display: false
                 }
             },
             scales: {
@@ -144,4 +185,3 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 </script>
-{/if}
