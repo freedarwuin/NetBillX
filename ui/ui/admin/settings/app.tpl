@@ -1055,7 +1055,7 @@
                     </div>
                     <p class="col-md-4 help-block">
                         {Lang::T('This key will be used to fetch BCV rates from DolarVzla API.')}
-                            <a href="https://www.dolarvzla.com/settings/api" target="_blank">Update your API key here</a>
+                            <a href="https://www.dolarvzla.com/settings/api" target="_blank">{Lang::T('Update your API key here')}</a>
                     </p>
                 </div>
                 <button class="btn btn-success btn-block" type="submit">
