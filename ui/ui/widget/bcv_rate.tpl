@@ -69,36 +69,32 @@
                 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
                 <script>
                     const ctx = document.getElementById('bcvChart').getContext('2d');
-                    const labels = [{foreach $bcv_history as $day}"{$day.rate_date|date_format:"%d/%m"}",{foreachelse}{/foreach}];
-                    const data = [{foreach $bcv_history as $day}{$day.rate},{foreachelse}{/foreach}];
+                    const labels = {$bcv_history|@json_encode|replace:'"',''|replace:'\\',''};
+                    const rates = {$bcv_history|@json_encode|replace:'"',''|replace:'\\',''};
+
+                    const chartLabels = [ {foreach $bcv_history as $d}"{$d.rate_date|date_format:"%d/%m"}",{foreachelse}{/foreach} ].reverse();
+                    const chartData = [ {foreach $bcv_history as $d}{$d.rate},{foreachelse}{/foreach} ].reverse();
+                    const pointColors = [ {foreach $bcv_history as $d}
+                        {if $d.change=='up'}'#007bff'{elseif $d.change=='down'}'#d9534f'{else}'#555'{/if},
+                    {foreachelse}{/foreach} ].reverse();
 
                     new Chart(ctx, {
                         type: 'line',
                         data: {
-                            labels: labels.reverse(),
+                            labels: chartLabels,
                             datasets: [{
                                 label: 'Bs/USD',
-                                data: data.reverse(),
+                                data: chartData,
                                 fill: false,
                                 borderColor: '#007bff',
                                 tension: 0.2,
-                                pointBackgroundColor: data.map((val, idx) => {
-                                    const change = "{foreach $bcv_history as $d}{$d.change},{/foreach}".split(",").reverse()[idx];
-                                    if(change==='up') return '#007bff';
-                                    if(change==='down') return '#d9534f';
-                                    return '#555';
-                                }),
+                                pointBackgroundColor: pointColors,
                                 pointRadius: 5
                             }]
                         },
                         options: {
-                            plugins: {
-                                legend: { display: false }
-                            },
-                            scales: {
-                                x: { display: true },
-                                y: { display: true }
-                            }
+                            plugins: { legend: { display: false } },
+                            scales: { x: { display: true }, y: { display: true } }
                         }
                     });
                 </script>
