@@ -285,7 +285,7 @@
             if (window.location.protocol == "https:" && navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(showPosition);
             } else {
-                setupMap(51.505, -0.09);
+                setupMap(10.179,-66.74);
             }
         }
 
