@@ -6,8 +6,8 @@ class bcv_rate
     {
         global $ui;
 
+        // Ruta al JSON generado por cron_bcv.php
         $tmpFile = __DIR__ . '/../bcv_data.json';
-        echo "DEBUG BCV\n📂 Leyendo archivo JSON en: $tmpFile\n";
 
         $bcv_rate = null;
         $bcv_history = [];
@@ -21,10 +21,6 @@ class bcv_rate
                 $bcv_history = $data['bcv_history'] ?? [];
             }
         }
-
-        echo "✅ Datos leídos correctamente:\n";
-        var_dump($bcv_rate);
-        var_dump($bcv_history);
 
         // Asignar variables al UI/Smarty
         $ui->assign([
