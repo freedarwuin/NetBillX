@@ -2,7 +2,7 @@
 // ===================================
 // CONFIGURACIÓN
 // ===================================
-$apiKey = "TU_NUEVA_API_KEY_AQUI"; // Reemplaza con tu clave real
+$apiKey = "e87ea1d5447c431f93e6088c963b9f6f01a416edbe5a810dfc8e8d7149bafd0d"; // Reemplaza con tu clave real
 $debug  = true; // Cambiar a false en producción
 
 // ===================================
