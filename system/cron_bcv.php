@@ -24,24 +24,18 @@ function callAPI($url, $apiKey) {
         ],
     ]);
     $response = curl_exec($ch);
-    if ($response === false) {
-        return null;
-    }
+    if ($response === false) return null;
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     if ($httpCode !== 200) return null;
     return json_decode($response, true);
 }
 
-// ===============================
 // 1️⃣ Tasa actual
-// ===============================
 $current = callAPI("https://api.dolarvzla.com/public/bcv/exchange-rate", $apiKey);
 $bcv_rate = isset($current['current']['usd']) ? (float)$current['current']['usd'] : null;
 
-// ===============================
-// 2️⃣ Histórico 9 días
-// ===============================
+// 2️⃣ Histórico últimos 9 días
 $today = date('Y-m-d');
 $from  = date('Y-m-d', strtotime('-8 days'));
 $list = callAPI("https://api.dolarvzla.com/public/bcv/exchange-rate/list?from=$from&to=$today", $apiKey);
@@ -64,10 +58,8 @@ if (isset($list['rates']) && is_array($list['rates'])) {
     }
 }
 
-// ===============================
 // 3️⃣ Guardar en JSON temporal
-// ===============================
 file_put_contents($tmpFile, json_encode([
     'bcv_rate' => $bcv_rate,
     'bcv_history' => $bcv_history
-]));
+], JSON_PRETTY_PRINT));

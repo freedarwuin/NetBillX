@@ -25,7 +25,6 @@
                                 align-items:center;
                                 justify-content: space-between;
                             ">
-
                                 <div>
                                     <div style="font-weight:bold;font-size:13px;color:#777;margin-bottom:8px;">
                                         {$day.rate_date|date_format:"%d/%m/%Y"}
@@ -54,14 +53,12 @@
                                          alt="Logo BCV"
                                          style="max-width:60px; height:auto;">
                                 </div>
-
                             </div>
                         </div>
 
                         {if ($smarty.foreach.loop.iteration % 3) == 0}
                             <div class="col-md-12"><hr style="margin:18px 0; border-top:1px solid #eee;"></div>
                         {/if}
-
                     {/foreach}
                 </div>
 
