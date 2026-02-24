@@ -1046,19 +1046,19 @@
         <div id="collapseDolarVzlaAPIKey" class="panel-collapse collapse" role="tabpanel">
             <div class="panel-body">
                 <div class="form-group">
-                    <label class="col-md-3 control-label">Access Token</label>
+                    <label class="col-md-3 control-label">{Lang::T('Access Token')}</label>
                     <div class="col-md-5">
                         <input type="password" class="form-control" id="dolarvzla_api_key" name="dolarvzla_api_key"
                             value="{$_c['dolarvzla_api_key']}"
-                            placeholder="Enter your DolarVzla API Key"
+                            placeholder="{Lang::T('Enter your DolarVzla API Key')}"
                             onmouseleave="this.type='password'" onmouseenter="this.type='text'">
                     </div>
                     <p class="col-md-4 help-block">
-                        This key will be used to fetch BCV rates from DolarVzla API.
+                        {Lang::T('This key will be used to fetch BCV rates from DolarVzla API.')}
                     </p>
                 </div>
                 <button class="btn btn-success btn-block" type="submit">
-                    Save Changes
+                    {Lang::T('Save Changes')}
                 </button>
             </div>
         </div>
