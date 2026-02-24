@@ -1,21 +1,8 @@
 <?php
-include "../config.php";
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+$apiKey = "e87ea1d5447c431f93e6088c963b9f6f01a416edbe5a810dfc8e8d7149bafd0d";
 
-try {
-
-    $dbh = new PDO(
-        "mysql:host=$db_host;dbname=$db_name;charset=utf8mb4",
-        $db_user,
-        $db_pass,
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-    );
-
-    $apiKey = "e87ea1d5447c431f93e6088c963b9f6f01a416edbe5a810dfc8e8d7149bafd0d";
-    $url = "https://api.dolarvzla.com/public/bcv/exchange-rate";
-
+function callAPI($url, $apiKey) {
     $ch = curl_init();
     curl_setopt_array($ch, [
         CURLOPT_URL => $url,
@@ -28,37 +15,69 @@ try {
     ]);
 
     $response = curl_exec($ch);
-
-    if ($response === false) {
-        throw new Exception("Error cURL: " . curl_error($ch));
-    }
-
     curl_close($ch);
 
-    $data = json_decode($response, true);
-
-    if (!isset($data['current']['usd'], $data['current']['date'])) {
-        throw new Exception("Estructura inesperada en la API");
-    }
-
-    $rate = $data['current']['usd'];
-    $rateDate = $data['current']['date'];
-
-    echo "Tasa BCV detectada: $rate <br>";
-    echo "Fecha: $rateDate <br>";
-
-    $stmt = $dbh->prepare("
-        INSERT INTO bcv_rate (rate, rate_date, created_at)
-        VALUES (?, ?, NOW())
-        ON DUPLICATE KEY UPDATE
-            rate = VALUES(rate),
-            updated_at = NOW()
-    ");
-
-    $stmt->execute([$rate, $rateDate]);
-
-    echo "✅ Guardado correctamente.";
-
-} catch (Exception $e) {
-    echo "❌ ERROR: " . $e->getMessage();
+    return $response ? json_decode($response, true) : null;
 }
+
+# ==========================
+# 1️⃣ ACTUAL
+# ==========================
+
+$current = callAPI(
+    "https://api.dolarvzla.com/public/bcv/exchange-rate",
+    $apiKey
+);
+
+$bcv_rate = $current['current']['usd'] ?? null;
+
+# ==========================
+# 2️⃣ HISTÓRICO (últimos 9 días)
+# ==========================
+
+$today = date('Y-m-d');
+$from = date('Y-m-d', strtotime('-8 days'));
+
+$list = callAPI(
+    "https://api.dolarvzla.com/public/bcv/exchange-rate/list?from=$from&to=$today",
+    $apiKey
+);
+
+$bcv_history = [];
+
+if (isset($list['rates']) && is_array($list['rates'])) {
+
+    // Ordenar por fecha descendente
+    usort($list['rates'], function($a, $b) {
+        return strcmp($b['date'], $a['date']);
+    });
+
+    $lastRate = null;
+
+    foreach ($list['rates'] as $row) {
+
+        $rate = $row['usd'];
+        $date = $row['date'];
+
+        $change = 'same';
+
+        if ($lastRate !== null) {
+            if ($rate > $lastRate) {
+                $change = 'up';
+            } elseif ($rate < $lastRate) {
+                $change = 'down';
+            }
+        }
+
+        $bcv_history[] = [
+            'rate' => $rate,
+            'rate_date' => $date,
+            'change' => $change
+        ];
+
+        $lastRate = $rate;
+    }
+}
+
+$smarty->assign('bcv_rate', $bcv_rate);
+$smarty->assign('bcv_history', $bcv_history);
