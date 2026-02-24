@@ -6,18 +6,20 @@ $tmpFile = __DIR__ . '/bcv_data.json';
 try {
 
     // ===============================
-    // 1️⃣ Si ya existe tasa de hoy → salir
+    // 1️⃣ Si ya existe tasa y coincide con la fecha oficial → salir
     // ===============================
     if (file_exists($tmpFile)) {
         $existing = json_decode(file_get_contents($tmpFile), true);
 
-        if (
-            isset($existing['rate_date']) &&
-            $existing['rate_date'] === date('Y-m-d')
-        ) {
-            echo "Ya actualizado hoy\n";
-            exit;
+        if (isset($existing['rate_date'])) {
+            // Si ya tenemos una fecha guardada, no volvemos a consultar
+            // hasta que cambie la fecha oficial publicada por la API
+            $savedDate = $existing['rate_date'];
+        } else {
+            $savedDate = null;
         }
+    } else {
+        $savedDate = null;
     }
 
     // ===============================
@@ -52,7 +54,7 @@ try {
     $apiKey = trim($row['value']);
 
     // ===============================
-    // 4️⃣ Llamar API (UNA SOLA VEZ)
+    // 4️⃣ Llamar API
     // ===============================
     $ch = curl_init();
 
@@ -77,7 +79,7 @@ try {
     curl_close($ch);
 
     // ===============================
-    // 5️⃣ Manejo inteligente errores
+    // 5️⃣ Manejo errores HTTP
     // ===============================
     if ($httpCode === 429) {
         $wait = $retryAfter ?: 3600;
@@ -90,22 +92,30 @@ try {
 
     $data = json_decode($response, true);
 
-    if (!isset($data['current']['usd'])) {
+    if (!isset($data['current']['usd'], $data['current']['date'])) {
         throw new Exception("Respuesta inesperada de la API.");
     }
 
     $rate = (float)$data['current']['usd'];
-    $date = date('Y-m-d');
+    $officialDate = $data['current']['date'];
 
     // ===============================
-    // 6️⃣ Guardar JSON simple
+    // 6️⃣ Si ya tenemos esa misma fecha → salir
+    // ===============================
+    if ($savedDate && $savedDate === $officialDate) {
+        echo "Ya actualizado para fecha oficial {$officialDate}\n";
+        exit;
+    }
+
+    // ===============================
+    // 7️⃣ Guardar JSON con fecha oficial
     // ===============================
     file_put_contents($tmpFile, json_encode([
         'bcv_rate'  => $rate,
-        'rate_date' => $date
+        'rate_date' => $officialDate
     ], JSON_PRETTY_PRINT));
 
-    echo "BCV actualizado correctamente: {$rate}\n";
+    echo "BCV actualizado correctamente: {$rate} (Fecha oficial: {$officialDate})\n";
 
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
