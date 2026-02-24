@@ -82,4 +82,4 @@ $smarty->assign('bcv_rate', $bcvData['bcv_rate']);
 $smarty->assign('bcv_history', $bcvData['bcv_history']);
 
 // Renderizar plantilla directamente (opcional)
-$smarty->display('../ui/ui/widget/bcv_rate.tpl');
+$smarty->display('ui/ui/widget/bcv_rate.tpl');
