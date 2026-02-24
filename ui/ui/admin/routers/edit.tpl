@@ -62,7 +62,7 @@
                         <label class="col-md-2 control-label">{Lang::T('Coordinates')}</label>
                         <div class="col-md-6">
                             <input name="coordinates" id="coordinates" class="form-control" value="{$d['coordinates']}"
-                                placeholder="6.465422, 3.406448">
+                                placeholder="10.17792,-66.74638">
                             <div id="map" style="width: '100%'; height: 200px; min-height: 150px;"></div>
                         </div>
                     </div>
