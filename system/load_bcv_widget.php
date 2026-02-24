@@ -1,31 +1,34 @@
 <?php
-/**
- * system/load_bcv_widget.php
- *
- * Carga el widget BCV usando Smarty leyendo el JSON generado por cron_bcv.php
- */
-
-require '../config.php';             // Configuración de tu Smarty
-require '../libs/Smarty.class.php';  // Ruta a Smarty
+require '../config.php';
+require '../libs/Smarty.class.php';
 
 $smarty = new Smarty();
 
-// Archivo JSON generado por cron_bcv.php
+// Ruta al JSON
 $tmpFile = __DIR__ . '/bcv_data.json';
 
-// Leer datos del JSON
-if (file_exists($tmpFile)) {
-    $data = json_decode(file_get_contents($tmpFile), true);
-    if (!is_array($data)) {
-        $data = ['bcv_rate' => null, 'bcv_history' => []];
-    }
+// Depuración: comprobar existencia y contenido
+echo "<pre>";
+echo "Archivo existe: "; var_dump(file_exists($tmpFile));
+echo "\nContenido crudo:\n"; var_dump(file_get_contents($tmpFile));
+echo "</pre>";
+
+// Leer JSON
+$data = json_decode(file_get_contents($tmpFile), true);
+
+// Depuración: ver variables
+echo "<pre>";
+var_dump($data);
+echo "</pre>";
+
+// Asignar a Smarty solo si JSON es válido
+if (is_array($data)) {
+    $smarty->assign('bcv_rate', $data['bcv_rate']);
+    $smarty->assign('bcv_history', $data['bcv_history']);
 } else {
-    $data = ['bcv_rate' => null, 'bcv_history' => []];
+    $smarty->assign('bcv_rate', null);
+    $smarty->assign('bcv_history', []);
 }
 
-// Asignar variables a Smarty
-$smarty->assign('bcv_rate', $data['bcv_rate']);
-$smarty->assign('bcv_history', $data['bcv_history']);
-
-// Renderizar el widget
+// Renderizar widget
 $smarty->display('../ui/ui/widget/bcv_rate.tpl');
