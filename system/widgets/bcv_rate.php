@@ -12,6 +12,9 @@ class bcv_rate
         $bcv_rate = null;
         $bcv_history = [];
 
+        // DEBUG: quitar al final
+        // echo "DEBUG BCV\n";
+
         if (file_exists($tmpFile)) {
             $json = file_get_contents($tmpFile);
             $data = json_decode($json, true);
@@ -19,6 +22,17 @@ class bcv_rate
             if ($data) {
                 $bcv_rate = $data['bcv_rate'] ?? null;
                 $bcv_history = $data['bcv_history'] ?? [];
+
+                // Tomar solo los últimos 9 registros (más recientes)
+                $bcv_history = array_slice($bcv_history, 0, 9);
+
+                // DEBUG: quitar al final
+                /*
+                echo "bcv_rate: ";
+                var_dump($bcv_rate);
+                echo "\nbcv_history:\n";
+                var_dump($bcv_history);
+                */
             }
         }
 
