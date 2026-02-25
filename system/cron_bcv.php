@@ -142,8 +142,3 @@ try {
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
-
-esta logica me gusta te cuento que quiero tambien agregar la de usdt ya que quiero obtener los datos para graficarlo
-
-https://api.dolarvzla.com/public/usdt/exchange-rate
-https://api.dolarvzla.com/public/usdt/exchange-rate/list
