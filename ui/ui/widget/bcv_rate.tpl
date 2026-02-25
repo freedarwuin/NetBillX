@@ -12,7 +12,6 @@
                         <span style="color:#aaa;">— {$rate_date|date_format:"%d/%m/%Y"}</span>
                     {/if}
                 </div>
-
                 <div style="font-size:34px; font-weight:700; margin-top:6px; color:#2c3e50;">
                     {$bcv_rate|number_format:4:",":"."}
                     <span style="font-size:14px; font-weight:500; color:#777;">Bs/USD</span>
@@ -21,7 +20,6 @@
 
             <div style="text-align:right;">
                 <div style="font-size:13px; color:#777;">Variación últimos 9 días</div>
-
                 <div style="
                     font-size:24px;
                     font-weight:bold;
@@ -77,22 +75,33 @@ document.addEventListener("DOMContentLoaded", function() {
     const ctx = document.getElementById('bcvChart');
     if (!ctx) return;
 
-    // Extraer datos del tpl
-    const labels = {$bcv_history|@json_encode};
-    const chartLabels = [];
+    const history = {$bcv_history|@json_encode};
+    const maxRecords = 20;
+    const slicedHistory = history.slice(0, maxRecords).reverse(); // más recientes primero
+
+    const labels = [];
     const bcvData = [];
     const usdtData = [];
 
-    labels.forEach(item => {
-        chartLabels.push(item.rate_date);
+    let lastUsdt = null;
+
+    slicedHistory.forEach(item => {
+        labels.push(item.rate_date);
         bcvData.push(item.rate);
-        usdtData.push(item.usdt || null); // si no hay USDT dejar null
+
+        // Interpolar USDT: si es null, usar el último valor válido
+        if (item.usdt !== null) {
+            usdtData.push(item.usdt);
+            lastUsdt = item.usdt;
+        } else {
+            usdtData.push(lastUsdt);
+        }
     });
 
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: chartLabels,
+            labels: labels,
             datasets: [
                 {
                     label: 'BCV',
