@@ -162,53 +162,96 @@ try {
     // 7️⃣ Enviar tasa por WhatsApp
     // ===============================
 
-    // Obtener teléfono
-    $stmt = $dbh->prepare("SELECT value FROM tbl_appconfig WHERE setting='phone' LIMIT 1");
+    // Obtener phone, country_code_phone y wa_url
+    $stmt = $dbh->prepare("
+        SELECT setting, value
+        FROM tbl_appconfig
+        WHERE setting IN ('phone','country_code_phone','wa_url')
+    ");
     $stmt->execute();
-    $phone = $stmt->fetchColumn();
+    $configData = $stmt->fetchAll();
+
+    $phone = null;
+    $countryCode = null;
+    $wa_url_template = null;
+
+    foreach ($configData as $row) {
+        if ($row['setting'] === 'phone') {
+            $phone = preg_replace('/\D/', '', $row['value']); // solo números
+        }
+        if ($row['setting'] === 'country_code_phone') {
+            $countryCode = preg_replace('/\D/', '', $row['value']);
+        }
+        if ($row['setting'] === 'wa_url') {
+            $wa_url_template = $row['value'];
+        }
+    }
 
     if (!$phone) {
         throw new Exception("No existe teléfono configurado en tbl_appconfig.");
     }
 
-    // Obtener plantilla wa_url
-    $stmt = $dbh->prepare("SELECT value FROM tbl_appconfig WHERE setting='wa_url' LIMIT 1");
-    $stmt->execute();
-    $wa_url_template = $stmt->fetchColumn();
+    if (!$countryCode) {
+        throw new Exception("No existe country_code_phone configurado.");
+    }
 
     if (!$wa_url_template) {
         throw new Exception("No existe wa_url configurado.");
     }
 
+    // ===============================
+    // Normalizar número
+    // ===============================
+
+    // Si ya comienza con código país
+    if (strpos($phone, $countryCode) === 0) {
+        $normalizedPhone = $phone;
+    } else {
+
+        // Si comienza con 0 → eliminar primer 0
+        if (strpos($phone, '0') === 0) {
+            $phone = substr($phone, 1);
+        }
+
+        $normalizedPhone = $countryCode . $phone;
+    }
+
+    // ===============================
     // Formatear tasas
+    // ===============================
     $bcv_format  = number_format($bcv_rate, 4, ',', '.');
     $usdt_format = $usdt_rate ? number_format($usdt_rate, 4, ',', '.') : 'N/D';
 
+    // ===============================
     // Construir mensaje
+    // ===============================
     $message = "💱 Tasa Oficial BCV\n"
              . "Fecha: $rate_date\n"
              . "BCV: $bcv_format Bs/USD\n"
              . "USDT: $usdt_format Bs/USD\n"
              . "Sistema NetBillX";
 
-    // Codificar mensaje
     $message_encoded = urlencode($message);
 
-    // Reemplazar variables en URL
+    // ===============================
+    // Generar URL final
+    // ===============================
     $wa_url = str_replace(
         ['[number]', '[text]'],
-        [$phone, $message_encoded],
+        [$normalizedPhone, $message_encoded],
         $wa_url_template
     );
 
-    // Enviar petición
+    // ===============================
+    // Enviar mensaje
+    // ===============================
     $response = file_get_contents($wa_url);
 
     if ($response === false) {
         throw new Exception("No se pudo enviar mensaje WhatsApp.");
     }
 
-    echo "WhatsApp enviado correctamente\n";
+    echo "WhatsApp enviado correctamente al $normalizedPhone\n";
 
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
