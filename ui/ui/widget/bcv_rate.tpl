@@ -1,14 +1,15 @@
 <div class="panel panel-info panel-hovered mb20 activities" style="border-radius:14px; overflow:hidden;">
 
+    {* ==========================
+       HEADER
+    =========================== *}
     <div class="panel-heading" style="background:#ffffff; padding:20px; border-bottom:1px solid #eee;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
             <div>
                 <div style="font-size:13px; color:#777;">
                     💱 Tasa Oficial BCV
                     {if $rate_date}
-                        <span style="color:#aaa;">
-                            — {$rate_date|date_format:"%d/%m/%Y"}
-                        </span>
+                        <span style="color:#aaa;">— {$rate_date|date_format:"%d/%m/%Y"}</span>
                     {/if}
                 </div>
 
@@ -32,19 +33,28 @@
         </div>
     </div>
 
+    {* ==========================
+       BODY - GRÁFICO BCV + USDT
+    =========================== *}
     <div class="panel-body" style="background:#f9fafc; padding:25px;">
+
         {if $bcv_rate}
 
-            {assign var="chart_values" value=[]}
+            {* ==========================
+               Preparar arrays para Chart.js
+            =========================== *}
             {assign var="chart_labels" value=[]}
+            {assign var="chart_bcv" value=[]}
+            {assign var="chart_usdt" value=[]}
 
             {foreach $bcv_history as $day}
-                {$chart_values[] = $day.rate}
                 {$chart_labels[] = $day.rate_date|date_format:"%d/%m"}
+                {$chart_bcv[] = $day.rate}
+                {$chart_usdt[] = $day.usdt|default:0}
             {/foreach}
 
             <div style="background:#fff; padding:15px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-                <canvas id="bcvChart" height="90"></canvas>
+                <canvas id="bcvChart" height="120"></canvas>
             </div>
 
         {else}
@@ -58,35 +68,59 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+
     const ctx = document.getElementById('bcvChart');
     if (!ctx) return;
 
-    const dataValues = {$chart_values nofilter};
     const labels = {$chart_labels nofilter};
-    if (!dataValues || dataValues.length === 0) return;
+    const bcvData = {$chart_bcv nofilter};
+    const usdtData = {$chart_usdt nofilter};
 
-    const trendColor = dataValues[dataValues.length-1] >= dataValues[0] ? '#28a745' : '#d9534f';
+    if (!bcvData || bcvData.length === 0) return;
+
+    // colores según tendencia
+    const bcvTrendColor = bcvData[bcvData.length-1] >= bcvData[0] ? '#28a745' : '#d9534f';
+    const usdtTrendColor = usdtData[usdtData.length-1] >= usdtData[0] ? '#007bff' : '#ff6600';
 
     new Chart(ctx, {
         type: 'line',
         data: {
             labels: labels,
-            datasets: [{
-                data: dataValues,
-                borderColor: trendColor,
-                backgroundColor: trendColor + '20',
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true,
-                pointRadius: 3,
-                pointBackgroundColor: trendColor
-            }]
+            datasets: [
+                {
+                    label: 'BCV',
+                    data: bcvData,
+                    borderColor: bcvTrendColor,
+                    backgroundColor: bcvTrendColor + '20',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3,
+                    pointBackgroundColor: bcvTrendColor
+                },
+                {
+                    label: 'USDT',
+                    data: usdtData,
+                    borderColor: usdtTrendColor,
+                    backgroundColor: usdtTrendColor + '20',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3,
+                    pointBackgroundColor: usdtTrendColor
+                }
+            ]
         },
         options: {
             responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: false } }
+            plugins: {
+                legend: { display: true, position: 'top' }
+            },
+            scales: {
+                y: { beginAtZero: false }
+            }
         }
     });
+
 });
 </script>
