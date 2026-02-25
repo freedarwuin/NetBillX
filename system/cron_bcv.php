@@ -158,6 +158,58 @@ try {
 
     echo "BCV + USDT actualizado correctamente\n";
 
+    // ===============================
+    // 7️⃣ Enviar tasa por WhatsApp
+    // ===============================
+
+    // Obtener teléfono
+    $stmt = $dbh->prepare("SELECT value FROM tbl_appconfig WHERE setting='phone' LIMIT 1");
+    $stmt->execute();
+    $phone = $stmt->fetchColumn();
+
+    if (!$phone) {
+        throw new Exception("No existe teléfono configurado en tbl_appconfig.");
+    }
+
+    // Obtener plantilla wa_url
+    $stmt = $dbh->prepare("SELECT value FROM tbl_appconfig WHERE setting='wa_url' LIMIT 1");
+    $stmt->execute();
+    $wa_url_template = $stmt->fetchColumn();
+
+    if (!$wa_url_template) {
+        throw new Exception("No existe wa_url configurado.");
+    }
+
+    // Formatear tasas
+    $bcv_format  = number_format($bcv_rate, 4, ',', '.');
+    $usdt_format = $usdt_rate ? number_format($usdt_rate, 4, ',', '.') : 'N/D';
+
+    // Construir mensaje
+    $message = "💱 Tasa Oficial BCV\n"
+             . "Fecha: $rate_date\n"
+             . "BCV: $bcv_format Bs/USD\n"
+             . "USDT: $usdt_format Bs/USD\n"
+             . "Sistema NetBillX";
+
+    // Codificar mensaje
+    $message_encoded = urlencode($message);
+
+    // Reemplazar variables en URL
+    $wa_url = str_replace(
+        ['[number]', '[text]'],
+        [$phone, $message_encoded],
+        $wa_url_template
+    );
+
+    // Enviar petición
+    $response = file_get_contents($wa_url);
+
+    if ($response === false) {
+        throw new Exception("No se pudo enviar mensaje WhatsApp.");
+    }
+
+    echo "WhatsApp enviado correctamente\n";
+
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
