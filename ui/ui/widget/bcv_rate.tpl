@@ -8,12 +8,12 @@
             <div>
                 <div style="font-size:13px; color:#777;">
                     💱 Tasa Oficial BCV
-                    {if $rate_date}
-                        <span style="color:#aaa;"> — {$rate_date|date_format:"%d/%m/%Y"}</span>
+                    {if $data.bcv.rate_date}
+                        <span style="color:#aaa;"> — {$data.bcv.rate_date|date_format:"%d/%m/%Y"}</span>
                     {/if}
                 </div>
                 <div style="font-size:34px; font-weight:700; margin-top:6px; color:#2c3e50;">
-                    {$bcv_rate|number_format:4:",":"."}
+                    {$data.bcv.rate|number_format:4:",":"."}
                     <span style="font-size:14px; font-weight:500; color:#777;">Bs/USD</span>
                 </div>
             </div>
@@ -56,7 +56,7 @@
     =========================== *}
     <div class="panel-body" style="background:#f9fafc; padding:25px;">
 
-        {if $bcv_rate || $usdt_rate || $eur_rate}
+        {if $data.bcv.rate || $data.usdt.rate || $data.eur.rate}
 
             {* ==========================
                GRÁFICOS
@@ -70,9 +70,9 @@
             {* ==========================
                HISTORIAL BCV
             =========================== *}
-            {if $bcv_history|@count > 0}
+            {if $data.bcv.history|@count > 0}
                 <div class="row">
-                    {foreach $bcv_history as $day}
+                    {foreach $data.bcv.history as $day}
                         <div class="col-md-4 mb-3">
                             <div style="border-radius:10px; padding:15px; background:#ffffff; box-shadow:0 3px 8px rgba(0,0,0,0.05); display:flex; justify-content:space-between; align-items:center;">
                                 <div>
@@ -102,14 +102,12 @@
 
 {literal}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
 document.addEventListener("DOMContentLoaded", function() {
 
     function renderChart(ctxId, labels, values, color, labelText) {
         const ctx = document.getElementById(ctxId);
-        if (!ctx) return;
-        if (!values || values.length === 0) return;
+        if (!ctx || !values || !values.length) return;
 
         new Chart(ctx, {
             type: 'line',
@@ -139,20 +137,18 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-{/literal}{$chart_labels nofilter}{literal}
-const labels = {$chart_labels nofilter};
+    const labels = {$chart_labels nofilter};
+    const bcvValues = {$bcv_chart_values nofilter};
+    const usdtValues = {$usdt_chart_values nofilter};
+    const eurValues = {$eur_chart_values nofilter};
 
-const bcvValues = {$chart_values nofilter};
-const usdtValues = {$usdt_chart_values nofilter};
-const eurValues = {$eur_chart_values nofilter};
+    const bcvTrend = bcvValues[0] <= bcvValues[bcvValues.length-1] ? '#28a745' : '#d9534f';
+    const usdtTrend = usdtValues && usdtValues[0] <= usdtValues[usdtValues.length-1] ? '#007bff' : '#d9534f';
+    const eurTrend  = eurValues  && eurValues[0]  <= eurValues[eurValues.length-1] ? '#ff9900' : '#d9534f';
 
-const bcvTrend = bcvValues[0] <= bcvValues[bcvValues.length-1] ? '#28a745' : '#d9534f';
-const usdtTrend = usdtValues && usdtValues[0] <= usdtValues[usdtValues.length-1] ? '#007bff' : '#d9534f';
-const eurTrend  = eurValues  && eurValues[0]  <= eurValues[eurValues.length-1] ? '#ff9900' : '#d9534f';
-
-renderChart('bcvChart', labels, bcvValues, bcvTrend, 'BCV (Bs/USD)');
-renderChart('usdtChart', labels, usdtValues, usdtTrend, 'USDT (Bs/USDT)');
-renderChart('eurChart', labels, eurValues, eurTrend, 'EUR (Bs/EUR)');
+    renderChart('bcvChart', labels, bcvValues, bcvTrend, 'BCV (Bs/USD)');
+    renderChart('usdtChart', labels, usdtValues, usdtTrend, 'USDT (Bs/USDT)');
+    renderChart('eurChart', labels, eurValues, eurTrend, 'EUR (Bs/EUR)');
 
 });
 </script>
