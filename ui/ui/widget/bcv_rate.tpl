@@ -103,7 +103,7 @@
         {if $bcv_rate}
 
             {* ==========================
-               GRÁFICO BCV
+               GRÁFICO
             =========================== *}
 
             <div style="background:#fff; padding:15px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.04); margin-bottom:25px;">
@@ -111,13 +111,13 @@
             </div>
 
             {* ==========================
-               HISTORIAL COMBINADO BCV + USDT
+               HISTORIAL
             =========================== *}
 
-            {if $history|@count > 0}
+            {if $bcv_history|@count > 0}
 
                 <div class="row">
-                    {foreach $history as $date => $day}
+                    {foreach $bcv_history as $day name=loop}
 
                         <div class="col-md-4 mb-3">
                             <div style="
@@ -132,49 +132,30 @@
 
                                 <div>
                                     <div style="font-size:13px; color:#888; margin-bottom:6px;">
-                                        {$date|date_format:"%d/%m/%Y"}
+                                        {$day.rate_date|date_format:"%d/%m/%Y"}
                                     </div>
 
-                                    {* BCV *}
-                                    {if isset($day.bcv)}
-                                        <div style="
-                                            font-size:16px;
-                                            font-weight:bold;
-                                            {if $day.bcv.change == 'up'}
-                                                color:#007bff;
-                                            {elseif $day.bcv.change == 'down'}
-                                                color:#d9534f;
-                                            {/if}
-                                        ">
-                                            {$day.bcv.rate|number_format:4:",":"."} Bs/USD
-                                        </div>
-                                        <div style="margin-top:4px; font-size:12px; color:#555;">
-                                            {if $day.bcv.change == 'up'}⬆ Subió
-                                            {elseif $day.bcv.change == 'down'}⬇ Bajó
-                                            {else}—{/if}
-                                        </div>
-                                    {/if}
+                                    <div style="
+                                        font-size:18px;
+                                        font-weight:bold;
+                                        {if $day.change == 'up'}
+                                            color:#007bff;
+                                        {elseif $day.change == 'down'}
+                                            color:#d9534f;
+                                        {/if}
+                                    ">
+                                        {$day.rate|number_format:4:",":"."} Bs/USD
+                                    </div>
 
-                                    {* USDT *}
-                                    {if isset($day.usdt)}
-                                        <div style="
-                                            font-size:16px;
-                                            font-weight:bold;
-                                            margin-top:8px;
-                                            {if $day.usdt.change == 'up'}
-                                                color:#28a745;
-                                            {elseif $day.usdt.change == 'down'}
-                                                color:#d9534f;
-                                            {/if}
-                                        ">
-                                            Buy: {$day.usdt.buy|number_format:4:",":"."} | Sell: {$day.usdt.sell|number_format:4:",":"."} Bs
-                                        </div>
-                                        <div style="margin-top:4px; font-size:12px; color:#555;">
-                                            {if $day.usdt.change == 'up'}⬆ Subió
-                                            {elseif $day.usdt.change == 'down'}⬇ Bajó
-                                            {else}—{/if}
-                                        </div>
-                                    {/if}
+                                    <div style="margin-top:6px;">
+                                        {if $day.change == 'up'}
+                                            <span class="label label-primary">⬆ Subió</span>
+                                        {elseif $day.change == 'down'}
+                                            <span class="label label-danger">⬇ Bajó</span>
+                                        {else}
+                                            <span class="label label-default">—</span>
+                                        {/if}
+                                    </div>
                                 </div>
 
                                 <img src="system/uploads/banco-central-de-venezuela-logo-png_seeklogo-622560.png"
@@ -207,7 +188,6 @@ document.addEventListener("DOMContentLoaded", function() {
     if (!ctx) return;
 
     const dataValues = {$chart_values nofilter};
-    const dataUSDT   = {$chart_usdt_values nofilter};
     if (!dataValues || dataValues.length === 0) return;
 
     const firstValue = dataValues[0];
@@ -218,35 +198,21 @@ document.addEventListener("DOMContentLoaded", function() {
         type: 'line',
         data: {
             labels: {$chart_labels nofilter},
-            datasets: [
-                {
-                    label: 'BCV',
-                    data: dataValues,
-                    borderColor: trendColor,
-                    backgroundColor: trendColor + '20',
-                    borderWidth: 3,
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 3,
-                    pointBackgroundColor: trendColor
-                },
-                {
-                    label: 'USDT',
-                    data: dataUSDT,
-                    borderColor: '#007bff',
-                    backgroundColor: '#007bff20',
-                    borderWidth: 3,
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 3,
-                    pointBackgroundColor: '#007bff'
-                }
-            ]
+            datasets: [{
+                data: dataValues,
+                borderColor: trendColor,
+                backgroundColor: trendColor + '20',
+                borderWidth: 3,
+                tension: 0.4,
+                fill: true,
+                pointRadius: 3,
+                pointBackgroundColor: trendColor
+            }]
         },
         options: {
             responsive: true,
             plugins: {
-                legend: { display: true }
+                legend: { display: false }
             },
             scales: {
                 y: {
