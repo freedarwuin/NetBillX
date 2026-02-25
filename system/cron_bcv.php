@@ -225,11 +225,11 @@ try {
     // ===============================
     // Construir mensaje
     // ===============================
-    $message = "💱 Tasa Oficial BCV\n"
-             . "Fecha: $rate_date\n"
-             . "BCV: $bcv_format Bs/USD\n"
-             . "USDT: $usdt_format Bs/USD\n"
-             . "Sistema NetBillX";
+    $message = "💱 *Tasa Oficial BCV*\n\n"
+             . "*Fecha:* $rate_date\n"
+             . "*BCV:* $bcv_format Bs/USD\n"
+             . "*USDT:* $usdt_format Bs/USD\n\n"
+             . "*Sistema* @DolarVZLA";
 
     $message_encoded = urlencode($message);
 
