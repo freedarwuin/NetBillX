@@ -19,7 +19,7 @@ try {
     );
 
     // ===============================
-    // 2️⃣ Obtener API Key desde tbl_appconfig
+    // 2️⃣ Obtener API Key
     // ===============================
     $stmt = $dbh->prepare("
         SELECT value
@@ -40,6 +40,7 @@ try {
     // 3️⃣ Función para llamar API
     // ===============================
     function callAPI($url, $apiKey) {
+
         $ch = curl_init();
 
         curl_setopt_array($ch, [
@@ -69,7 +70,22 @@ try {
     }
 
     // ===============================
-    // 4️⃣ Histórico últimos 20 días
+    // 4️⃣ Tasa actual y fecha
+    // ===============================
+    $current = callAPI(
+        "https://api.dolarvzla.com/public/bcv/exchange-rate",
+        $apiKey
+    );
+
+    $bcv_rate = $current['current']['usd'] ?? null;
+    $rate_date = $current['current']['date'] ?? null; // <--- fecha que querías
+
+    if (!$bcv_rate) {
+        throw new Exception("No se pudo obtener tasa BCV actual.");
+    }
+
+    // ===============================
+    // 5️⃣ Histórico últimos 20 días
     // ===============================
     $today = date('Y-m-d');
     $from  = date('Y-m-d', strtotime('-20 days'));
@@ -84,30 +100,28 @@ try {
 
     if (isset($list['rates']) && is_array($list['rates'])) {
 
-        // ordenar descendente (de más reciente a más antiguo)
-        usort($list['rates'], fn($a,$b) => strcmp($b['date'],$a['date']));
+        usort($list['rates'], fn($a, $b) =>
+            strcmp($b['date'], $a['date'])
+        );
 
         foreach ($list['rates'] as $row) {
 
             if (!isset($row['usd'], $row['date'])) continue;
 
             $rate = (float)$row['usd'];
-            $usdt = isset($row['usdt']) ? (float)$row['usdt'] : null;
-            $eur  = isset($row['eur'])  ? (float)$row['eur']  : null;
             $date = $row['date'];
 
             $change = 'same';
+
             if ($previousRate !== null) {
                 if ($rate > $previousRate) $change = 'up';
                 elseif ($rate < $previousRate) $change = 'down';
             }
 
             $bcv_history[] = [
-                'rate'      => $rate,
-                'usdt'      => $usdt,
-                'eur'       => $eur,
+                'rate' => $rate,
                 'rate_date' => $date,
-                'change'    => $change
+                'change' => $change
             ];
 
             $previousRate = $rate;
@@ -115,26 +129,11 @@ try {
     }
 
     // ===============================
-    // 5️⃣ Tasa actual (la más reciente)
-    // ===============================
-    if (count($bcv_history) > 0) {
-        $latest = $bcv_history[0];
-        $bcv_rate = $latest['rate'];
-        $usdt_rate = $latest['usdt'];
-        $eur_rate  = $latest['eur'];
-        $rate_date = $latest['rate_date'];
-    } else {
-        throw new Exception("No se pudo obtener tasa BCV actual.");
-    }
-
-    // ===============================
     // 6️⃣ Guardar JSON
     // ===============================
     file_put_contents($tmpFile, json_encode([
         'bcv_rate'    => $bcv_rate,
-        'usdt_rate'   => $usdt_rate,
-        'eur_rate'    => $eur_rate,
-        'rate_date'   => $rate_date,
+        'rate_date'   => $rate_date, // <--- agregado
         'bcv_history' => $bcv_history
     ], JSON_PRETTY_PRINT));
 
