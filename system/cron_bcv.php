@@ -4,6 +4,10 @@ include "../config.php";
 $tmpFile = __DIR__ . '/bcv_data.json';
 
 try {
+
+    // ===============================
+    // 1️⃣ Conexión DB
+    // ===============================
     $dbh = new PDO(
         "mysql:host=127.0.0.1;dbname={$db_name};charset=utf8mb4",
         $db_user,
@@ -14,6 +18,9 @@ try {
         ]
     );
 
+    // ===============================
+    // 2️⃣ Obtener API Key
+    // ===============================
     $stmt = $dbh->prepare("
         SELECT value
         FROM tbl_appconfig
@@ -29,8 +36,13 @@ try {
 
     $apiKey = trim($row['value']);
 
+    // ===============================
+    // 3️⃣ Función para llamar API
+    // ===============================
     function callAPI($url, $apiKey) {
+
         $ch = curl_init();
+
         curl_setopt_array($ch, [
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
@@ -42,9 +54,11 @@ try {
         ]);
 
         $response = curl_exec($ch);
+
         if (curl_errno($ch)) {
             throw new Exception("CURL Error: " . curl_error($ch));
         }
+
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
@@ -55,71 +69,81 @@ try {
         return json_decode($response, true);
     }
 
-    // Monedas a procesar
-    $monedas = [
-        'bcv' => [
-            'url_current' => "https://api.dolarvzla.com/public/bcv/exchange-rate",
-            'url_list' => "https://api.dolarvzla.com/public/bcv/exchange-rate/list"
-        ],
-        'usdt' => [
-            'url_current' => "https://api.dolarvzla.com/public/usdt/exchange-rate",
-            'url_list' => "https://api.dolarvzla.com/public/usdt/exchange-rate/list"
-        ],
-        'eur' => [
-            'url_current' => "https://api.dolarvzla.com/public/eur/exchange-rate",
-            'url_list' => "https://api.dolarvzla.com/public/eur/exchange-rate/list"
-        ]
-    ];
+    // ===============================
+    // 4️⃣ Tasa actual y fecha
+    // ===============================
+    $current = callAPI(
+        "https://api.dolarvzla.com/public/bcv/exchange-rate",
+        $apiKey
+    );
 
-    $data = [];
+    $bcv_rate = $current['current']['usd'] ?? null;
+    $rate_date = $current['current']['date'] ?? null; // <--- fecha que querías
 
+    if (!$bcv_rate) {
+        throw new Exception("No se pudo obtener tasa BCV actual.");
+    }
+
+    // ===============================
+    // 5️⃣ Histórico últimos 28 días
+    // ===============================
     $today = date('Y-m-d');
     $from  = date('Y-m-d', strtotime('-28 days'));
 
-    foreach ($monedas as $key => $urls) {
-        $current = callAPI($urls['url_current'], $apiKey);
-        $rate = $current['current']['usd'] ?? null; // Para USDT y EUR, ajustar si la API cambia la clave
-        $rate_date = $current['current']['date'] ?? null;
+    $list = callAPI(
+        "https://api.dolarvzla.com/public/bcv/exchange-rate/list?from=$from&to=$today",
+        $apiKey
+    );
 
-        $history = [];
-        $previousRate = null;
+    $bcv_history = [];
+    $previousRate = null;
 
-        $list = callAPI($urls['url_list'] . "?from=$from&to=$today", $apiKey);
+    if (isset($list['rates']) && is_array($list['rates'])) {
 
-        if (isset($list['rates']) && is_array($list['rates'])) {
-            usort($list['rates'], fn($a, $b) => strcmp($b['date'], $a['date']));
-            foreach ($list['rates'] as $row) {
-                if (!isset($row['usd'], $row['date'])) continue;
+        usort($list['rates'], fn($a, $b) =>
+            strcmp($b['date'], $a['date'])
+        );
 
-                $r = (float)$row['usd'];
-                $d = $row['date'];
+        foreach ($list['rates'] as $row) {
 
-                $change = 'same';
-                if ($previousRate !== null) {
-                    if ($r > $previousRate) $change = 'up';
-                    elseif ($r < $previousRate) $change = 'down';
-                }
+            if (!isset($row['usd'], $row['date'])) continue;
 
-                $history[] = [
-                    'rate' => $r,
-                    'rate_date' => $d,
-                    'change' => $change
-                ];
+            $rate = (float)$row['usd'];
+            $date = $row['date'];
 
-                $previousRate = $r;
+            $change = 'same';
+
+            if ($previousRate !== null) {
+                if ($rate > $previousRate) $change = 'up';
+                elseif ($rate < $previousRate) $change = 'down';
             }
-        }
 
-        $data[$key] = [
-            'rate' => $rate,
-            'rate_date' => $rate_date,
-            'history' => $history
-        ];
+            $bcv_history[] = [
+                'rate' => $rate,
+                'rate_date' => $date,
+                'change' => $change
+            ];
+
+            $previousRate = $rate;
+        }
     }
 
-    file_put_contents($tmpFile, json_encode($data, JSON_PRETTY_PRINT));
-    echo "JSON actualizado correctamente\n";
+    // ===============================
+    // 6️⃣ Guardar JSON
+    // ===============================
+    file_put_contents($tmpFile, json_encode([
+        'bcv_rate'    => $bcv_rate,
+        'rate_date'   => $rate_date, // <--- agregado
+        'bcv_history' => $bcv_history
+    ], JSON_PRETTY_PRINT));
+
+    echo "BCV actualizado correctamente\n";
 
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
+
+esta logica me gusta te cuento que quiero tambien agregar la de usdt ya que quiero obtener los datos para graficarlo
+
+https://api.dolarvzla.com/public/usdt/exchange-rate
+https://api.dolarvzla.com/public/usdt/exchange-rate/list
