@@ -48,17 +48,32 @@
        BODY
     =========================== *}
     <div class="panel-body" style="background:#f9fafc; padding:25px;">
-        {if $bcv.history|@count > 0}
+
+        {if $bcv.latest.usd}
+
+            {* ==========================
+               GRÁFICO BCV
+            =========================== *}
+
+            {assign var="chart_values" value=[]}
+            {assign var="chart_labels" value=[]}
+
+            {foreach $bcv.bcv_history as $day}
+                {$chart_values[] = $day.rate}
+                {$chart_labels[] = $day.rate_date|date_format:"%d/%m"}
+            {/foreach}
+
             <div style="background:#fff; padding:15px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.04);">
                 <canvas id="bcvChart" height="90"></canvas>
             </div>
+
         {else}
             <div class="text-center text-muted small">
                 La tasa BCV aún no está disponible.
             </div>
         {/if}
-    </div>
 
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -69,6 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const dataValues = {$chart_values nofilter};
     const labels = {$chart_labels nofilter};
+
     if (!dataValues || dataValues.length === 0) return;
 
     const trendColor = dataValues[dataValues.length-1] >= dataValues[0] ? '#28a745' : '#d9534f';
