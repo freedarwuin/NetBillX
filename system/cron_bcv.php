@@ -70,19 +70,19 @@ try {
     }
 
     // ===============================
-    // 4️⃣ Tasa actual y fecha
+    // 4️⃣ Tasa actual BCV y USDT
     // ===============================
-    $current = callAPI(
-        "https://api.dolarvzla.com/public/bcv/exchange-rate",
-        $apiKey
-    );
+    $bcvCurrent  = callAPI("https://api.dolarvzla.com/public/bcv/exchange-rate", $apiKey);
+    $usdtCurrent = callAPI("https://api.dolarvzla.com/public/usdt/exchange-rate", $apiKey);
 
-    $bcv_rate = $current['current']['usd'] ?? null;
-    $rate_date = $current['current']['date'] ?? null; // <--- fecha que querías
+    $bcv_rate    = $bcvCurrent['current']['usd'] ?? null;
+    $bcv_date    = $bcvCurrent['current']['date'] ?? null;
 
-    if (!$bcv_rate) {
-        throw new Exception("No se pudo obtener tasa BCV actual.");
-    }
+    $usdt_rate   = $usdtCurrent['current']['usd'] ?? null;
+    $usdt_date   = $usdtCurrent['current']['date'] ?? null;
+
+    if (!$bcv_rate)  throw new Exception("No se pudo obtener tasa BCV actual.");
+    if (!$usdt_rate) throw new Exception("No se pudo obtener tasa USDT actual.");
 
     // ===============================
     // 5️⃣ Histórico últimos 28 días
@@ -90,54 +90,59 @@ try {
     $today = date('Y-m-d');
     $from  = date('Y-m-d', strtotime('-28 days'));
 
-    $list = callAPI(
-        "https://api.dolarvzla.com/public/bcv/exchange-rate/list?from=$from&to=$today",
-        $apiKey
-    );
+    $bcvList  = callAPI("https://api.dolarvzla.com/public/bcv/exchange-rate/list?from=$from&to=$today", $apiKey);
+    $usdtList = callAPI("https://api.dolarvzla.com/public/usdt/exchange-rate/list?from=$from&to=$today", $apiKey);
 
-    $bcv_history = [];
-    $previousRate = null;
+    $bcv_history  = [];
+    $usdt_history = [];
+    $prevBCV  = null;
+    $prevUSDT = null;
 
-    if (isset($list['rates']) && is_array($list['rates'])) {
-
-        usort($list['rates'], fn($a, $b) =>
-            strcmp($b['date'], $a['date'])
-        );
-
-        foreach ($list['rates'] as $row) {
-
+    if (isset($bcvList['rates']) && is_array($bcvList['rates'])) {
+        usort($bcvList['rates'], fn($a, $b) => strcmp($b['date'], $a['date']));
+        foreach ($bcvList['rates'] as $row) {
             if (!isset($row['usd'], $row['date'])) continue;
-
             $rate = (float)$row['usd'];
             $date = $row['date'];
-
             $change = 'same';
-
-            if ($previousRate !== null) {
-                if ($rate > $previousRate) $change = 'up';
-                elseif ($rate < $previousRate) $change = 'down';
+            if ($prevBCV !== null) {
+                if ($rate > $prevBCV) $change = 'up';
+                elseif ($rate < $prevBCV) $change = 'down';
             }
+            $bcv_history[] = ['rate' => $rate, 'rate_date' => $date, 'change' => $change];
+            $prevBCV = $rate;
+        }
+    }
 
-            $bcv_history[] = [
-                'rate' => $rate,
-                'rate_date' => $date,
-                'change' => $change
-            ];
-
-            $previousRate = $rate;
+    if (isset($usdtList['rates']) && is_array($usdtList['rates'])) {
+        usort($usdtList['rates'], fn($a, $b) => strcmp($b['date'], $a['date']));
+        foreach ($usdtList['rates'] as $row) {
+            if (!isset($row['usd'], $row['date'])) continue;
+            $rate = (float)$row['usd'];
+            $date = $row['date'];
+            $change = 'same';
+            if ($prevUSDT !== null) {
+                if ($rate > $prevUSDT) $change = 'up';
+                elseif ($rate < $prevUSDT) $change = 'down';
+            }
+            $usdt_history[] = ['rate' => $rate, 'rate_date' => $date, 'change' => $change];
+            $prevUSDT = $rate;
         }
     }
 
     // ===============================
-    // 6️⃣ Guardar JSON
+    // 6️⃣ Guardar JSON completo
     // ===============================
     file_put_contents($tmpFile, json_encode([
         'bcv_rate'    => $bcv_rate,
-        'rate_date'   => $rate_date, // <--- agregado
-        'bcv_history' => $bcv_history
+        'bcv_date'    => $bcv_date,
+        'bcv_history' => $bcv_history,
+        'usdt_rate'    => $usdt_rate,
+        'usdt_date'    => $usdt_date,
+        'usdt_history' => $usdt_history
     ], JSON_PRETTY_PRINT));
 
-    echo "BCV actualizado correctamente\n";
+    echo "BCV y USDT actualizados correctamente\n";
 
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
