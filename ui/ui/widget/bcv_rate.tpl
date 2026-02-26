@@ -19,7 +19,7 @@
             </div>
 
             <div style="text-align:right;">
-                <div style="font-size:13px; color:#777;">Variación últimos 9 días</div>
+                <div style="font-size:13px; color:#777;">📊 Variacion respecto al dia anterior:</div>
                 <div style="
                     font-size:24px;
                     font-weight:bold;
