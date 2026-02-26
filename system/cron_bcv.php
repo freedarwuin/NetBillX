@@ -78,7 +78,24 @@ try {
     }
 
     // ===============================
-    // 4️⃣ Obtener histórico BCV y USDT últimos 20 días
+    // 4️⃣ Obtener tasa actual (CURRENT)
+    // ===============================
+    $bcvCurrent = callAPI(
+        "https://api.dolarvzla.com/public/bcv/exchange-rate",
+        $apiKey
+    );
+
+    if (!isset($bcvCurrent['current']['usd'])) {
+        throw new Exception("No se pudo obtener tasa actual BCV.");
+    }
+
+    $current_usd  = (float)$bcvCurrent['current']['usd'];
+    $current_eur  = isset($bcvCurrent['current']['eur']) ? (float)$bcvCurrent['current']['eur'] : null;
+    $current_date = substr($bcvCurrent['current']['date'], 0, 10);
+
+
+    // ===============================
+    // 5️⃣ Obtener histórico últimos 20 días
     // ===============================
     $today = date('Y-m-d');
     $from  = date('Y-m-d', strtotime('-20 days'));
@@ -88,32 +105,40 @@ try {
 
     $bcv_history = [];
     $previousBCV = null;
-    $lastUsdt = null;
 
+    // ===============================
+    // Indexar USDT por fecha (OPTIMIZADO)
+    // ===============================
+    $usdtIndexed = [];
+    if (isset($usdtList['rates'])) {
+        foreach ($usdtList['rates'] as $u) {
+            $uDate = substr($u['date'], 0, 10);
+            $usdtIndexed[$uDate] = isset($u['average']) ? (float)$u['average'] : null;
+        }
+    }
+
+    // ===============================
+    // Procesar BCV histórico
+    // ===============================
     if (isset($bcvList['rates']) && is_array($bcvList['rates'])) {
 
-        // ordenar descendente (de más reciente a más antiguo)
         usort($bcvList['rates'], fn($a,$b) => strcmp($b['date'],$a['date']));
 
+        $lastUsdt = null;
+
         foreach ($bcvList['rates'] as $row) {
+
             if (!isset($row['usd'], $row['date'])) continue;
 
             $rateBCV = (float)$row['usd'];
             $rateEUR = isset($row['eur']) ? (float)$row['eur'] : null;
-            $date    = substr($row['date'],0,10); // YYYY-MM-DD
+            $date    = substr($row['date'], 0, 10);
 
-            // Rellenar USDT con último valor disponible
-            $usdtRate = $lastUsdt;
-            foreach ($usdtList['rates'] ?? [] as $u) {
-                $uDate = substr($u['date'],0,10);
-                if ($uDate === $date) {
-                    $usdtRate = isset($u['average']) ? (float)$u['average'] : $lastUsdt;
-                    break;
-                }
-            }
+            // Obtener USDT indexado
+            $usdtRate = $usdtIndexed[$date] ?? $lastUsdt;
             $lastUsdt = $usdtRate;
 
-            // Determinar cambio BCV
+            // Determinar cambio
             $change = 'same';
             if ($previousBCV !== null) {
                 if ($rateBCV > $previousBCV) $change = 'up';
@@ -136,17 +161,20 @@ try {
         throw new Exception("No se pudo obtener histórico BCV.");
     }
 
-    // ===============================
-    // 5️⃣ Tasa actual (la más reciente)
-    // ===============================
-    $latest = $bcv_history[0];
-    $bcv_rate  = $latest['rate'];
-    $usdt_rate = $latest['usdt'];
-    $eur_rate  = $latest['eur'];
-    $rate_date = $latest['rate_date'];
 
     // ===============================
-    // 6️⃣ Guardar JSON
+    // 6️⃣ Tasa principal desde CURRENT
+    // ===============================
+    $bcv_rate  = $current_usd;
+    $eur_rate  = $current_eur;
+    $rate_date = $current_date;
+
+    // USDT lo tomamos del día más reciente del histórico
+    $usdt_rate = $bcv_history[0]['usdt'] ?? null;
+
+
+    // ===============================
+    // 7️⃣ Guardar JSON
     // ===============================
     file_put_contents($tmpFile, json_encode([
         'bcv_rate'    => $bcv_rate,
@@ -155,8 +183,6 @@ try {
         'rate_date'   => $rate_date,
         'bcv_history' => $bcv_history
     ], JSON_PRETTY_PRINT));
-
-    echo "BCV + USDT actualizado correctamente\n";
 
     // ===============================
     // 7️⃣ Enviar tasa por WhatsApp
