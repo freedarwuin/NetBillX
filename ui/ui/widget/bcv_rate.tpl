@@ -11,9 +11,6 @@
                     {if $rate_date}
                         <span style="color:#aaa;">— {$rate_date|date_format:"%d/%m/%Y"}</span>
                     {/if}
-                    {if $eur_rate}
-                        <span style="color:#aaa;">— {$eur_rate|date_format:"%d/%m/%Y"}</span>
-                    {/if}
                 </div>
                 <div style="font-size:34px; font-weight:700; margin-top:6px; color:#2c3e50;">
                     {$bcv_rate|number_format:4:",":"."}
