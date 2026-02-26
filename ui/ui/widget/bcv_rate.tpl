@@ -11,11 +11,8 @@
                     {/if}
                 </div>
                 <div style="font-size:34px; font-weight:700; margin-top:6px; color:#2c3e50;">
-                    {$bcv_rate|number_format:4:",":"."}
-                    <span style="font-size:14px; font-weight:500; color:#777;">Bs/USD</span>
+                    {$bcv_rate|number_format:4:",":"."} <span style="font-size:14px; font-weight:500; color:#777;">Bs/USD</span>
                 </div>
-
-                {* Mostrar Euro principal *}
                 {if $eur_rate}
                     <div style="font-size:14px; font-weight:500; color:#555; margin-top:4px;">
                         💶 Euro: {$eur_rate|number_format:4:",":"."} Bs/EUR
@@ -24,16 +21,28 @@
             </div>
 
             <div style="text-align:right;">
-                <div style="font-size:13px; color:#777;">📊 Variación USD respecto al día anterior:</div>
+                <div style="font-size:13px; color:#777;">📊 Variación USD:</div>
                 <div style="
                     font-size:24px;
                     font-weight:bold;
                     margin-top:4px;
-                    {if $variacion_valor >= 0} color:#28a745; {else} color:#d9534f; {/if}
+                    {if $variacion_valor_usd >= 0} color:#28a745; {else} color:#d9534f; {/if}
                 ">
-                    {if $variacion_valor >= 0}+{/if}{$variacion_texto}
-                    {if $variacion_valor >= 0}📈{else}📉{/if}
+                    {if $variacion_valor_usd >= 0}+{/if}{$variacion_texto_usd}
+                    {if $variacion_valor_usd >= 0}📈{else}📉{/if}
                 </div>
+
+                {if $variacion_valor_eur !== null}
+                    <div style="font-size:13px; color:#777; margin-top:6px;">📊 Variación Euro:</div>
+                    <div style="
+                        font-size:20px;
+                        font-weight:bold;
+                        {if $variacion_valor_eur >= 0} color:#ffc107; {else} color:#d39e00; {/if}
+                    ">
+                        {if $variacion_valor_eur >= 0}+{/if}{$variacion_texto_eur}
+                        {if $variacion_valor_eur >= 0}📈{else}📉{/if}
+                    </div>
+                {/if}
             </div>
         </div>
 
@@ -76,39 +85,16 @@ document.addEventListener("DOMContentLoaded", function() {
     const ctx = document.getElementById('bcvChart');
     if (!ctx) return;
 
-    const history = {$bcv_history|@json_encode};
-    const maxRecords = 20;
-    const slicedHistory = history.slice(0, maxRecords).reverse();
-
-    const labels = [];
-    const bcvData = [];
+    const labels = {$chart_labels|raw};
+    const bcvData = {$chart_values_usd|raw};
+    const euroData = {$chart_values_eur|raw};
     const usdtData = [];
-    const euroData = [];
 
+    // Interpolar USDT
     let lastUsdt = null;
-    let lastEuro = null;
-
-    slicedHistory.forEach(item => {
-        labels.push(item.rate_date);
-
-        // BCV
-        bcvData.push(item.rate ?? 0);
-
-        // USDT
-        if (item.usdt != null) {
-            usdtData.push(item.usdt);
-            lastUsdt = item.usdt;
-        } else {
-            usdtData.push(lastUsdt ?? 0);
-        }
-
-        // Euro
-        if (item.eur != null) {
-            euroData.push(item.eur);
-            lastEuro = item.eur;
-        } else {
-            euroData.push(lastEuro ?? 0);
-        }
+    {$bcv_history|@json_encode}.slice(0,20).reverse().forEach(item => {
+        if (item.usdt != null) lastUsdt = item.usdt;
+        usdtData.push(lastUsdt ?? 0);
     });
 
     new Chart(ctx, {
