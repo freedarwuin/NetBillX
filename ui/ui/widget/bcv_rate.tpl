@@ -19,19 +19,15 @@
             </div>
 
             <div style="text-align:right;">
-                <div style="font-size:13px; color:#777;">
-                    📊 Variacion respecto al dia anterior:
-                </div>
-
+                <div style="font-size:13px; color:#777;">📊 Variacion respecto al dia anterior:</div>
                 <div style="
                     font-size:24px;
                     font-weight:bold;
                     margin-top:4px;
-                    {if $variacion_valor >= 0}color:#28a745;{else}color:#d9534f;{/if}
+                    {if $variacion_texto >= 0} color:#28a745; {else} color:#d9534f; {/if}
                 ">
-                    {if $variacion_valor > 0}+{/if}
-                    {$variacion_valor}%
-                    {if $variacion_valor >= 0}📈{else}📉{/if}
+                    {if $variacion_texto >= 0}+{/if}{$variacion_texto}
+                    {if $variacion_texto >= 0}📈{else}📉{/if}
                 </div>
             </div>
         </div>
