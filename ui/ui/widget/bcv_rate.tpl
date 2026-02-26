@@ -7,7 +7,7 @@
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
             <div>
                 <div style="font-size:13px; color:#777;">
-                    💱 Tasa Oficial BCV
+                    💱 Tasa Oficial BCV {$dayName}
                     {if $rate_date}
                         <span style="color:#aaa;">— {$rate_date|date_format:"%d/%m/%Y"}</span>
                     {/if}
