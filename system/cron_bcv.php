@@ -275,7 +275,7 @@ try {
              . "La Tasa para $dayName $fecha_ve 07:00 AM\n"
              . "*BCV:* $bcv_format Bs/USD\n"
              //. "*USDT:* $usdt_format Bs/USD\n\n"
-             . "*Sistema* @DolarVZLA";
+             . "*Sistema* NetBillX Grafica actualizada";
 
     $message_encoded = urlencode($message);
 
