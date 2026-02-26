@@ -16,18 +16,28 @@
                     {$bcv_rate|number_format:4:",":"."}
                     <span style="font-size:14px; font-weight:500; color:#777;">Bs/USD</span>
                 </div>
+
+                {* Variación EUR debajo de la fecha *}
+                {if $euro_rate}
+                    <div style="font-size:14px; font-weight:500; color:#555; margin-top:4px;">
+                        💶 Tasa Euro: {$euro_rate|number_format:4:",":"."} Bs/EUR
+                        <span style="{if $variacion_valor_euro >= 0}color:#28a745;{else}color:#d9534f;{/if} font-weight:bold;">
+                            ({$variacion_texto_euro})
+                        </span>
+                    </div>
+                {/if}
             </div>
 
             <div style="text-align:right;">
-                <div style="font-size:13px; color:#777;">📊 Variacion respecto al dia anterior:</div>
+                <div style="font-size:13px; color:#777;">📊 Variación USD respecto al día anterior:</div>
                 <div style="
                     font-size:24px;
                     font-weight:bold;
                     margin-top:4px;
-                    {if $variacion_texto >= 0} color:#28a745; {else} color:#d9534f; {/if}
+                    {if $variacion_valor >= 0} color:#28a745; {else} color:#d9534f; {/if}
                 ">
-                    {if $variacion_texto >= 0}+{/if}{$variacion_texto}
-                    {if $variacion_texto >= 0}📈{else}📉{/if}
+                    {if $variacion_valor >= 0}+{/if}{$variacion_texto}
+                    {if $variacion_valor >= 0}📈{else}📉{/if}
                 </div>
             </div>
         </div>
@@ -82,19 +92,31 @@ document.addEventListener("DOMContentLoaded", function() {
     const labels = [];
     const bcvData = [];
     const usdtData = [];
+    const euroData = [];
 
     let lastUsdt = null;
+    let lastEuro = null;
 
     slicedHistory.forEach(item => {
         labels.push(item.rate_date);
+
+        // BCV
         bcvData.push(item.rate);
 
-        // Interpolar USDT: si es null, usar el último valor válido
+        // USDT
         if (item.usdt !== null) {
             usdtData.push(item.usdt);
             lastUsdt = item.usdt;
         } else {
             usdtData.push(lastUsdt);
+        }
+
+        // EUR
+        if (item.eur !== null) {
+            euroData.push(item.eur);
+            lastEuro = item.eur;
+        } else {
+            euroData.push(lastEuro);
         }
     });
 
@@ -124,6 +146,17 @@ document.addEventListener("DOMContentLoaded", function() {
                     fill: true,
                     pointRadius: 3,
                     pointBackgroundColor: '#28a745'
+                },
+                {
+                    label: 'EUR',
+                    data: euroData,
+                    borderColor: '#ffc107',
+                    backgroundColor: '#ffc10720',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#ffc107'
                 }
             ]
         },

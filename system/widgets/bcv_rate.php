@@ -9,14 +9,19 @@ class bcv_rate
         $tmpFile = __DIR__ . '/../bcv_data.json';
 
         $bcv_rate = null;
+        $euro_rate = null;
         $rate_date = null;
         $bcv_history = [];
 
         $chart_labels = [];
         $chart_values = [];
+        $chart_euro_values = [];
 
         $variation_percent = 0;
         $variacion_texto = "Sin variación";
+
+        $variation_percent_euro = 0;
+        $variacion_texto_euro = "Sin variación";
 
         if (file_exists($tmpFile)) {
 
@@ -26,6 +31,7 @@ class bcv_rate
             if ($data) {
 
                 $bcv_rate    = $data['bcv_rate'] ?? null;
+                $euro_rate   = $data['eur_rate'] ?? null; // 👈 IMPORTANTE
                 $rate_date   = $data['rate_date'] ?? null;
                 $bcv_history = $data['bcv_history'] ?? [];
 
@@ -36,12 +42,20 @@ class bcv_rate
                 $history_for_chart = array_reverse($bcv_history);
 
                 foreach ($history_for_chart as $day) {
+
                     $chart_labels[] = date('d/m', strtotime($day['rate_date']));
-                    $chart_values[] = (float)$day['rate'];
+
+                    $chart_values[] = isset($day['rate'])
+                        ? (float)$day['rate']
+                        : null;
+
+                    $chart_euro_values[] = isset($day['eur'])
+                        ? (float)$day['eur']
+                        : null;
                 }
 
                 // ==========================
-                // Calcular variación REAL
+                // Variación USD
                 // ==========================
 
                 if (count($chart_values) > 1) {
@@ -61,6 +75,30 @@ class bcv_rate
                         $variacion_texto = "⬇ Bajó {$variation_percent}%";
                     } else {
                         $variacion_texto = "➖ Sin cambio";
+                    }
+                }
+
+                // ==========================
+                // Variación EUR
+                // ==========================
+
+                if (count($chart_euro_values) > 1) {
+
+                    $ayer_eur = $chart_euro_values[count($chart_euro_values) - 2];
+                    $hoy_eur  = $chart_euro_values[count($chart_euro_values) - 1];
+
+                    if ($ayer_eur > 0) {
+                        $variation_percent_euro = (($hoy_eur - $ayer_eur) / $ayer_eur) * 100;
+                    }
+
+                    $variation_percent_euro = round($variation_percent_euro, 2);
+
+                    if ($variation_percent_euro > 0) {
+                        $variacion_texto_euro = "⬆ Subió {$variation_percent_euro}%";
+                    } elseif ($variation_percent_euro < 0) {
+                        $variacion_texto_euro = "⬇ Bajó {$variation_percent_euro}%";
+                    } else {
+                        $variacion_texto_euro = "➖ Sin cambio";
                     }
                 }
             }
@@ -95,18 +133,26 @@ class bcv_rate
         }
 
         // ==========================
-        // Asignar variables a Smarty
+        // Asignar a Smarty
         // ==========================
 
         $ui->assign([
-            'bcv_rate'     => $bcv_rate,
-            'rate_date'    => $rate_date,
-            'bcv_history'  => $bcv_history,
-            'chart_labels' => json_encode($chart_labels),
-            'chart_values' => json_encode($chart_values),
 
-            'variacion_valor' => $variation_percent,
-            'variacion_texto' => $variacion_texto,
+            'bcv_rate'     => $bcv_rate,
+            'euro_rate'    => $euro_rate,
+            'rate_date'    => $rate_date,
+
+            'bcv_history'  => $bcv_history,
+
+            'chart_labels'       => json_encode($chart_labels),
+            'chart_values'       => json_encode($chart_values),
+            'chart_euro_values'  => json_encode($chart_euro_values),
+
+            'variacion_valor'        => $variation_percent,
+            'variacion_texto'        => $variacion_texto,
+
+            'variacion_valor_euro'   => $variation_percent_euro,
+            'variacion_texto_euro'   => $variacion_texto_euro,
 
             'dolarvzla_api_expiration'    => $dolarvzla_api_expiration,
             'dolarvzla_api_expired'       => $dolarvzla_api_expired,
