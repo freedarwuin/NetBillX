@@ -18,9 +18,9 @@
                 </div>
 
                 {* Variación EUR debajo de la fecha *}
-                {if $euro_rate}
+                {if $eur_rate}
                     <div style="font-size:14px; font-weight:500; color:#555; margin-top:4px;">
-                        💶 Tasa Euro: {$euro_rate|number_format:4:",":"."} Bs/EUR
+                        💶 Tasa Euro: {$eur_rate|number_format:4:",":"."} Bs/EUR
                         <span style="{if $variacion_valor_euro >= 0}color:#28a745;{else}color:#d9534f;{/if} font-weight:bold;">
                             ({$variacion_texto_euro})
                         </span>
@@ -94,17 +94,17 @@ document.addEventListener("DOMContentLoaded", function() {
     const usdtData = [];
     const euroData = [];
 
-    let lastUsdt = null;
-    let lastEuro = null;
+    let lastUsdt = 0;
+    let lastEuro = 0;
 
     slicedHistory.forEach(item => {
         labels.push(item.rate_date);
 
         // BCV
-        bcvData.push(item.rate);
+        bcvData.push(item.rate ?? 0);
 
         // USDT
-        if (item.usdt !== null) {
+        if (item.usdt != null) {
             usdtData.push(item.usdt);
             lastUsdt = item.usdt;
         } else {
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
 
         // EUR
-        if (item.eur !== null) {
+        if ('eur' in item && item.eur != null) {
             euroData.push(item.eur);
             lastEuro = item.eur;
         } else {
