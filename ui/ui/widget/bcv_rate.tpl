@@ -24,10 +24,10 @@
                     font-size:24px;
                     font-weight:bold;
                     margin-top:4px;
-                    {if $variacion_texto >= 0} color:#28a745; {else} color:#d9534f; {/if}
+                    {if $porcentaje $variacion_texto >= 0} color:#28a745; {else} color:#d9534f; {/if}
                 ">
-                    {if $variacion_texto >= 0}+{/if}{$variacion_texto}
-                    {if $variacion_texto >= 0}📈{else}📉{/if}
+                    {if $porcentaje $variacion_texto >= 0}+{/if}{$porcentaje $variacion_texto}
+                    {if $porcentaje $variacion_texto >= 0}📈{else}📉{/if}
                 </div>
             </div>
         </div>
