@@ -9,27 +9,14 @@ class bcv_rate
         $tmpFile = __DIR__ . '/../bcv_data.json';
 
         $bcv_rate = null;
+        $rate_date = null;
         $bcv_history = [];
+
         $chart_labels = [];
         $chart_values = [];
 
-        // ==========================
-        // Calcular variación porcentual
-        // ==========================
         $variation_percent = 0;
-
-        if (count($chart_values) > 1) {
-            $first = $chart_values[0];
-            $last  = $chart_values[count($chart_values) - 1];
-
-            if ($first > 0) {
-                $variation_percent = (($last - $first) / $first) * 100;
-            }
-        }
-
-        $ui->assign([
-            'variation_percent' => round($variation_percent, 2)
-        ]);
+        $variacion_texto = "Sin variación";
 
         if (file_exists($tmpFile)) {
 
@@ -38,28 +25,49 @@ class bcv_rate
 
             if ($data) {
 
-                $bcv_rate = $data['bcv_rate'] ?? null;
+                $bcv_rate    = $data['bcv_rate'] ?? null;
+                $rate_date   = $data['rate_date'] ?? null;
                 $bcv_history = $data['bcv_history'] ?? [];
 
-                // Tomar solo los últimos 9 registros
+                // Tomar últimos 9 registros
                 $bcv_history = array_slice($bcv_history, 0, 9);
 
-                // ==========================
-                // Preparar datos para gráfico
-                // ==========================
-
-                // Invertimos para mostrar del más antiguo al más reciente
+                // Invertir para gráfico (antiguo → reciente)
                 $history_for_chart = array_reverse($bcv_history);
 
                 foreach ($history_for_chart as $day) {
                     $chart_labels[] = date('d/m', strtotime($day['rate_date']));
                     $chart_values[] = (float)$day['rate'];
                 }
+
+                // ==========================
+                // Calcular variación REAL
+                // ==========================
+
+                if (count($chart_values) > 1) {
+
+                    $ayer = $chart_values[count($chart_values) - 2];
+                    $hoy  = $chart_values[count($chart_values) - 1];
+
+                    if ($ayer > 0) {
+                        $variation_percent = (($hoy - $ayer) / $ayer) * 100;
+                    }
+
+                    $variation_percent = round($variation_percent, 2);
+
+                    if ($variation_percent > 0) {
+                        $variacion_texto = "⬆ Subió {$variation_percent}%";
+                    } elseif ($variation_percent < 0) {
+                        $variacion_texto = "⬇ Bajó {$variation_percent}%";
+                    } else {
+                        $variacion_texto = "➖ Sin cambio";
+                    }
+                }
             }
         }
 
         // ==========================
-        // Estado de expiración API DolarVzla
+        // Estado expiración API
         // ==========================
 
         $dolarvzla_api_expiration = null;
@@ -76,26 +84,30 @@ class bcv_rate
 
             if ($expirationTime !== false) {
 
-                // Formatear para mostrar
                 $dolarvzla_api_expiration = date('d/m/Y H:i', $expirationTime);
 
-                // Ya vencida
                 $dolarvzla_api_expired = $expirationTime < time();
 
-                // Vence en los próximos 3 días
                 $dolarvzla_api_expiring_soon =
                     $expirationTime > time() &&
                     $expirationTime <= strtotime('+3 days');
             }
         }
 
+        // ==========================
+        // Asignar variables a Smarty
+        // ==========================
+
         $ui->assign([
             'bcv_rate'     => $bcv_rate,
+            'rate_date'    => $rate_date,
             'bcv_history'  => $bcv_history,
             'chart_labels' => json_encode($chart_labels),
             'chart_values' => json_encode($chart_values),
 
-            // Nuevas variables
+            'variacion_valor' => $variation_percent,
+            'variacion_texto' => $variacion_texto,
+
             'dolarvzla_api_expiration'    => $dolarvzla_api_expiration,
             'dolarvzla_api_expired'       => $dolarvzla_api_expired,
             'dolarvzla_api_expiring_soon' => $dolarvzla_api_expiring_soon

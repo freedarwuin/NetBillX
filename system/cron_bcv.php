@@ -183,6 +183,8 @@ try {
         'eur_rate'    => $eur_rate,
         'rate_date'   => $rate_date,
         'bcv_history' => $bcv_history
+        'variacion_texto' => $variacion_texto, // <-- AGREGAR
+        'variacion_valor' => $porcentaje       // <-- AGREGAR NUMÉRICO
     ], JSON_PRETTY_PRINT));
 
     // ===============================
