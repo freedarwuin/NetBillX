@@ -272,7 +272,7 @@ try {
     // Construir mensaje
     // ===============================
     $message = "💱 *Buenas Tardes*\n\n"
-             . "La Tasa para $dayName $fecha_ve 07:00 AM\n"
+             . "La Tasa para *$dayName $fecha_ve 07:00 AM*\n"
              . "*BCV:* $bcv_format Bs/USD\n"
              //. "*USDT:* $usdt_format Bs/USD\n\n"
              . "*Sistema* NetBillX Grafica actualizada";
