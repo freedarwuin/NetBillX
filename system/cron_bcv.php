@@ -271,11 +271,17 @@ try {
     // ===============================
     // Construir mensaje
     // ===============================
-    $message = "💱 *Buenas Tardes*\n\n"
-             . "La Tasa para *$dayName $fecha_ve 07:00 AM*\n"
-             . "*BCV:* $bcv_format Bs/USD\n"
-             //. "*USDT:* $usdt_format Bs/USD\n\n"
-             . "*Sistema* NetBillX Grafica actualizada";
+    $message = "💱 *Actualizacion Tasa Oficial BCV*\n\n"
+             . "📅 *$dayName $fecha_ve - 07:00 AM*\n\n"
+             . "💵 *Dolar BCV:* $bcv_format Bs/USD\n"
+             . ($usdt_rate ? "💰 *USDT Promedio:* $usdt_format Bs/USD\n" : "")
+             . "\n"
+             . "📊 Variacion respecto al dia anterior: "
+             . ($bcv_history[0]['change'] === 'up' ? "⬆ Subio" :
+                ($bcv_history[0]['change'] === 'down' ? "⬇ Bajo" : "➖ Sin cambio"))
+             . "\n\n"
+             . "🏢 Sistema NetBillX\n"
+             . "Grafica y datos actualizados automaticamente.";
 
     $message_encoded = urlencode($message);
 
