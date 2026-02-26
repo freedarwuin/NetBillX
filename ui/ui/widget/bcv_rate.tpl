@@ -13,9 +13,9 @@
                 <div style="font-size:34px; font-weight:700; margin-top:6px; color:#2c3e50;">
                     {$bcv_rate|number_format:4:",":"."} <span style="font-size:14px; font-weight:500; color:#777;">Bs/USD</span>
                 </div>
-                {if $eur_rate}
+                {if $euro_rate}
                     <div style="font-size:14px; font-weight:500; color:#555; margin-top:4px;">
-                        💶 Euro: {$eur_rate|number_format:4:",":"."} Bs/EUR
+                        💶 Euro: {$euro_rate|number_format:4:",":"."} Bs/EUR
                     </div>
                 {/if}
             </div>
@@ -139,12 +139,8 @@ document.addEventListener("DOMContentLoaded", function() {
         },
         options: {
             responsive: true,
-            plugins: {
-                legend: { display: true, position: 'top' }
-            },
-            scales: {
-                y: { beginAtZero: false }
-            }
+            plugins: { legend: { display: true, position: 'top' } },
+            scales: { y: { beginAtZero: false } }
         }
     });
 });
