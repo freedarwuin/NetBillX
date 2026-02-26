@@ -218,6 +218,7 @@ try {
     // ===============================
     $bcv_format  = number_format($bcv_rate, 4, ',', '.');
     $usdt_format = $usdt_rate ? number_format($usdt_rate, 4, ',', '.') : 'N/D';
+    $eur_format = $eur_rate ? number_format($eur_rate, 4, ',', '.') : 'N/D';
 
     $dateObj = new DateTime($rate_date);
     $dias = [
@@ -234,6 +235,7 @@ try {
     $message = "💱 *Actualizacion Tasa Oficial BCV*\n\n"
              . "📅 Tasa para el dia *$dayName $fecha_ve - 07:00 AM*\n\n"
              . "💵 *Dolar BCV:* $bcv_format Bs/USD\n"
+             . "💶 *Euro BCV:* $eur_format Bs/EUR\n"
              . ($usdt_rate ? "💰 *USDT Promedio:* $usdt_format Bs/USD\n" : "")
              . "\n"
              . "📊 Variacion respecto al dia anterior:\n"
