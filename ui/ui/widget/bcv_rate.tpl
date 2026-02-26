@@ -1,8 +1,6 @@
 <div class="panel panel-info panel-hovered mb20 activities" style="border-radius:14px; overflow:hidden;">
 
-    {* ==========================
-       HEADER
-    =========================== *}
+    {* HEADER *}
     <div class="panel-heading" style="background:#ffffff; padding:20px; border-bottom:1px solid #eee;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
             <div>
@@ -17,13 +15,10 @@
                     <span style="font-size:14px; font-weight:500; color:#777;">Bs/USD</span>
                 </div>
 
-                {* Variación EUR debajo de la fecha *}
+                {* Mostrar Euro principal *}
                 {if $eur_rate}
                     <div style="font-size:14px; font-weight:500; color:#555; margin-top:4px;">
-                        💶 Tasa Euro: {$eur_rate|number_format:4:",":"."} Bs/EUR
-                        <span style="{if $variacion_valor_euro >= 0}color:#28a745;{else}color:#d9534f;{/if} font-weight:bold;">
-                            ({$variacion_texto_euro})
-                        </span>
+                        💶 Euro: {$eur_rate|number_format:4:",":"."} Bs/EUR
                     </div>
                 {/if}
             </div>
@@ -42,9 +37,7 @@
             </div>
         </div>
 
-        {* ==========================
-           ESTADO API
-        =========================== *}
+        {* Estado API *}
         {if $dolarvzla_api_expiration}
             <div style="
                 margin-top:15px;
@@ -65,9 +58,7 @@
         {/if}
     </div>
 
-    {* ==========================
-       BODY
-    =========================== *}
+    {* BODY *}
     <div class="panel-body" style="background:#f9fafc; padding:25px;">
         {if $bcv_rate}
             <div style="background:#fff; padding:15px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.04); margin-bottom:25px;">
@@ -87,15 +78,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const history = {$bcv_history|@json_encode};
     const maxRecords = 20;
-    const slicedHistory = history.slice(0, maxRecords).reverse(); // más recientes primero
+    const slicedHistory = history.slice(0, maxRecords).reverse();
 
     const labels = [];
     const bcvData = [];
     const usdtData = [];
     const euroData = [];
 
-    let lastUsdt = 0;
-    let lastEuro = 0;
+    let lastUsdt = null;
+    let lastEuro = null;
 
     slicedHistory.forEach(item => {
         labels.push(item.rate_date);
@@ -108,15 +99,15 @@ document.addEventListener("DOMContentLoaded", function() {
             usdtData.push(item.usdt);
             lastUsdt = item.usdt;
         } else {
-            usdtData.push(lastUsdt);
+            usdtData.push(lastUsdt ?? 0);
         }
 
-        // EUR
-        if ('eur' in item && item.eur != null) {
+        // Euro
+        if (item.eur != null) {
             euroData.push(item.eur);
             lastEuro = item.eur;
         } else {
-            euroData.push(lastEuro);
+            euroData.push(lastEuro ?? 0);
         }
     });
 
@@ -148,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     pointBackgroundColor: '#28a745'
                 },
                 {
-                    label: 'EUR',
+                    label: 'Euro',
                     data: euroData,
                     borderColor: '#ffc107',
                     backgroundColor: '#ffc10720',
