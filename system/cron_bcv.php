@@ -249,10 +249,30 @@ try {
     $usdt_format = $usdt_rate ? number_format($usdt_rate, 4, ',', '.') : 'N/D';
 
     // ===============================
+    // Formatear fecha venezolana
+    // ===============================
+    $dateObj = new DateTime($rate_date);
+
+    $dias = [
+        'Sunday'    => 'Domingo',
+        'Monday'    => 'Lunes',
+        'Tuesday'   => 'Martes',
+        'Wednesday' => 'Miércoles',
+        'Thursday'  => 'Jueves',
+        'Friday'    => 'Viernes',
+        'Saturday'  => 'Sábado'
+    ];
+
+    $dayName = $dias[$dateObj->format('l')];
+
+    // Formato venezolano
+    $fecha_ve = $dateObj->format('d/m/Y');
+
+    // ===============================
     // Construir mensaje
     // ===============================
     $message = "💱 *Tasa Oficial BCV*\n\n"
-             . "*Fecha:* $rate_date\n"
+             . "La Tasa para $dayName $fecha_ve 07:00 AM\n"
              . "*BCV:* $bcv_format Bs/USD\n"
              . "*USDT:* $usdt_format Bs/USD\n\n"
              . "*Sistema* @DolarVZLA";
