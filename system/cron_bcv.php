@@ -230,7 +230,7 @@ try {
     // 🔥 Mensaje final mejorado
     // ===============================
     $message = "💱 *Actualizacion Tasa Oficial BCV*\n\n"
-             . "📅 *$dayName $fecha_ve - 07:00 AM*\n\n"
+             . "📅 Tasa para el dia *$dayName $fecha_ve - 07:00 AM*\n\n"
              . "💵 *Dolar BCV:* $bcv_format Bs/USD\n"
              . ($usdt_rate ? "💰 *USDT Promedio:* $usdt_format Bs/USD\n" : "")
              . "\n"
