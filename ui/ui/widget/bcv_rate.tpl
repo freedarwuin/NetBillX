@@ -79,94 +79,94 @@
     </div>
 </div>
 
-{* ================= SCRIPT CHART.JS ================= *}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const ctx = document.getElementById('bcvChart');
     if (!ctx) return;
 
-    // Verificar si los datos están disponibles
-    const labels = {$chart_labels|@json_encode nofilter};
-    const bcvData = {$chart_values|@json_encode nofilter};
-    const euroData = {$chart_euro_values|@json_encode nofilter};
-    const usdtData = {$chart_usdt_values|@json_encode nofilter};
+    const labels = {$chart_labels|raw};
+    const bcvData = {$chart_values_usd|raw};
+    const euroData = {$chart_values_eur|raw};
+    const usdtData = [];
 
-    // Verificar que los datos no están vacíos antes de crear el gráfico
-    if (labels.length && bcvData.length && euroData.length && usdtData.length) {
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'BCV',
-                        data: bcvData,
-                        borderColor: '#007bff',
-                        backgroundColor: '#007bff20',
-                        borderWidth: 3,
-                        tension: 0.4,
-                        fill: true,
-                        pointRadius: 3,
-                        pointBackgroundColor: '#007bff'
-                    },
-                    {
-                        label: 'USDT',
-                        data: usdtData,
-                        borderColor: '#28a745',
-                        backgroundColor: '#28a74520',
-                        borderWidth: 3,
-                        tension: 0.4,
-                        fill: true,
-                        pointRadius: 3,
-                        pointBackgroundColor: '#28a745'
-                    },
-                    {
-                        label: 'Euro',
-                        data: euroData,
-                        borderColor: '#ffc107',
-                        backgroundColor: '#ffc10720',
-                        borderWidth: 3,
-                        tension: 0.4,
-                        fill: true,
-                        pointRadius: 3,
-                        pointBackgroundColor: '#ffc107'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: true, position: 'top' }
+    // Interpolar USDT
+    let lastUsdt = null;
+    {$bcv_history|@json_encode}.slice(0,20).reverse().forEach(item => {
+        if (item.usdt != null) lastUsdt = item.usdt;
+        usdtData.push(lastUsdt ?? 0);
+    });
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'BCV',
+                    data: bcvData,
+                    borderColor: '#007bff',
+                    backgroundColor: '#007bff20',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#007bff'
                 },
-                scales: {
-                    x: {
-                        type: 'category', // Esto indica que los valores del eje X son categorías
-                        labels: labels,
-                        title: {
-                            display: true,
-                            text: 'Fecha',  // Eje X con nombre 'Fecha'
-                            font: { size: 14, weight: 'bold' },
-                        },
+                {
+                    label: 'USDT',
+                    data: usdtData,
+                    borderColor: '#28a745',
+                    backgroundColor: '#28a74520',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#28a745'
+                },
+                {
+                    label: 'Euro',
+                    data: euroData,
+                    borderColor: '#ffc107',
+                    backgroundColor: '#ffc10720',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#ffc107'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true, position: 'top' }
+            },
+            scales: {
+                x: {
+                    type: 'category', // Usamos categorías en el eje X
+                    labels: labels,
+                    title: {
+                        display: true,
+                        text: 'Fecha',  // Título para el eje X
+                        font: { size: 14, weight: 'bold' },
                     },
-                    y: {
-                        title: {
-                            display: true,
-                            text: 'Valor (Bs)',  // Eje Y con nombre 'Valor (Bs)'
-                            font: { size: 14, weight: 'bold' },
-                        },
-                        ticks: {
-                            beginAtZero: false, // No empezar en cero para mejor visualización
-                            callback: function(value) {
-                                return value.toLocaleString();  // Formato de número con separador de miles
-                            }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Valor (Bs)',  // Título para el eje Y
+                        font: { size: 14, weight: 'bold' },
+                    },
+                    ticks: {
+                        beginAtZero: false, // No empieza en cero
+                        callback: function(value) {
+                            return value.toLocaleString(); // Formato de número con separador de miles
                         }
                     }
                 }
             }
-        });
-    } else {
-        console.log('Datos faltantes para el gráfico');
-    }
+        }
+    });
 });
 </script>
