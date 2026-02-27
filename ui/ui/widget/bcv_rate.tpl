@@ -85,14 +85,16 @@ document.addEventListener("DOMContentLoaded", function() {
     const ctx = document.getElementById('bcvChart');
     if (!ctx) return;
 
-    const labels = {$chart_labels|raw};
-    const bcvData = {$chart_values_usd|raw};
-    const euroData = {$chart_values_eur|raw};
+    // Usamos JSON.parse para convertir los datos que pasamos desde Smarty a un array de JavaScript
+    const labels = JSON.parse('{$chart_labels|json_encode}');
+    const bcvData = JSON.parse('{$chart_values|json_encode}');
+    const euroData = JSON.parse('{$chart_euro_values|json_encode}');
     const usdtData = [];
 
     // Interpolar USDT
     let lastUsdt = null;
-    {$bcv_history|@json_encode}.slice(0,20).reverse().forEach(item => {
+    const bcvHistory = JSON.parse('{$bcv_history|json_encode}');
+    bcvHistory.slice(0, 20).reverse().forEach(item => {
         if (item.usdt != null) lastUsdt = item.usdt;
         usdtData.push(lastUsdt ?? 0);
     });
@@ -144,24 +146,24 @@ document.addEventListener("DOMContentLoaded", function() {
             },
             scales: {
                 x: {
-                    type: 'category', // Usamos categorías en el eje X
+                    type: 'category',
                     labels: labels,
                     title: {
                         display: true,
-                        text: 'Fecha',  // Título para el eje X
+                        text: 'Fecha',
                         font: { size: 14, weight: 'bold' },
                     },
                 },
                 y: {
                     title: {
                         display: true,
-                        text: 'Valor (Bs)',  // Título para el eje Y
+                        text: 'Valor (Bs)',
                         font: { size: 14, weight: 'bold' },
                     },
                     ticks: {
-                        beginAtZero: false, // No empieza en cero
+                        beginAtZero: false,
                         callback: function(value) {
-                            return value.toLocaleString(); // Formato de número con separador de miles
+                            return value.toLocaleString();
                         }
                     }
                 }
