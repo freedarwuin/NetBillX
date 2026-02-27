@@ -85,11 +85,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const ctx = document.getElementById('bcvChart');
     if (!ctx) return;
 
-    // Obtener datos desde Smarty
+    // Obtener datos desde Smarty (ya están ordenados cronológicamente)
     const labels = {$chart_labels|json_encode};
     const bcvData = {$chart_values|json_encode};
     const euroData = {$chart_euro_values|json_encode};
-    const usdtData = {$chart_usdt_values|json_encode};  // Asegúrate de que esta variable esté correcta
+    const usdtData = {$chart_usdt_values|json_encode};
 
     new Chart(ctx, {
         type: 'line',
