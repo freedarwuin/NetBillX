@@ -36,23 +36,20 @@ class bcv_rate
                 $rate_date   = $data['rate_date'] ?? null;
                 $bcv_history = $data['bcv_history'] ?? [];
 
-                // Ordenar cronológicamente los registros por fecha (más antiguo primero)
-                usort($bcv_history, function($a, $b) {
-                    return strtotime($a['rate_date']) - strtotime($b['rate_date']);
-                });
+                // Tomar últimos 9 registros
+                $bcv_history = array_slice($bcv_history, 0, 9);
 
-                // Tomar los 9 últimos registros (para mostrar solo las últimas 9 fechas)
-                $bcv_history = array_slice($bcv_history, -9);
-
-                // Invertir el array para mostrar el más reciente a la derecha
+                // Invertir para gráfico (antiguo → reciente)
                 $history_for_chart = array_reverse($bcv_history);
 
                 foreach ($history_for_chart as $day) {
 
                     $chart_labels[] = date('d/m', strtotime($day['rate_date']));
+
+                    // Reemplazar valores nulos o vacíos con 0
                     $chart_values[] = isset($day['rate']) ? (float)$day['rate'] : 0;
                     $chart_euro_values[] = isset($day['eur']) ? (float)$day['eur'] : 0;
-                    $chart_usdt_values[] = isset($day['usdt']) ? (float)$day['usdt'] : 0;
+                    $chart_usdt_values[] = isset($day['usdt']) ? (float)$day['usdt'] : 0;  // Asegurarse de pasar 0 en lugar de null
                 }
 
                 // ========================== Variación USD ==========================
