@@ -85,19 +85,11 @@ document.addEventListener("DOMContentLoaded", function() {
     const ctx = document.getElementById('bcvChart');
     if (!ctx) return;
 
-    // Usamos JSON.parse para convertir los datos que pasamos desde Smarty a un array de JavaScript
-    const labels = JSON.parse('{$chart_labels|json_encode}');
-    const bcvData = JSON.parse('{$chart_values|json_encode}');
-    const euroData = JSON.parse('{$chart_euro_values|json_encode}');
-    const usdtData = [];
-
-    // Interpolar USDT
-    let lastUsdt = null;
-    const bcvHistory = JSON.parse('{$bcv_history|json_encode}');
-    bcvHistory.slice(0, 20).reverse().forEach(item => {
-        if (item.usdt != null) lastUsdt = item.usdt;
-        usdtData.push(lastUsdt ?? 0);
-    });
+    // Obtener datos desde Smarty
+    const labels = {$chart_labels|json_encode};
+    const bcvData = {$chart_values|json_encode};
+    const euroData = {$chart_euro_values|json_encode};
+    const usdtData = {$chart_usdt_values|json_encode};  // Asegúrate de que esta variable esté correcta
 
     new Chart(ctx, {
         type: 'line',
@@ -146,26 +138,17 @@ document.addEventListener("DOMContentLoaded", function() {
             },
             scales: {
                 x: {
-                    type: 'category',
-                    labels: labels,
                     title: {
                         display: true,
-                        text: 'Fecha',
-                        font: { size: 14, weight: 'bold' },
-                    },
+                        text: 'Fecha'
+                    }
                 },
                 y: {
                     title: {
                         display: true,
-                        text: 'Valor (Bs)',
-                        font: { size: 14, weight: 'bold' },
+                        text: 'Valor (Bs)'
                     },
-                    ticks: {
-                        beginAtZero: false,
-                        callback: function(value) {
-                            return value.toLocaleString();
-                        }
-                    }
+                    beginAtZero: false
                 }
             }
         }
