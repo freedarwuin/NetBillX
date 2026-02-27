@@ -140,7 +140,28 @@ document.addEventListener("DOMContentLoaded", function() {
                     legend: { display: true, position: 'top' }
                 },
                 scales: {
-                    y: { beginAtZero: false }
+                    x: {
+                        type: 'category', // Esto indica que los valores del eje X son categorías
+                        labels: labels,
+                        title: {
+                            display: true,
+                            text: 'Fecha',  // Eje X con nombre 'Fecha'
+                            font: { size: 14, weight: 'bold' },
+                        },
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Valor (Bs)',  // Eje Y con nombre 'Valor (Bs)'
+                            font: { size: 14, weight: 'bold' },
+                        },
+                        ticks: {
+                            beginAtZero: false, // No empezar en cero para mejor visualización
+                            callback: function(value) {
+                                return value.toLocaleString();  // Formato de número con separador de miles
+                            }
+                        }
+                    }
                 }
             }
         });
