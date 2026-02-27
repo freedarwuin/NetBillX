@@ -98,6 +98,13 @@ document.addEventListener("DOMContentLoaded", function() {
         usdtData.push(lastUsdt ?? 0);  // Asignamos el último valor conocido de USDT
     });
 
+    // Encontrar el valor máximo de todos los datos (BCV, Euro, USDT)
+    const allData = [...bcvData, ...euroData, ...usdtData];
+    const maxValue = Math.max(...allData);
+
+    // Incrementar el máximo en un 10% para asegurar que haya un margen
+    const maxYValue = Math.ceil(maxValue * 1.1);  // 10% más grande que el valor máximo
+
     new Chart(ctx, {
         type: 'line',
         data: {
@@ -148,8 +155,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     beginAtZero: false,
                     ticks: {
                         stepSize: 50,  // Escala de 50 en 50
-                        min: 350,  // Mínimo en 350
-                        max: 600,  // Máximo en 600
+                        min: 0,  // Empezar en 0 para asegurar que se vea todo el gráfico
+                        max: maxYValue,  // El máximo ahora es dinámico, con un margen adicional
                         callback: function(value) {
                             return value; // Mostrar los valores tal como están
                         }
