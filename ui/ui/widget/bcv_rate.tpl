@@ -26,10 +26,10 @@
                     font-size:24px;
                     font-weight:bold;
                     margin-top:4px;
-                    {if $variacion_valor_usd >= 0} color:#28a745; {else} color:#d9534f; {/if}
+                    {if $variacion_valor >= 0} color:#28a745; {else} color:#d9534f; {/if}
                 ">
-                    {if $variacion_valor_usd >= 0}+{/if}{$variacion_texto_usd}
-                    {if $variacion_valor_usd >= 0}📈{else}📉{/if}
+                    {if $variacion_valor >= 0}+{/if}{$variacion_texto}
+                    {if $variacion_valor >= 0}📈{else}📉{/if}
                 </div>
 
                 {if $variacion_valor_eur !== null}
@@ -86,62 +86,66 @@ document.addEventListener("DOMContentLoaded", function() {
     const ctx = document.getElementById('bcvChart');
     if (!ctx) return;
 
-    // Convertir PHP arrays a JSON y desactivar filtrado de Smarty
+    // Verificar si los datos están disponibles
     const labels = {$chart_labels|@json_encode nofilter};
-    const bcvData = {$chart_values_usd|@json_encode nofilter};
-    const euroData = {$chart_values_eur|@json_encode nofilter};
-    const usdtData = {$chart_values_usdt|@json_encode nofilter};
+    const bcvData = {$chart_values|@json_encode nofilter};
+    const euroData = {$chart_euro_values|@json_encode nofilter};
+    const usdtData = {$chart_usdt_values|@json_encode nofilter};
 
-    // Crear gráfico
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'BCV',
-                    data: bcvData,
-                    borderColor: '#007bff',
-                    backgroundColor: '#007bff20',
-                    borderWidth: 3,
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 3,
-                    pointBackgroundColor: '#007bff'
-                },
-                {
-                    label: 'USDT',
-                    data: usdtData,
-                    borderColor: '#28a745',
-                    backgroundColor: '#28a74520',
-                    borderWidth: 3,
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 3,
-                    pointBackgroundColor: '#28a745'
-                },
-                {
-                    label: 'Euro',
-                    data: euroData,
-                    borderColor: '#ffc107',
-                    backgroundColor: '#ffc10720',
-                    borderWidth: 3,
-                    tension: 0.4,
-                    fill: true,
-                    pointRadius: 3,
-                    pointBackgroundColor: '#ffc107'
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: true, position: 'top' }
+    // Verificar que los datos no están vacíos antes de crear el gráfico
+    if (labels.length && bcvData.length && euroData.length && usdtData.length) {
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'BCV',
+                        data: bcvData,
+                        borderColor: '#007bff',
+                        backgroundColor: '#007bff20',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#007bff'
+                    },
+                    {
+                        label: 'USDT',
+                        data: usdtData,
+                        borderColor: '#28a745',
+                        backgroundColor: '#28a74520',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#28a745'
+                    },
+                    {
+                        label: 'Euro',
+                        data: euroData,
+                        borderColor: '#ffc107',
+                        backgroundColor: '#ffc10720',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 3,
+                        pointBackgroundColor: '#ffc107'
+                    }
+                ]
             },
-            scales: {
-                y: { beginAtZero: false }
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: true, position: 'top' }
+                },
+                scales: {
+                    y: { beginAtZero: false }
+                }
             }
-        }
-    });
+        });
+    } else {
+        console.log('Datos faltantes para el gráfico');
+    }
 });
 </script>
