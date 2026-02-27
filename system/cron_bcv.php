@@ -156,7 +156,15 @@ try {
     $ayer_rate = $bcv_history[1]['rate'];
 
     $diferencia = $bcv_rate - $ayer_rate;
+    // Depuración
+    var_dump($bcv_rate); // Ver tasa actual
+    var_dump($ayer_rate); // Ver tasa de ayer
+
+    $diferencia = $bcv_rate - $ayer_rate;
     $porcentaje = ($ayer_rate != 0) ? ($diferencia / $ayer_rate) * 100 : 0;
+
+    var_dump($diferencia); // Ver diferencia
+    var_dump($porcentaje); // Ver porcentaje
 
     $variacion_texto = "➖ Sin cambio";
 
