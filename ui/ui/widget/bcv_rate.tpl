@@ -4,11 +4,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const ctx = document.getElementById('bcvChart');
     if (!ctx) return;
 
-    //const labels = {$chart_labels|raw};
-    //const bcvData = {$chart_values|raw};
-    //const euroData = {$chart_euro_values|raw};
-    //const usdtData = {$chart_usdt_values|raw};
-
     const labels = {$chart_labels|raw};
     const bcvData = {$chart_values_usd|raw};
     const euroData = {$chart_values_eur|raw};
