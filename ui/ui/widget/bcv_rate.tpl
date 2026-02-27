@@ -89,10 +89,19 @@
 
         const ctx = document.getElementById('bcvChart').getContext('2d');
 
-        // Encuentra los valores máximo y mínimo de cada conjunto de datos
-        const allData = [...bcvData, ...euroData, ...usdtData];
-        const maxValue = Math.max(...allData);
-        const minValue = Math.min(...allData);
+        // Definir el rango máximo y mínimo (0 - 100)
+        const maxValue = Math.max(...bcvData, ...euroData, ...usdtData);
+        const minValue = Math.min(...bcvData, ...euroData, ...usdtData);
+
+        // Escalar los valores a un rango de 0 a 100
+        const scaleData = (data, min, max) => {
+            return data.map(value => (value - min) / (max - min) * 100);
+        };
+
+        // Escalar las tasas
+        const scaledBcvData = scaleData(bcvData, minValue, maxValue);
+        const scaledEuroData = scaleData(euroData, minValue, maxValue);
+        const scaledUsdtData = scaleData(usdtData, minValue, maxValue);
 
         const chart = new Chart(ctx, {
             type: 'line',
@@ -100,26 +109,26 @@
                 labels: labels,
                 datasets: [
                     {
-                        label: 'Tasa BCV (Bs/USD)',
+                        label: 'Tasa BCV (Escalada)',
                         borderColor: '#28a745',
                         backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                        data: bcvData,
+                        data: scaledBcvData,
                         fill: true,
                         tension: 0.4
                     },
                     {
-                        label: 'Tasa Euro (Bs/EUR)',
+                        label: 'Tasa Euro (Escalada)',
                         borderColor: '#ffc107',
                         backgroundColor: 'rgba(255, 193, 7, 0.2)',
-                        data: euroData,
+                        data: scaledEuroData,
                         fill: true,
                         tension: 0.4
                     },
                     {
-                        label: 'Tasa USDT',
+                        label: 'Tasa USDT (Escalada)',
                         borderColor: '#007bff',
                         backgroundColor: 'rgba(0, 123, 255, 0.2)',
-                        data: usdtData,
+                        data: scaledUsdtData,
                         fill: true,
                         tension: 0.4
                     }
@@ -130,12 +139,12 @@
                 maintainAspectRatio: false,
                 scales: {
                     y: {
-                        beginAtZero: false,  // No forzar a que comience desde cero
-                        suggestedMin: 380,   // Ajuste mínimo más cercano al valor de la tasa BCV más baja
-                        suggestedMax: 430,   // Ajuste máximo para permitir margen y claridad
+                        min: 0,    // Mínimo en 0
+                        max: 100,  // Máximo en 100
                         ticks: {
+                            stepSize: 10, // Escala de 10 en 10
                             callback: function(value) {
-                                return value.toFixed(2);  // Mostrar dos decimales
+                                return value.toFixed(0); // Mostrar valores enteros
                             }
                         }
                     }
