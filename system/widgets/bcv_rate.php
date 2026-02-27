@@ -95,6 +95,7 @@ class bcv_rate
         }
 
         // ========================== Estado expiración API ==========================
+        // ========================== Estado expiración API ==========================
         $dolarvzla_api_expiration = null;
         $dolarvzla_api_expired = false;
         $dolarvzla_api_expiring_soon = false;
@@ -116,6 +117,11 @@ class bcv_rate
                 $dolarvzla_api_expiring_soon =
                     $expirationTime > time() &&
                     $expirationTime <= strtotime('+3 days');
+
+                // Si la API ha expirado, borrar el archivo JSON
+                if ($dolarvzla_api_expired && file_exists($tmpFile)) {
+                    unlink($tmpFile);  // Eliminar el archivo JSON
+                }
             }
         }
 
