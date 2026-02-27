@@ -6,11 +6,6 @@
  * Example to run every at 7:00 in the morning
  * 0 7 * * * /usr/bin/php /var/www/system/cron_reminder.php
  **/
-file_put_contents(
-    '/var/log/reminder_run.log',
-    date('Y-m-d H:i:s') . " Ejecutado\n",
-    FILE_APPEND
-);
 
 include "../init.php";
 
