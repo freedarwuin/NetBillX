@@ -79,7 +79,6 @@
     </div>
 </div>
 
-{* ================= Graficar con Chart.js ================= *}
 {if $bcv_rate}
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -89,6 +88,11 @@
         const usdtData = {$chart_usdt_values|escape:"json"};
 
         const ctx = document.getElementById('bcvChart').getContext('2d');
+
+        // Encuentra los valores máximo y mínimo de cada conjunto de datos
+        const allData = [...bcvData, ...euroData, ...usdtData];
+        const maxValue = Math.max(...allData);
+        const minValue = Math.min(...allData);
 
         const chart = new Chart(ctx, {
             type: 'line',
@@ -126,10 +130,12 @@
                 maintainAspectRatio: false,
                 scales: {
                     y: {
-                        beginAtZero: false,
+                        beginAtZero: false,  // No forzar a que comience desde cero
+                        suggestedMin: minValue - 5,  // Ajuste mínimo dinámico
+                        suggestedMax: maxValue + 5,  // Ajuste máximo dinámico
                         ticks: {
                             callback: function(value) {
-                                return value.toFixed(2);
+                                return value.toFixed(2);  // Mostrar dos decimales
                             }
                         }
                     }
