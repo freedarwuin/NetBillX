@@ -93,8 +93,12 @@ document.addEventListener("DOMContentLoaded", function() {
     // Interpolar USDT
     let lastUsdt = null;
     {$bcv_history|@json_encode}.slice(0,20).reverse().forEach(item => {
-        if (item.usdt != null) lastUsdt = item.usdt;
-        usdtData.push(lastUsdt ?? 0);
+        // Si el valor de USDT es válido, lo usamos
+        if (item.usdt != null) {
+            lastUsdt = item.usdt;
+        }
+        // Si el valor de USDT es nulo, lo mantenemos en el último valor conocido
+        usdtData.push(lastUsdt);
     });
 
     new Chart(ctx, {

@@ -107,7 +107,6 @@ class bcv_rate
         // ==========================
         // Estado expiración API
         // ==========================
-
         $dolarvzla_api_expiration = null;
         $dolarvzla_api_expired = false;
         $dolarvzla_api_expiring_soon = false;
@@ -135,7 +134,6 @@ class bcv_rate
         // ==========================
         // Asignar a Smarty
         // ==========================
-
         $ui->assign([
 
             'bcv_rate'     => $bcv_rate,
