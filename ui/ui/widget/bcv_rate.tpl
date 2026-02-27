@@ -90,14 +90,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const labels = {$chart_labels|@json_encode nofilter};
     const bcvData = {$chart_values_usd|@json_encode nofilter};
     const euroData = {$chart_values_eur|@json_encode nofilter};
-    const usdtData = [];
-
-    // Interpolar USDT desde el historial
-    let lastUsdt = null;
-    {$bcv_history|@json_encode nofilter}.slice(0,20).reverse().forEach(item => {
-        if (item.usdt != null) lastUsdt = item.usdt;
-        usdtData.push(lastUsdt ?? 0);
-    });
+    const usdtData = {$chart_values_usdt|@json_encode nofilter};
 
     // Crear gráfico
     new Chart(ctx, {
