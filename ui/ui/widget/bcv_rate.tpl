@@ -131,8 +131,8 @@
                 scales: {
                     y: {
                         beginAtZero: false,  // No forzar a que comience desde cero
-                        suggestedMin: minValue - 5,  // Ajuste mínimo dinámico
-                        suggestedMax: maxValue + 5,  // Ajuste máximo dinámico
+                        suggestedMin: 380,   // Ajuste mínimo más cercano al valor de la tasa BCV más baja
+                        suggestedMax: 430,   // Ajuste máximo para permitir margen y claridad
                         ticks: {
                             callback: function(value) {
                                 return value.toFixed(2);  // Mostrar dos decimales
