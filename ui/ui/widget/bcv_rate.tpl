@@ -85,9 +85,10 @@ document.addEventListener("DOMContentLoaded", function() {
     const ctx = document.getElementById('bcvChart');
     if (!ctx) return;
 
-    const labels = {$chart_labels|raw};  // Etiquetas para las fechas
-    const bcvData = {$chart_values|raw}; // Datos de BCV
-    const euroData = {$chart_euro_values|raw}; // Datos de Euro
+    // Convertir las variables PHP a formato JSON
+    const labels = {$chart_labels|escape:"json"};  // Etiquetas para las fechas
+    const bcvData = {$chart_values|escape:"json"}; // Datos de BCV
+    const euroData = {$chart_euro_values|escape:"json"}; // Datos de Euro
     const usdtData = [];  // Inicialización para USDT
 
     // Interpolar USDT si es necesario
