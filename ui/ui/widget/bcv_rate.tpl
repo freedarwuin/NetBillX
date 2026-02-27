@@ -1,6 +1,6 @@
 <div class="panel panel-info panel-hovered mb20 activities" style="border-radius:14px; overflow:hidden;">
 
-    {* HEADER *}
+    {* ================= HEADER ================= *}
     <div class="panel-heading" style="background:#ffffff; padding:20px; border-bottom:1px solid #eee;">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
             <div>
@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        {* Estado API *}
+        {* ================= ESTADO API ================= *}
         {if $dolarvzla_api_expiration}
             <div style="
                 margin-top:15px;
@@ -67,7 +67,7 @@
         {/if}
     </div>
 
-    {* BODY *}
+    {* ================= BODY ================= *}
     <div class="panel-body" style="background:#f9fafc; padding:25px;">
         {if $bcv_rate}
             <div style="background:#fff; padding:15px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.04); margin-bottom:25px;">
@@ -79,24 +79,27 @@
     </div>
 </div>
 
+{* ================= SCRIPT CHART.JS ================= *}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
     const ctx = document.getElementById('bcvChart');
     if (!ctx) return;
 
-    const labels = {$chart_labels|raw};
-    const bcvData = {$chart_values_usd|raw};
-    const euroData = {$chart_values_eur|raw};
+    // Convertir PHP arrays a JSON para JS
+    const labels = {$chart_labels|@json_encode nofilter};
+    const bcvData = {$chart_values_usd|@json_encode nofilter};
+    const euroData = {$chart_values_eur|@json_encode nofilter};
     const usdtData = [];
 
-    // Interpolar USDT
+    // Interpolar USDT desde el historial
     let lastUsdt = null;
-    {$bcv_history|@json_encode}.slice(0,20).reverse().forEach(item => {
+    {$bcv_history|@json_encode nofilter}.slice(0,20).reverse().forEach(item => {
         if (item.usdt != null) lastUsdt = item.usdt;
         usdtData.push(lastUsdt ?? 0);
     });
 
+    // Crear gráfico
     new Chart(ctx, {
         type: 'line',
         data: {
