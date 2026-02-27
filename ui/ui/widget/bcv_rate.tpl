@@ -79,3 +79,62 @@
     </div>
 </div>
 
+{* ================= Graficar con Chart.js ================= *}
+{if $bcv_rate}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const labels = {$chart_labels|escape:"json"};
+        const bcvData = {$chart_values|escape:"json"};
+        const euroData = {$chart_euro_values|escape:"json"};
+        const usdtData = {$chart_usdt_values|escape:"json"};
+
+        const ctx = document.getElementById('bcvChart').getContext('2d');
+
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Tasa BCV (Bs/USD)',
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                        data: bcvData,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Tasa Euro (Bs/EUR)',
+                        borderColor: '#ffc107',
+                        backgroundColor: 'rgba(255, 193, 7, 0.2)',
+                        data: euroData,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Tasa USDT',
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.2)',
+                        data: usdtData,
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toFixed(2);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+{/if}
