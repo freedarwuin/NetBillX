@@ -79,77 +79,83 @@
     </div>
 </div>
 
-{if $bcv_rate}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const labels = {$chart_labels|escape:"json"};
-        const bcvData = {$chart_values|escape:"json"};
-        const euroData = {$chart_euro_values|escape:"json"};
-        const usdtData = {$chart_usdt_values|escape:"json"};
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const ctx = document.getElementById('bcvChart');
+    if (!ctx) return;
 
-        const ctx = document.getElementById('bcvChart').getContext('2d');
+    const labels = {$chart_labels|raw};  // Etiquetas para las fechas
+    const bcvData = {$chart_values|raw}; // Datos de BCV
+    const euroData = {$chart_euro_values|raw}; // Datos de Euro
+    const usdtData = [];  // Inicialización para USDT
 
-        // Definir el rango máximo y mínimo (0 - 100)
-        const maxValue = Math.max(...bcvData, ...euroData, ...usdtData);
-        const minValue = Math.min(...bcvData, ...euroData, ...usdtData);
+    // Interpolar USDT si es necesario
+    let lastUsdt = null;
+    {$bcv_history|@json_encode}.slice(0,20).reverse().forEach(item => {
+        if (item.usdt != null) lastUsdt = item.usdt;
+        usdtData.push(lastUsdt ?? 0);  // Asignamos el último valor conocido de USDT
+    });
 
-        // Escalar los valores a un rango de 0 a 100
-        const scaleData = (data, min, max) => {
-            return data.map(value => (value - min) / (max - min) * 100);
-        };
-
-        // Escalar las tasas
-        const scaledBcvData = scaleData(bcvData, minValue, maxValue);
-        const scaledEuroData = scaleData(euroData, minValue, maxValue);
-        const scaledUsdtData = scaleData(usdtData, minValue, maxValue);
-
-        const chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Tasa BCV (Escalada)',
-                        borderColor: '#28a745',
-                        backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                        data: scaledBcvData,
-                        fill: true,
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Tasa Euro (Escalada)',
-                        borderColor: '#ffc107',
-                        backgroundColor: 'rgba(255, 193, 7, 0.2)',
-                        data: scaledEuroData,
-                        fill: true,
-                        tension: 0.4
-                    },
-                    {
-                        label: 'Tasa USDT (Escalada)',
-                        borderColor: '#007bff',
-                        backgroundColor: 'rgba(0, 123, 255, 0.2)',
-                        data: scaledUsdtData,
-                        fill: true,
-                        tension: 0.4
-                    }
-                ]
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'BCV',
+                    data: bcvData,
+                    borderColor: '#007bff',
+                    backgroundColor: '#007bff20',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#007bff'
+                },
+                {
+                    label: 'USDT',
+                    data: usdtData,
+                    borderColor: '#28a745',
+                    backgroundColor: '#28a74520',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#28a745'
+                },
+                {
+                    label: 'Euro',
+                    data: euroData,
+                    borderColor: '#ffc107',
+                    backgroundColor: '#ffc10720',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#ffc107'
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: true, position: 'top' }
             },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        min: 0,    // Mínimo en 0
-                        max: 100,  // Máximo en 100
-                        ticks: {
-                            stepSize: 10, // Escala de 10 en 10
-                            callback: function(value) {
-                                return value.toFixed(0); // Mostrar valores enteros
-                            }
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    ticks: {
+                        stepSize: 50,  // Escala de 50 en 50
+                        min: 350,  // Mínimo en 350
+                        max: 600,  // Máximo en 600
+                        callback: function(value) {
+                            return value; // Mostrar los valores tal como están
                         }
                     }
                 }
             }
-        });
-    </script>
-{/if}
+        }
+    });
+});
+</script>
