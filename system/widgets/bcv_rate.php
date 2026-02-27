@@ -16,6 +16,7 @@ class bcv_rate
         $chart_labels = [];
         $chart_values = [];
         $chart_euro_values = [];
+        $chart_usdt_values = [];  // Nuevo array para USDT
 
         $variation_percent = 0;
         $variacion_texto = "Sin variación";
@@ -45,21 +46,14 @@ class bcv_rate
 
                     $chart_labels[] = date('d/m', strtotime($day['rate_date']));
 
-                    $chart_values[] = isset($day['rate'])
-                        ? (float)$day['rate']
-                        : null;
-
-                    $chart_euro_values[] = isset($day['eur'])
-                        ? (float)$day['eur']
-                        : null;
+                    // Reemplazar valores nulos o vacíos con 0
+                    $chart_values[] = isset($day['rate']) ? (float)$day['rate'] : 0;
+                    $chart_euro_values[] = isset($day['eur']) ? (float)$day['eur'] : 0;
+                    $chart_usdt_values[] = isset($day['usdt']) ? (float)$day['usdt'] : 0;  // Asegurarse de pasar 0 en lugar de null
                 }
 
-                // ==========================
-                // Variación USD
-                // ==========================
-
+                // ========================== Variación USD ==========================
                 if (count($chart_values) > 1) {
-
                     $ayer = $chart_values[count($chart_values) - 2];
                     $hoy  = $chart_values[count($chart_values) - 1];
 
@@ -78,12 +72,8 @@ class bcv_rate
                     }
                 }
 
-                // ==========================
-                // Variación EUR
-                // ==========================
-
+                // ========================== Variación EUR ==========================
                 if (count($chart_euro_values) > 1) {
-
                     $ayer_eur = $chart_euro_values[count($chart_euro_values) - 2];
                     $hoy_eur  = $chart_euro_values[count($chart_euro_values) - 1];
 
@@ -104,10 +94,7 @@ class bcv_rate
             }
         }
 
-        // ==========================
-        // Estado expiración API
-        // ==========================
-
+        // ========================== Estado expiración API ==========================
         $dolarvzla_api_expiration = null;
         $dolarvzla_api_expired = false;
         $dolarvzla_api_expiring_soon = false;
@@ -132,30 +119,22 @@ class bcv_rate
             }
         }
 
-        // ==========================
-        // Asignar a Smarty
-        // ==========================
-
+        // ========================== Asignar a Smarty ==========================
         $ui->assign([
-
             'bcv_rate'     => $bcv_rate,
             'euro_rate'    => $euro_rate,
             'rate_date'    => $rate_date,
-
             'bcv_history'  => $bcv_history,
-
-            'chart_labels'       => json_encode($chart_labels),
-            'chart_values'       => json_encode($chart_values),
-            'chart_euro_values'  => json_encode($chart_euro_values),
-
-            'variacion_valor'        => $variation_percent,
-            'variacion_texto'        => $variacion_texto,
-
-            'variacion_valor_euro'   => $variation_percent_euro,
-            'variacion_texto_euro'   => $variacion_texto_euro,
-
-            'dolarvzla_api_expiration'    => $dolarvzla_api_expiration,
-            'dolarvzla_api_expired'       => $dolarvzla_api_expired,
+            'chart_labels' => json_encode($chart_labels),
+            'chart_values' => json_encode($chart_values),
+            'chart_euro_values' => json_encode($chart_euro_values),
+            'chart_usdt_values' => json_encode($chart_usdt_values), // Asignar valores de USDT
+            'variacion_valor' => $variation_percent,
+            'variacion_texto' => $variacion_texto,
+            'variacion_valor_euro' => $variation_percent_euro,
+            'variacion_texto_euro' => $variacion_texto_euro,
+            'dolarvzla_api_expiration' => $dolarvzla_api_expiration,
+            'dolarvzla_api_expired' => $dolarvzla_api_expired,
             'dolarvzla_api_expiring_soon' => $dolarvzla_api_expiring_soon
         ]);
 
