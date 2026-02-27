@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     beginAtZero: false,
                     ticks: {
                         stepSize: 50,  // Escala de 50 en 50
-                        min: 0,  // Empezar en 0 para asegurar que se vea todo el gráfico
+                        min: 0,  // Empezar en 0 para asegurar que se vea_todo el gráfico
                         max: maxYValue,  // El máximo ahora es dinámico, con un margen adicional
                         callback: function(value) {
                             return value; // Mostrar los valores tal como están
