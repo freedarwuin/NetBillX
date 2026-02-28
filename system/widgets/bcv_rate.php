@@ -95,7 +95,6 @@ class bcv_rate
         }
 
         // ========================== Estado expiración API ==========================
-        // ========================== Estado expiración API ==========================
         $dolarvzla_api_expiration = null;
         $dolarvzla_api_expired = false;
         $dolarvzla_api_expiring_soon = false;
