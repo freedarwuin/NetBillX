@@ -234,7 +234,8 @@ class Message
             $price_bs = $price * $bcv;
 
             $msg = str_replace('[[tasa_bcv]]', number_format($bcv, 4, '.', ''), $msg);
-            $msg = str_replace('[[plan_price_bs]]', Lang::moneyFormat($price_bs), $msg);
+            $price_bs_formatted = 'Bs. ' . number_format($price_bs, 2, ',', '.');
+            $msg = str_replace('[[plan_price_bs]]', $price_bs_formatted, $msg);
             $msg = str_replace('[[rate_date]]', $rate_date, $msg);
 
         } else {
