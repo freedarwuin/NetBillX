@@ -404,7 +404,7 @@ class Message
             $total += $add_cost;
         }
 
-        // Calculate tax
+        // Calcular impuestos
         $tax = 0;
         $tax_enable = isset($config['enable_tax']) ? $config['enable_tax'] : 'no';
         if ($tax_enable === 'yes') {
