@@ -24,10 +24,15 @@
                             <b>[[name]]</b> - {Lang::T('will be replaced with Customer Name')}.<br>
                             <b>[[username]]</b> - {Lang::T('will be replaced with Customer username')}.<br>
                             <b>[[package]]</b> - {Lang::T('will be replaced with Package name')}.<br>
-                            <b>[[price]]</b> - {Lang::T('will be replaced with Package price')}.<br>
+                            <b>[[price]]</b> - {Lang::T('will be replaced with Package price in USD')}.<br>
                             <b>[[bills]]</b> - {Lang::T('additional bills for customers')}.<br>
-                            <b>[[payment_link]]</b> - <a href="{$app_url}/docs/#Reminder%20with%20payment%20link"
-                                target="_blank">{Lang::T("read documentation")}</a>.
+                            <b>[[tasa_bcv]]</b> - {Lang::T('will be replaced with current BCV exchange rate')}.<br>
+                            <b>[[rate_date]]</b> - {Lang::T('will be replaced with BCV rate date')}.<br>
+                            <b>[[plan_price_bs]]</b> - {Lang::T('will be replaced with package price converted to bolivares using BCV rate')}.<br>
+                            <b>[[payment_link]]</b> -
+                            <a href="{$app_url}/docs/#Reminder%20with%20payment%20link" target="_blank">
+                                {Lang::T("read documentation")}
+                            </a>.
                         </p>
                     </div>
                 </div>
@@ -80,11 +85,16 @@
                             <b>[[name]]</b> - {Lang::T('will be replaced with Customer Name')}.<br>
                             <b>[[username]]</b> - {Lang::T('will be replaced with Customer username')}.<br>
                             <b>[[package]]</b> - {Lang::T('will be replaced with Package name')}.<br>
-                            <b>[[price]]</b> - {Lang::T('will be replaced with Package price')}.<br>
+                            <b>[[price]]</b> - {Lang::T('will be replaced with Package price in USD')}.<br>
                             <b>[[expired_date]]</b> - {Lang::T('will be replaced with Expiration date')}.<br>
                             <b>[[bills]]</b> - {Lang::T('additional bills for customers')}.<br>
-                            <b>[[payment_link]]</b> - <a href="{$app_url}/docs/#Reminder%20with%20payment%20link"
-                                target="_blank">{Lang::T("read documentation")}</a>.
+                            <b>[[tasa_bcv]]</b> - {Lang::T('will be replaced with current BCV exchange rate')}.<br>
+                            <b>[[rate_date]]</b> - {Lang::T('will be replaced with BCV rate date')}.<br>
+                            <b>[[plan_price_bs]]</b> - {Lang::T('will be replaced with package price converted to bolivares using BCV rate')}.<br>
+                            <b>[[payment_link]]</b> -
+                            <a href="{$app_url}/docs/#Reminder%20with%20payment%20link" target="_blank">
+                                {Lang::T("read documentation")}
+                            </a>.
                         </p>
                     </div>
                 </div>
