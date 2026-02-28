@@ -16,6 +16,23 @@ require $root_path . 'system/autoload/mail/SMTP.php';
 
 class Message
 {
+    public static function getBCVData()
+    {
+        $file = __DIR__ . '/../bcv_data.json';
+
+        if (!file_exists($file)) {
+            return null;
+        }
+
+        $json = file_get_contents($file);
+        $data = json_decode($json, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return null;
+        }
+
+        return $data;
+    }
 
     public static function sendTelegram($txt, $chat_id = null, $topik = '')
     {
@@ -207,12 +224,25 @@ class Message
         $msg = str_replace('[[plan]]', $package, $msg);
         $msg = str_replace('[[package]]', $package, $msg);
         $msg = str_replace('[[price]]', Lang::moneyFormat($price), $msg);
-        // Calculate bills and additional costs
-        list($bills, $add_cost) = User::getBills($customer['id']);
+        // ===== BCV Integration =====
+        $bcvData = self::getBCVData();
 
-        // Initialize note and total variables
-        $note = "";
-        $total = $price;
+        if ($bcvData && isset($bcvData['bcv_rate'])) {
+
+            $bcv = (float) $bcvData['bcv_rate'];
+            $rate_date = $bcvData['rate_date'] ?? '';
+            $price_bs = $price * $bcv;
+
+            $msg = str_replace('[[tasa_bcv]]', number_format($bcv, 4, '.', ''), $msg);
+            $msg = str_replace('[[plan_price_bs]]', Lang::moneyFormat($price_bs), $msg);
+            $msg = str_replace('[[rate_date]]', $rate_date, $msg);
+
+        } else {
+
+            $msg = str_replace('[[tasa_bcv]]', 'N/A', $msg);
+            $msg = str_replace('[[plan_price_bs]]', 'N/A', $msg);
+            $msg = str_replace('[[rate_date]]', '', $msg);
+        }
 
         // Add bills to the note if there are any additional costs
         if ($add_cost != 0) {
