@@ -389,10 +389,10 @@ class Message
         $inv_url = "?_route=voucher/invoice/$trx[id]/" . md5($trx['id'] . $db_pass);
         $textInvoice = str_replace('[[invoice_link]]', $inv_url, $textInvoice);
 
-        // Calculate bills and additional costs
+        // Calcular facturas y costes adicionales
         list($bills, $add_cost) = User::getBills($cust['id']);
 
-        // Initialize note and total variables
+        // Inicializar variables de nota y total
         $note = "";
         $total = $trx['price'];
 
@@ -420,7 +420,7 @@ class Message
             }
         }
 
-        // Add total to the note
+        // Añadir total a la nota
         $note .= "Total : " . Lang::moneyFormat($total) . "\n";
 
         // Replace placeholders in the message
