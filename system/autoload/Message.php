@@ -356,6 +356,27 @@ class Message
         $textInvoice = str_replace('[[type]]', $trx['type'], $textInvoice);
         $textInvoice = str_replace('[[plan_name]]', $trx['plan_name'], $textInvoice);
         $textInvoice = str_replace('[[plan_price]]', Lang::moneyFormat($trx['price']), $textInvoice);
+        // ===== BCV Integration for Invoice =====
+        $bcvData = self::getBCVData();
+
+        if ($bcvData && isset($bcvData['bcv_rate'])) {
+
+            $bcv = (float) $bcvData['bcv_rate'];
+            $rate_date = $bcvData['rate_date'] ?? '';
+            $price_bs = $trx['price'] * $bcv;
+
+            $textInvoice = str_replace('[[tasa_bcv]]', number_format($bcv, 4, '.', ''), $textInvoice);
+            $textInvoice = str_replace('[[rate_date]]', $rate_date, $textInvoice);
+
+            $price_bs_formatted = 'Bs. ' . number_format($price_bs, 2, ',', '.');
+            $textInvoice = str_replace('[[plan_price_bs]]', $price_bs_formatted, $textInvoice);
+
+        } else {
+
+            $textInvoice = str_replace('[[tasa_bcv]]', 'N/A', $textInvoice);
+            $textInvoice = str_replace('[[rate_date]]', '', $textInvoice);
+            $textInvoice = str_replace('[[plan_price_bs]]', 'N/A', $textInvoice);
+        }
         $textInvoice = str_replace('[[name]]', $cust['fullname'], $textInvoice);
         $textInvoice = str_replace('[[note]]', $cust['note'], $textInvoice);
         $textInvoice = str_replace('[[user_name]]', $trx['username'], $textInvoice);
