@@ -116,15 +116,19 @@
                             <b>[[payment_channel]]</b> - {Lang::T('Payment channel user paid from')}.<br>
                             <b>[[type]]</b> - {Lang::T('is Hotspot or PPPOE')}.<br>
                             <b>[[plan_name]]</b> - {Lang::T('Internet Package')}.<br>
-                            <b>[[plan_price]]</b> - {Lang::T('Internet Package Prices')}.<br>
+                            <b>[[plan_price]]</b> - {Lang::T('Internet Package Prices in USD')}.<br>
+                            <b>[[tasa_bcv]]</b> - {Lang::T('BCV exchange rate applied to this invoice')}.<br>
+                            <b>[[rate_date]]</b> - {Lang::T('BCV rate date used for conversion')}.<br>
+                            <b>[[plan_price_bs]]</b> - {Lang::T('Internet Package price converted to bolivares using BCV rate')}.<br>
                             <b>[[name]]</b> - {Lang::T('Receiver name')}.<br>
                             <b>[[user_name]]</b> - {Lang::T('Username internet')}.<br>
                             <b>[[user_password]]</b> - {Lang::T('User password')}.<br>
                             <b>[[expired_date]]</b> - {Lang::T('Expired datetime')}.<br>
                             <b>[[footer]]</b> - {Lang::T('Invoice Footer')}.<br>
                             <b>[[note]]</b> - {Lang::T('For Notes by admin')}.<br>
-                            <b>[[invoice_link]]</b> - <a href="{$app_url}/docs/#Reminder%20with%20payment%20link"
-                            target="_blank">{Lang::T("read documentation")}</a>.
+                            <b>[[invoice_link]]</b> -
+                            <a href="{$app_url}/docs/#Reminder%20with%20payment%20link"
+                                target="_blank">{Lang::T("read documentation")}</a>.
                         </p>
                     </div>
                 </div>
