@@ -244,6 +244,30 @@ try {
         echo "La tasa no cambió. No se envía WhatsApp.\n";
     }
 
+    // ===============================
+    // 🔥 Enviar WhatsApp solo si cambia la tasa
+    // ===============================
+    if ($rate_changed) {
+        $response = file_get_contents($wa_url);
+        if ($response === false) {
+            throw new Exception("No se pudo enviar mensaje WhatsApp.");
+        }
+        echo "WhatsApp enviado porque la tasa cambió\n";
+
+        // ===============================
+        // ✅ Ejecutar send_bcv.php
+        // ===============================
+        $send_bcv_path = __DIR__ . '/MONITOR/send_bcv.php';
+        if (file_exists($send_bcv_path)) {
+            include $send_bcv_path;
+            echo "send_bcv.php ejecutado correctamente.\n";
+        } else {
+            echo "No se encontró send_bcv.php en MONITOR.\n";
+        }
+    } else {
+        echo "La tasa no cambió. No se envía WhatsApp.\n";
+    }
+
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
