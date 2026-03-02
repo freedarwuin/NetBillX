@@ -257,7 +257,7 @@ try {
         // ===============================
         // ✅ Ejecutar send_bcv.php
         // ===============================
-        $send_bcv_path = __DIR__ . '../MONITOR/send_bcv.php';
+        $send_bcv_path = __DIR__ . '/../MONITOR/send_bcv.php';
         if (file_exists($send_bcv_path)) {
             include $send_bcv_path;
             echo "send_bcv.php ejecutado correctamente.\n";
