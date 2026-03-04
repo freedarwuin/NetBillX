@@ -235,7 +235,7 @@ try {
     $message = "✨ *$saludo* ✨\n\n"
              . "💱 *Actualización Tasa Oficial BCV*\n"
              . "━━━━━━━━━━━━━━━━━━\n\n"
-             . "📅 *Fecha:* $dayName $fecha_ve - 07:00 AM\n\n"
+             . "📅 Tasa para el día *$dayName $fecha_ve - 07:00 AM*\n\n"
              . "💵 *Dólar BCV:* $bcv_format Bs/USD\n"
              . "💶 *Euro BCV:* $eur_format Bs/EUR\n"
              . ($usdt_rate ? "💰 *USDT Promedio:* $usdt_format Bs/USD\n" : "")
