@@ -247,6 +247,47 @@ try {
     $wa_url = str_replace(['[number]', '[text]'], [$phone, $message_encoded], $wa_url_template);
 
     // ===============================
+    // 📂 Enviar WhatsApp a todos los destinatarios
+    // ===============================
+    $destinatarios_file = __DIR__ . '/system/destinatarios.txt';
+
+    if (!file_exists($destinatarios_file)) {
+        // Si no existe, creamos un ejemplo
+        $ejemplo = "04141234567\n04241234567\n";
+        file_put_contents($destinatarios_file, $ejemplo);
+        echo "destinatarios.txt no existía. Fue creado automáticamente.\n";
+        echo "Agrega los números en system/destinatarios.txt\n";
+    } else {
+        $contenido = trim(file_get_contents($destinatarios_file));
+        if (empty($contenido)) {
+            echo "destinatarios.txt está vacío. No se enviará WhatsApp.\n";
+        } else {
+            $numeros_raw = preg_split('/[\s,]+/', $contenido);
+            $destinatarios = [];
+            foreach ($numeros_raw as $numero) {
+                $numero_limpio = preg_replace('/\D/', '', $numero);
+                if (!empty($numero_limpio)) $destinatarios[] = $numero_limpio;
+            }
+            $destinatarios = array_unique($destinatarios);
+            echo "Destinatarios encontrados: " . count($destinatarios) . "\n";
+
+            if ($rate_changed) {
+                foreach ($destinatarios as $num) {
+                    $wa_url_num = str_replace('[number]', $num, $wa_url);
+                    $response = @file_get_contents($wa_url_num);
+                    if ($response === false) {
+                        echo "Error al enviar WhatsApp a $num\n";
+                    } else {
+                        echo "WhatsApp enviado a $num correctamente\n";
+                    }
+                }
+            } else {
+                echo "La tasa no cambió. No se enviará WhatsApp a los destinatarios.\n";
+            }
+        }
+    }
+
+    // ===============================
     // 🔥 Enviar WhatsApp solo si cambia la tasa
     // ===============================
     if ($rate_changed) {
