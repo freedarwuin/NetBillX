@@ -113,6 +113,7 @@ try {
 
     if (isset($bcvList['rates']) && is_array($bcvList['rates'])) {
         usort($bcvList['rates'], fn($a,$b) => strcmp($b['date'],$a['date']));
+
         $lastUsdt = null;
         foreach ($bcvList['rates'] as $row) {
             if (!isset($row['usd'], $row['date'])) continue;
@@ -146,11 +147,13 @@ try {
 
     $variacion_texto = "➖ Sin cambio";
     if ($diferencia > 0) {
-        $variacion_texto = "⬆ Subió +" . number_format($diferencia, 4, ',', '.') .
-            " Bs (" . number_format($porcentaje, 2, ',', '.') . "%)";
+        $variacion_texto = "⬆ Subió +"
+            . number_format($diferencia, 4, ',', '.')
+            . " Bs (" . number_format($porcentaje, 2, ',', '.') . "%)";
     } elseif ($diferencia < 0) {
-        $variacion_texto = "⬇ Bajó " . number_format(abs($diferencia), 4, ',', '.') .
-            " Bs (" . number_format(abs($porcentaje), 2, ',', '.') . "%)";
+        $variacion_texto = "⬇ Bajó "
+            . number_format(abs($diferencia), 4, ',', '.')
+            . " Bs (" . number_format(abs($porcentaje), 2, ',', '.') . "%)";
     }
 
     // ===============================
@@ -163,6 +166,7 @@ try {
             $old_rate = (float)$oldData['bcv_rate'];
         }
     }
+
     $rate_changed = ($old_rate === null || round($old_rate, 4) !== round($bcv_rate, 4));
 
     // ===============================
@@ -189,17 +193,33 @@ try {
     $stmt->execute();
     $configData = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
-    $phone       = preg_replace('/\D/', '', $configData['phone'] ?? '');
-    $countryCode = preg_replace('/\D/', '', $configData['country_code_phone'] ?? '');
     $wa_url_template = $configData['wa_url'] ?? '';
+    if (!$wa_url_template) throw new Exception("Configuración WhatsApp incompleta.");
 
-    if (!$phone || !$countryCode || !$wa_url_template) {
-        throw new Exception("Configuración WhatsApp incompleta.");
-    }
+    // ===============================
+    // 📂 Verificar o crear destinatarios.txt
+    // ===============================
+    $destinatarios_file = __DIR__ . '/../MONITOR/destinatarios.txt';
+    $destinatarios = [];
 
-    if (strpos($phone, $countryCode) !== 0) {
-        if (strpos($phone, '0') === 0) $phone = substr($phone, 1);
-        $phone = $countryCode . $phone;
+    if (!file_exists($destinatarios_file)) {
+        $ejemplo = "04141234567\n04241234567\n";
+        file_put_contents($destinatarios_file, $ejemplo);
+        echo "destinatarios.txt no existía. Fue creado automáticamente.\n";
+        echo "Agrega los números en MONITOR/destinatarios.txt\n";
+    } else {
+        $contenido = trim(file_get_contents($destinatarios_file));
+        if (!empty($contenido)) {
+            $numeros_raw = preg_split('/[\s,]+/', $contenido);
+            foreach ($numeros_raw as $numero) {
+                $numero_limpio = preg_replace('/\D/', '', $numero);
+                if (!empty($numero_limpio)) $destinatarios[] = $numero_limpio;
+            }
+            $destinatarios = array_unique($destinatarios);
+            echo "Destinatarios encontrados: " . count($destinatarios) . "\n";
+        } else {
+            echo "destinatarios.txt está vacío.\n";
+        }
     }
 
     // ===============================
@@ -214,6 +234,9 @@ try {
         $saludo = "Buenas noches";
     }
 
+    // ===============================
+    // 💬 Armar mensaje
+    // ===============================
     $bcv_format  = number_format($bcv_rate, 4, ',', '.');
     $usdt_format = $usdt_rate ? number_format($usdt_rate, 4, ',', '.') : 'N/D';
     $eur_format  = $eur_rate ? number_format($eur_rate, 4, ',', '.') : 'N/D';
@@ -235,58 +258,28 @@ try {
              . "━━━━━━━━━━━━━━━━━━\n"
              . "🏢 *Sistema NetBillX*\n📈 Datos y gráfica actualizados automáticamente.";
 
-    $message_encoded = urlencode($message);
-    $wa_url = str_replace(['[number]', '[text]'], [$phone, $message_encoded], $wa_url_template);
-
     // ===============================
     // 🔥 Enviar WhatsApp solo si cambia la tasa
     // ===============================
-    if ($rate_changed) {
+    if ($rate_changed && !empty($destinatarios)) {
+        foreach ($destinatarios as $phone) {
+            // Añadir código de país si no está
+            $countryCode = preg_replace('/\D/', '', $configData['country_code_phone'] ?? '');
+            if ($countryCode && strpos($phone, $countryCode) !== 0) {
+                if (strpos($phone, '0') === 0) $phone = substr($phone, 1);
+                $phone = $countryCode . $phone;
+            }
 
-        $response = file_get_contents($wa_url);
-        if ($response === false) {
-            throw new Exception("No se pudo enviar mensaje WhatsApp.");
-        }
-        echo "WhatsApp enviado porque la tasa cambió\n";
-
-        // ===============================
-        // 📂 Verificar o crear destinatarios.txt
-        // ===============================
-        $destinatarios_file = __DIR__ . '/../MONITOR/destinatarios.txt';
-
-        if (!file_exists($destinatarios_file)) {
-            $ejemplo = "04141234567\n04241234567\n";
-            file_put_contents($destinatarios_file, $ejemplo);
-            echo "destinatarios.txt no existía. Fue creado automáticamente.\n";
-            echo "Agrega los números en MONITOR/destinatarios.txt\n";
-        } else {
-            $contenido = trim(file_get_contents($destinatarios_file));
-            if (empty($contenido)) {
-                echo "destinatarios.txt está vacío.\n";
+            $wa_url = str_replace(['[number]', '[text]'], [$phone, urlencode($message)], $wa_url_template);
+            $response = file_get_contents($wa_url);
+            if ($response === false) {
+                echo "No se pudo enviar WhatsApp a $phone\n";
             } else {
-                $numeros_raw = preg_split('/[\s,]+/', $contenido);
-                $destinatarios = [];
-                foreach ($numeros_raw as $numero) {
-                    $numero_limpio = preg_replace('/\D/', '', $numero);
-                    if (!empty($numero_limpio)) $destinatarios[] = $numero_limpio;
-                }
-                $destinatarios = array_unique($destinatarios);
-                echo "Destinatarios encontrados: " . count($destinatarios) . "\n";
+                echo "WhatsApp enviado a $phone porque la tasa cambió\n";
             }
         }
-
-        // ===============================
-        // ✅ Ejecutar send_bcv.php
-        // ===============================
-        $send_bcv_path = __DIR__ . '/../MONITOR/send_bcv.php';
-        if (file_exists($send_bcv_path)) {
-            include $send_bcv_path;
-            echo "send_bcv.php ejecutado correctamente.\n";
-        } else {
-            echo "No se encontró send_bcv.php en MONITOR.\n";
-        }
     } else {
-        echo "La tasa no cambió. No se envía WhatsApp.\n";
+        echo "La tasa no cambió o no hay destinatarios. No se envía WhatsApp.\n";
     }
 
 } catch (Exception $e) {
