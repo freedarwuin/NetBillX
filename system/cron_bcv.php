@@ -208,6 +208,19 @@ try {
         $phone = $countryCode . $phone;
     }
 
+    // ===============================
+    // 🕒 Saludo automático según hora
+    // ===============================
+    $horaActual = (int)date('H'); // Hora en formato 24h (00-23)
+
+    if ($horaActual >= 5 && $horaActual <= 11) {
+        $saludo = "Buenos días";
+    } elseif ($horaActual >= 12 && $horaActual <= 18) {
+        $saludo = "Buenas tardes";
+    } else {
+        $saludo = "Buenas noches";
+    }
+
     $bcv_format  = number_format($bcv_rate, 4, ',', '.');
     $usdt_format = $usdt_rate ? number_format($usdt_rate, 4, ',', '.') : 'N/D';
     $eur_format  = $eur_rate ? number_format($eur_rate, 4, ',', '.') : 'N/D';
@@ -217,16 +230,19 @@ try {
     $dayName = $dias[$dateObj->format('l')];
     $fecha_ve = $dateObj->format('d/m/Y');
 
-    $message = "💱 *Actualización Tasa Oficial BCV*\n\n"
-             . "📅 Tasa para el día *$dayName $fecha_ve - 07:00 AM*\n\n"
+    $message = "✨ *$saludo* ✨\n\n"
+             . "💱 *Actualización Oficial BCV*\n"
+             . "━━━━━━━━━━━━━━━━━━\n\n"
+             . "📅 *Fecha:* $dayName $fecha_ve\n\n"
              . "💵 *Dólar BCV:* $bcv_format Bs/USD\n"
              . "💶 *Euro BCV:* $eur_format Bs/EUR\n"
              . ($usdt_rate ? "💰 *USDT Promedio:* $usdt_format Bs/USD\n" : "")
              . "\n"
-             . "📊 Variación respecto al día anterior:\n"
+             . "📊 *Variación respecto al día anterior:*\n"
              . "$variacion_texto\n\n"
-             . "🏢 Sistema NetBillX\n"
-             . "Gráfica y datos actualizados automáticamente.";
+             . "━━━━━━━━━━━━━━━━━━\n"
+             . "🏢 *Sistema NetBillX*\n"
+             . "📈 Datos y gráfica actualizados automáticamente.";
 
     $message_encoded = urlencode($message);
     $wa_url = str_replace(['[number]', '[text]'], [$phone, $message_encoded], $wa_url_template);
@@ -255,19 +271,41 @@ try {
         echo "WhatsApp enviado porque la tasa cambió\n";
 
         // ===============================
-        // ✅ Ejecutar send_bcv.php
+        // 📂 Verificar o crear destinatarios.txt
         // ===============================
-        $send_bcv_path = __DIR__ . '/../MONITOR/send_bcv.php';
-        if (file_exists($send_bcv_path)) {
-            include $send_bcv_path;
-            echo "send_bcv.php ejecutado correctamente.\n";
-        } else {
-            echo "No se encontró send_bcv.php en MONITOR.\n";
-        }
-    } else {
-        echo "La tasa no cambió. No se envía WhatsApp.\n";
-    }
+        $destinatarios_file = __DIR__ . '/../system/destinatarios.txt';
 
+        if (!file_exists($destinatarios_file)) {
+
+            $ejemplo = "04141234567\n04241234567\n";
+            file_put_contents($destinatarios_file, $ejemplo);
+
+            echo "destinatarios.txt no existía. Fue creado automáticamente.\n";
+            echo "Agrega los números en system/destinatarios.txt\n";
+
+        } else {
+
+            $contenido = trim(file_get_contents($destinatarios_file));
+
+            if (empty($contenido)) {
+                echo "destinatarios.txt está vacío.\n";
+            } else {
+
+                $numeros_raw = preg_split('/[\s,]+/', $contenido);
+                $destinatarios = [];
+
+                foreach ($numeros_raw as $numero) {
+                    $numero_limpio = preg_replace('/\D/', '', $numero);
+                    if (!empty($numero_limpio)) {
+                        $destinatarios[] = $numero_limpio;
+                    }
+                }
+
+                $destinatarios = array_unique($destinatarios);
+
+                echo "Destinatarios encontrados: " . count($destinatarios) . "\n";
+            }
+        }
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
 }
