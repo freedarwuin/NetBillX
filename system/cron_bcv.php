@@ -47,7 +47,7 @@ try {
     $apiKey = trim($row['value']);
 
     // ===============================
-    // 3️⃣ Función para llamar API
+    // 3️⃣ Función API
     // ===============================
     function callAPI($url, $apiKey) {
         $ch = curl_init();
@@ -78,7 +78,7 @@ try {
     }
 
     // ===============================
-    // 4️⃣ Obtener tasa actual
+    // 4️⃣ Tasa actual
     // ===============================
     $bcvCurrent = callAPI(
         "https://api.dolarvzla.com/public/bcv/exchange-rate",
@@ -94,7 +94,7 @@ try {
     $rate_date = substr($bcvCurrent['current']['date'], 0, 10);
 
     // ===============================
-    // 5️⃣ Histórico últimos 20 días
+    // 5️⃣ Histórico
     // ===============================
     $today = date('Y-m-d');
     $from  = date('Y-m-d', strtotime('-20 days'));
@@ -147,7 +147,7 @@ try {
     $usdt_rate = $bcv_history[0]['usdt'] ?? null;
 
     // ===============================
-    // 6️⃣ Calcular variación
+    // 6️⃣ Variación
     // ===============================
     $ayer_rate = $bcv_history[1]['rate'];
     $diferencia = $bcv_rate - $ayer_rate;
@@ -166,7 +166,7 @@ try {
     }
 
     // ===============================
-    // 7️⃣ Verificar cambio
+    // 7️⃣ Cambio
     // ===============================
     $old_rate = null;
 
@@ -183,77 +183,12 @@ try {
     // 8️⃣ Guardar JSON
     // ===============================
     file_put_contents($tmpFile, json_encode([
-        'bcv_rate'       => $bcv_rate,
-        'usdt_rate'      => $usdt_rate,
-        'eur_rate'       => $eur_rate,
-        'rate_date'      => $rate_date,
-        'bcv_history'    => $bcv_history,
-        'variacion_texto'=> $variacion_texto,
-        'variacion_valor'=> $porcentaje
+        'bcv_rate' => $bcv_rate
     ], JSON_PRETTY_PRINT));
 
     // ===============================
     // 9️⃣ WhatsApp
     // ===============================
-    $stmt = $dbh->prepare("
-        SELECT setting, value
-        FROM tbl_appconfig
-        WHERE setting IN ('phone','country_code_phone','wa_url')
-    ");
-    $stmt->execute();
-    $configData = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
-
-    $phone       = preg_replace('/\D/', '', $configData['phone'] ?? '');
-    $countryCode = preg_replace('/\D/', '', $configData['country_code_phone'] ?? '');
-    $wa_url_template = $configData['wa_url'] ?? '';
-
-    if (!$phone || !$countryCode || !$wa_url_template) {
-        throw new Exception("Configuración WhatsApp incompleta.");
-    }
-
-    if (strpos($phone, $countryCode) !== 0) {
-        if (strpos($phone, '0') === 0) {
-            $phone = substr($phone, 1);
-        }
-        $phone = $countryCode . $phone;
-    }
-
-    $horaActual = (int)date('H');
-
-    if ($horaActual >= 5 && $horaActual <= 11) {
-        $saludo = "Buenos días";
-    } elseif ($horaActual >= 12 && $horaActual <= 18) {
-        $saludo = "Buenas tardes";
-    } else {
-        $saludo = "Buenas noches";
-    }
-
-    $bcv_format  = number_format($bcv_rate, 4, ',', '.');
-    $usdt_format = $usdt_rate ? number_format($usdt_rate, 4, ',', '.') : 'N/D';
-    $eur_format  = $eur_rate ? number_format($eur_rate, 4, ',', '.') : 'N/D';
-
-    $dateObj = new DateTime($rate_date);
-    $dias = ['Sunday'=>'Domingo','Monday'=>'Lunes','Tuesday'=>'Martes','Wednesday'=>'Miércoles','Thursday'=>'Jueves','Friday'=>'Viernes','Saturday'=>'Sábado'];
-    $dayName = $dias[$dateObj->format('l')];
-    $fecha_ve = $dateObj->format('d/m/Y');
-
-    $message = "✨ *$saludo* ✨\n\n"
-             . "💱 *Actualización Oficial BCV*\n"
-             . "━━━━━━━━━━━━━━━━━━\n\n"
-             . "📅 *Fecha:* $dayName $fecha_ve  - 07:00 AM\n\n"
-             . "💵 *Dólar BCV:* $bcv_format Bs/USD\n"
-             . "💶 *Euro BCV:* $eur_format Bs/EUR\n"
-             . ($usdt_rate ? "💰 *USDT Promedio:* $usdt_format Bs/USD\n" : "")
-             . "\n"
-             . "📊 *Variación respecto al día anterior:*\n"
-             . "$variacion_texto\n\n"
-             . "━━━━━━━━━━━━━━━━━━\n"
-             . "🏢 *Sistema NetBillX*\n"
-             . "📈 Datos y gráfica actualizados automáticamente.";
-
-    $message_encoded = urlencode($message);
-    $wa_url = str_replace(['[number]', '[text]'], [$phone, $message_encoded], $wa_url_template);
-
     if ($rate_changed) {
 
         $response = file_get_contents($wa_url);
@@ -263,42 +198,9 @@ try {
 
         echo "WhatsApp enviado porque la tasa cambió\n";
 
-        // ===============================
-        // 📂 Verificar o crear destinatarios.txt
-        // ===============================
-        $destinatarios_file = __DIR__ . '/../MONITOR/destinatarios.txt';
-
-        if (!file_exists($destinatarios_file)) {
-
-            $ejemplo = "04141234567\n04241234567\n";
-            file_put_contents($destinatarios_file, $ejemplo);
-
-            echo "destinatarios.txt no existía. Fue creado automáticamente.\n";
-            echo "Agrega los números en MONITOR/destinatarios.txt\n";
-
-        } else {
-
-            $contenido = trim(file_get_contents($destinatarios_file));
-
-            if (empty($contenido)) {
-                echo "destinatarios.txt está vacío.\n";
-            } else {
-
-                $numeros_raw = preg_split('/[\s,]+/', $contenido);
-                $destinatarios = [];
-
-                foreach ($numeros_raw as $numero) {
-                    $numero_limpio = preg_replace('/\D/', '', $numero);
-                    if (!empty($numero_limpio)) {
-                        $destinatarios[] = $numero_limpio;
-                    }
-                }
-
-                $destinatarios = array_unique($destinatarios);
-
-                echo "Destinatarios encontrados: " . count($destinatarios) . "\n";
-            }
-        }
+    } else {
+        echo "La tasa no cambió. No se envía WhatsApp.\n";
+    }
 
 } catch (Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
