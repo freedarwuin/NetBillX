@@ -2,8 +2,7 @@
 /**
  * cron_bcv.php
  * Genera bcv_data.json con tasas BCV y USDT
- * Envía WhatsApp solo si cambia la tasa BCV
- * y lo envía a los números de MONITOR/destinatarios.txt
+ * Solo envía WhatsApp si cambia la tasa BCV
  */
 
 ini_set('display_errors', 1);
@@ -189,98 +188,84 @@ try {
     $stmt = $dbh->prepare("
         SELECT setting, value
         FROM tbl_appconfig
-        WHERE setting IN ('wa_url','country_code_phone')
+        WHERE setting IN ('phone','country_code_phone','wa_url')
     ");
     $stmt->execute();
     $configData = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
-    $wa_url_template = $configData['wa_url'] ?? '';
+    $phone       = preg_replace('/\D/', '', $configData['phone'] ?? '');
     $countryCode = preg_replace('/\D/', '', $configData['country_code_phone'] ?? '');
+    $wa_url_template = $configData['wa_url'] ?? '';
 
-    if (!$wa_url_template) throw new Exception("Configuración WhatsApp incompleta.");
+    if (!$phone || !$countryCode || !$wa_url_template) {
+        throw new Exception("Configuración WhatsApp incompleta.");
+    }
 
-    // ===============================
-    // 📂 Verificar o crear destinatarios.txt
-    // ===============================
-    $destinatarios_file = __DIR__ . '/../MONITOR/destinatarios.txt';
-    $destinatarios = [];
-
-    if (!file_exists($destinatarios_file)) {
-        $ejemplo = "04141234567\n04241234567\n";
-        file_put_contents($destinatarios_file, $ejemplo);
-        echo "destinatarios.txt no existía. Fue creado automáticamente.\n";
-        echo "Agrega los números en MONITOR/destinatarios.txt\n";
-    } else {
-        $contenido = trim(file_get_contents($destinatarios_file));
-        if (!empty($contenido)) {
-            $numeros_raw = preg_split('/[\s,]+/', $contenido);
-            foreach ($numeros_raw as $numero) {
-                $numero_limpio = preg_replace('/\D/', '', $numero);
-                if (!empty($numero_limpio)) $destinatarios[] = $numero_limpio;
-            }
-            $destinatarios = array_unique($destinatarios);
-            echo "Destinatarios encontrados: " . count($destinatarios) . "\n";
-        } else {
-            echo "destinatarios.txt está vacío.\n";
+    if (strpos($phone, $countryCode) !== 0) {
+        if (strpos($phone, '0') === 0) {
+            $phone = substr($phone, 1);
         }
+        $phone = $countryCode . $phone;
     }
 
-    // ===============================
-    // 🕒 Saludo automático según hora
-    // ===============================
-    $horaActual = (int)date('H');
-    if ($horaActual >= 5 && $horaActual <= 11) {
-        $saludo = "Buenos días";
-    } elseif ($horaActual >= 12 && $horaActual <= 18) {
-        $saludo = "Buenas tardes";
-    } else {
-        $saludo = "Buenas noches";
-    }
-
-    // ===============================
-    // 💬 Armar mensaje
-    // ===============================
     $bcv_format  = number_format($bcv_rate, 4, ',', '.');
     $usdt_format = $usdt_rate ? number_format($usdt_rate, 4, ',', '.') : 'N/D';
     $eur_format  = $eur_rate ? number_format($eur_rate, 4, ',', '.') : 'N/D';
 
     $dateObj = new DateTime($rate_date);
-    $dias = ['Sunday'=>'Domingo','Monday'=>'Lunes','Tuesday'=>'Martes','Wednesday'=>'Miércoles',
-             'Thursday'=>'Jueves','Friday'=>'Viernes','Saturday'=>'Sábado'];
+    $dias = ['Sunday'=>'Domingo','Monday'=>'Lunes','Tuesday'=>'Martes','Wednesday'=>'Miércoles','Thursday'=>'Jueves','Friday'=>'Viernes','Saturday'=>'Sábado'];
     $dayName = $dias[$dateObj->format('l')];
     $fecha_ve = $dateObj->format('d/m/Y');
 
-    $message = "✨ *$saludo* ✨\n\n"
-             . "💱 *Actualización Oficial BCV*\n"
-             . "━━━━━━━━━━━━━━━━━━\n\n"
-             . "📅 *Fecha:* $dayName $fecha_ve - 07:00 AM\n\n"
+    $message = "💱 *Actualización Tasa Oficial BCV*\n\n"
+             . "📅 Tasa para el día *$dayName $fecha_ve - 07:00 AM*\n\n"
              . "💵 *Dólar BCV:* $bcv_format Bs/USD\n"
              . "💶 *Euro BCV:* $eur_format Bs/EUR\n"
              . ($usdt_rate ? "💰 *USDT Promedio:* $usdt_format Bs/USD\n" : "")
-             . "\n📊 *Variación respecto al día anterior:*\n$variacion_texto\n\n"
-             . "━━━━━━━━━━━━━━━━━━\n"
-             . "🏢 *Sistema NetBillX*\n📈 Datos y gráfica actualizados automáticamente.";
+             . "\n"
+             . "📊 Variación respecto al día anterior:\n"
+             . "$variacion_texto\n\n"
+             . "🏢 Sistema NetBillX\n"
+             . "Gráfica y datos actualizados automáticamente.";
+
+    $message_encoded = urlencode($message);
+    $wa_url = str_replace(['[number]', '[text]'], [$phone, $message_encoded], $wa_url_template);
 
     // ===============================
-    // 🔥 Enviar WhatsApp a todos los destinatarios si cambia la tasa
+    // 🔥 Enviar WhatsApp solo si cambia la tasa
     // ===============================
-    if ($rate_changed && !empty($destinatarios)) {
-        foreach ($destinatarios as $phone) {
-            if ($countryCode && strpos($phone, $countryCode) !== 0) {
-                if (strpos($phone, '0') === 0) $phone = substr($phone, 1);
-                $phone = $countryCode . $phone;
-            }
+    if ($rate_changed) {
+        $response = file_get_contents($wa_url);
+        if ($response === false) {
+            throw new Exception("No se pudo enviar mensaje WhatsApp.");
+        }
+        echo "WhatsApp enviado porque la tasa cambió\n";
+    } else {
+        echo "La tasa no cambió. No se envía WhatsApp.\n";
+    }
 
-            $wa_url = str_replace(['[number]', '[text]'], [$phone, urlencode($message)], $wa_url_template);
-            $response = file_get_contents($wa_url);
-            if ($response === false) {
-                echo "No se pudo enviar WhatsApp a $phone\n";
-            } else {
-                echo "WhatsApp enviado a $phone porque la tasa cambió\n";
-            }
+    // ===============================
+    // 🔥 Enviar WhatsApp solo si cambia la tasa
+    // ===============================
+    if ($rate_changed) {
+        $response = file_get_contents($wa_url);
+        if ($response === false) {
+            throw new Exception("No se pudo enviar mensaje WhatsApp.");
+        }
+        echo "WhatsApp enviado porque la tasa cambió\n";
+
+        // ===============================
+        // ✅ Ejecutar send_bcv.php
+        // ===============================
+        $send_bcv_path = __DIR__ . '/../MONITOR/send_bcv.php';
+        if (file_exists($send_bcv_path)) {
+            include $send_bcv_path;
+            echo "send_bcv.php ejecutado correctamente.\n";
+        } else {
+            echo "No se encontró send_bcv.php en MONITOR.\n";
         }
     } else {
-        echo "La tasa no cambió o no hay destinatarios. No se envía WhatsApp.\n";
+        echo "La tasa no cambió. No se envía WhatsApp.\n";
     }
 
 } catch (Exception $e) {
