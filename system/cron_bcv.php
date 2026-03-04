@@ -183,23 +183,26 @@ try {
     ], JSON_PRETTY_PRINT));
 
     // ===============================
-    // 9️⃣ Configuración WhatsApp
+    // 9️⃣ Configuración WhatsApp usando tbl_customers + country_code_phone
     // ===============================
+    $customerId = 1; // Cambiar por el cliente deseado
+
     $stmt = $dbh->prepare("
-        SELECT setting, value
-        FROM tbl_appconfig
-        WHERE setting IN ('phone','country_code_phone','wa_url')
+        SELECT c.phonenumber, a.value AS country_code_phone
+        FROM tbl_customers c
+        LEFT JOIN tbl_appconfig a ON a.setting = 'country_code_phone'
+        WHERE c.id = :id
+        LIMIT 1
     ");
-    $stmt->execute();
-    $configData = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+    $stmt->execute([':id' => $customerId]);
+    $row = $stmt->fetch();
 
-    $phone       = preg_replace('/\D/', '', $configData['phone'] ?? '');
-    $countryCode = preg_replace('/\D/', '', $configData['country_code_phone'] ?? '');
-    $wa_url_template = $configData['wa_url'] ?? '';
-
-    if (!$phone || !$countryCode || !$wa_url_template) {
-        throw new Exception("Configuración WhatsApp incompleta.");
+    if (!$row || empty($row['phonenumber']) || empty($row['country_code_phone'])) {
+        throw new Exception("Número de teléfono o código de país no encontrado para cliente ID $customerId.");
     }
+
+    $phone       = preg_replace('/\D/', '', $row['phonenumber']);
+    $countryCode = preg_replace('/\D/', '', $row['country_code_phone']);
 
     if (strpos($phone, $countryCode) !== 0) {
         if (strpos($phone, '0') === 0) {
@@ -208,14 +211,7 @@ try {
         $phone = $countryCode . $phone;
     }
 
-    $bcv_format  = number_format($bcv_rate, 4, ',', '.');
-    $usdt_format = $usdt_rate ? number_format($usdt_rate, 4, ',', '.') : 'N/D';
-    $eur_format  = $eur_rate ? number_format($eur_rate, 4, ',', '.') : 'N/D';
-
-    $dateObj = new DateTime($rate_date);
-    $dias = ['Sunday'=>'Domingo','Monday'=>'Lunes','Tuesday'=>'Martes','Wednesday'=>'Miércoles','Thursday'=>'Jueves','Friday'=>'Viernes','Saturday'=>'Sábado'];
-    $dayName = $dias[$dateObj->format('l')];
-    $fecha_ve = $dateObj->format('d/m/Y');
+    $wa_url_template = "https://api.whatsapp.com/send?phone=[number]&text=[text]";
 
     // ===============================
     // 🕒 Saludo automático según hora
@@ -232,6 +228,15 @@ try {
     // ===============================
     // 💬 Armar mensaje con saludo
     // ===============================
+    $bcv_format  = number_format($bcv_rate, 4, ',', '.');
+    $usdt_format = $usdt_rate ? number_format($usdt_rate, 4, ',', '.') : 'N/D';
+    $eur_format  = $eur_rate ? number_format($eur_rate, 4, ',', '.') : 'N/D';
+
+    $dateObj = new DateTime($rate_date);
+    $dias = ['Sunday'=>'Domingo','Monday'=>'Lunes','Tuesday'=>'Martes','Wednesday'=>'Miércoles','Thursday'=>'Jueves','Friday'=>'Viernes','Saturday'=>'Sábado'];
+    $dayName = $dias[$dateObj->format('l')];
+    $fecha_ve = $dateObj->format('d/m/Y');
+
     $message = "✨ *$saludo* ✨\n\n"
              . "💱 *Actualización Tasa Oficial BCV*\n"
              . "━━━━━━━━━━━━━━━━━━\n\n"
