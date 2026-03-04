@@ -2,7 +2,8 @@
 /**
  * cron_bcv.php
  * Genera bcv_data.json con tasas BCV y USDT
- * Solo envía WhatsApp si cambia la tasa BCV
+ * Envía WhatsApp solo si cambia la tasa BCV
+ * y lo envía a los números de MONITOR/destinatarios.txt
  */
 
 ini_set('display_errors', 1);
@@ -188,12 +189,14 @@ try {
     $stmt = $dbh->prepare("
         SELECT setting, value
         FROM tbl_appconfig
-        WHERE setting IN ('phone','country_code_phone','wa_url')
+        WHERE setting IN ('wa_url','country_code_phone')
     ");
     $stmt->execute();
     $configData = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
     $wa_url_template = $configData['wa_url'] ?? '';
+    $countryCode = preg_replace('/\D/', '', $configData['country_code_phone'] ?? '');
+
     if (!$wa_url_template) throw new Exception("Configuración WhatsApp incompleta.");
 
     // ===============================
@@ -259,12 +262,10 @@ try {
              . "🏢 *Sistema NetBillX*\n📈 Datos y gráfica actualizados automáticamente.";
 
     // ===============================
-    // 🔥 Enviar WhatsApp solo si cambia la tasa
+    // 🔥 Enviar WhatsApp a todos los destinatarios si cambia la tasa
     // ===============================
     if ($rate_changed && !empty($destinatarios)) {
         foreach ($destinatarios as $phone) {
-            // Añadir código de país si no está
-            $countryCode = preg_replace('/\D/', '', $configData['country_code_phone'] ?? '');
             if ($countryCode && strpos($phone, $countryCode) !== 0) {
                 if (strpos($phone, '0') === 0) $phone = substr($phone, 1);
                 $phone = $countryCode . $phone;
