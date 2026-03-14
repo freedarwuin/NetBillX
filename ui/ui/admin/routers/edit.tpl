@@ -31,7 +31,7 @@
                     <div class="form-group">
                         <label class="col-md-2 control-label">{Lang::T('IP Address')}</label>
                         <div class="col-md-6">
-                            <input type="text" placeholder="192.168.88.1:8728" class="form-control" id="ip_address"
+                            <input type="text" placeholder="192.168.88.1:8787" class="form-control" id="ip_address"
                                 name="ip_address" value="{$d['ip_address']}">
                         </div>
                     </div>

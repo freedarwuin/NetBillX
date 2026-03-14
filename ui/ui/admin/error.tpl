@@ -49,7 +49,7 @@
                             <br>
                             Mikrotik troubleshooting: <br>
                             <ul>
-                                <li>{Lang::T('Make sure you use API Port, Default 8728')}</li>
+                                <li>{Lang::T('Make sure you use API Port, Default 8787')}</li>
                                 <li>{Lang::T('Make sure Username and Password are correct')}</li>
                                 <li>{Lang::T('Make sure your hosting not blocking port to external')}</li>
                                 <li>{Lang::T('Make sure your Mikrotik accessible from NetBillX')}</li>
