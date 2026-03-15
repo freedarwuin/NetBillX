@@ -130,7 +130,7 @@ class Client
      * @param string        $password The RouterOS password.
      * @param int|null      $port     The port on which the RouterOS host
      *     provides the API service. You can also specify NULL, in which case
-     *     the port will automatically be chosen between 8787 and 8729,
+     *     the port will automatically be chosen between 8728 and 8729,
      *     depending on the value of $crypto.
      * @param bool          $persist  Whether or not the connection should be a
      *     persistent one.
@@ -152,7 +152,7 @@ class Client
         $host,
         $username,
         $password = '',
-        $port = 8787,
+        $port = 8728,
         $persist = false,
         $timeout = null,
         $crypto = N::CRYPTO_OFF,

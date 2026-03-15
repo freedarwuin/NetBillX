@@ -170,7 +170,7 @@ if ($config['router_check']) {
         // check if custom port
         if (strpos($router->ip_address, ':') === false) {
             $ip = $router->ip_address;
-            $port = 8787;
+            $port = 8728;
         } else {
             [$ip, $port] = explode(':', $router->ip_address);
         }

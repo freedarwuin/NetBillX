@@ -421,7 +421,7 @@ class MikrotikVpn
                 $tp = '80';
             }
             if ($cmnt == 'Api') {
-                $tp = '8787';
+                $tp = '8728';
             }
             if ($cmnt == 'Winbox' || $cmnt == 'Web' || $cmnt == 'Api') {
                 $addRequest = new RouterOS\Request('/ip/firewall/nat/add');
